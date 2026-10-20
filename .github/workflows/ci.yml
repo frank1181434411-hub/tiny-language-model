@@ -25,7 +25,7 @@ jobs:
       - name: Test
         run: python -m pytest
 
-  losses-cpu:
+  compute-cpu:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,5 +39,5 @@ jobs:
         run: python -m pip install -e ".[dev,compute]"
       - name: Verify CPU PyTorch import
         run: python -c "import torch; assert torch.version.cuda is None"
-      - name: Test loss numerics and gradients
-        run: python -m pytest tests/test_losses.py
+      - name: Test compute numerics, state restoration and imports
+        run: python -m pytest

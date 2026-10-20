@@ -1,4 +1,6 @@
-"""从 Assignment 1 迁移的手写交叉熵损失。"""
+"""
+从 Assignment 1 迁移的手写交叉熵损失。
+"""
 
 from __future__ import annotations
 
@@ -7,10 +9,9 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     import torch
 
-
 def cross_entropy(logits: torch.Tensor,targets: torch.Tensor) -> torch.Tensor:
-    """计算所有 token 的平均交叉熵。
-
+    """
+    计算所有 token 的平均交叉熵。
     logits 为有限浮点分数，形状 (..., vocab_size)；targets 为对应形状的
     int64 token ID。FP16/BF16 输入使用 FP32 计算并返回 loss。
     """

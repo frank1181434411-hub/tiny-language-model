@@ -5,19 +5,33 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
 
-def test_all_modules_import_without_side_effects(tmp_path):
+
+@pytest.mark.parametrize("compute", [False, True])
+def test_modules_import_without_side_effects(tmp_path, compute):
+    if compute:
+        pytest.importorskip("torch", reason="optimizer import requires compute dependencies")
     package = Path(__file__).resolve().parents[1] / "src" / "tiny_lm"
     modules = []
     for path in sorted(package.rglob("*.py")):
         parts = list(path.relative_to(package.parent).with_suffix("").parts)
         if parts[-1] == "__init__":
             parts.pop()
-        modules.append(".".join(parts))
+        module = ".".join(parts)
+        if module != "tiny_lm.optim":
+            modules.append(module)
+    if compute:
+        modules = ["tiny_lm.optim"]
     script = """
 import importlib
 import os
 import sys
+
+# PyTorch's own initialization is outside the project's import audit.
+compute = sys.argv[1] == "compute"
+if compute:
+    import torch
 
 def audit(event, args):
     if event == "open":
@@ -30,12 +44,13 @@ def audit(event, args):
         raise AssertionError(f"Import attempted side effect: {event}")
 
 sys.addaudithook(audit)
-for module in sys.argv[1:]:
+for module in sys.argv[2:]:
     importlib.import_module(module)
-assert not ({"torch", "numpy", "regex"} & sys.modules.keys())
+if not compute:
+    assert not ({"torch", "numpy", "regex"} & sys.modules.keys())
 """
     result = subprocess.run(
-        [sys.executable, "-B", "-c", script, *modules],
+        [sys.executable, "-B", "-c", script, "compute" if compute else "light", *modules],
         cwd=tmp_path,
         env={**os.environ, "PYTHONIOENCODING": "utf-8"},
         capture_output=True,
