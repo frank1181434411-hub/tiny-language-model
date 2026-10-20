@@ -33,3 +33,7 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.format]
+# Preserve the compact spacing style of the migrated loss implementation.
+exclude = ["src/tiny_lm/losses.py"]
