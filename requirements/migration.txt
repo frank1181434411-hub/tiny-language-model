@@ -1,0 +1,14 @@
+# Optional environment for migrating and checking Assignment 1 source.
+# Install the CPU torch wheel first as described in docs/dependencies.md.
+# These packages are not part of the lightweight scaffold's default install.
+torch==2.11.0
+numpy>=2.4
+regex>=2026.3.32
+
+# Existing Assignment 1 test dependencies
+pytest>=9.0
+pytest-timeout>=2.3
+einops>=0.8
+jaxtyping>=0.3
+psutil>=7
+tiktoken>=0.12.0

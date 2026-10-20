@@ -1,0 +1,30 @@
+# 仅用于配置与框架检查；当前无法完成训练。
+# 所有相对路径以本文件所在的 configs/ 为基准。
+model:
+  vocab_size: 256
+  context_length: 16
+  num_layers: 1
+  d_model: 32
+  num_heads: 4
+  d_ff: 64
+  norm_mode: pre_norm
+  ffn_type: swiglu
+  rope_theta: 10000.0
+data:
+  train_data_path: ../data/smoke/train.bin
+  val_data_path: ../data/smoke/val.bin
+  tokenizer_path: ../artifacts/smoke/tokenizer.json
+training:
+  batch_size: 2
+  max_steps: 4
+  learning_rate: 0.001
+  min_learning_rate: 0.0001
+  warmup_steps: 1
+  weight_decay: 0.01
+  grad_clip: 1.0
+  seed: 42
+  device: cpu
+  eval_interval: 2
+  save_interval: 2
+output:
+  output_dir: ../outputs/smoke

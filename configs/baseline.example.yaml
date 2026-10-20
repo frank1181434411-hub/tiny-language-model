@@ -1,0 +1,30 @@
+# 待硬件与实验确定的配置模板；不是已验证的训练方案。
+# 数值仅用于展示结构，尚未验证显存、速度、收敛或 tokenizer 兼容性。
+model:
+  vocab_size: 10000
+  context_length: 256
+  num_layers: 4
+  d_model: 256
+  num_heads: 8
+  d_ff: 704
+  norm_mode: pre_norm
+  ffn_type: swiglu
+  rope_theta: 10000.0
+data:
+  train_data_path: ../data/baseline/train.bin
+  val_data_path: ../data/baseline/val.bin
+  tokenizer_path: ../artifacts/baseline/tokenizer.json
+training:
+  batch_size: 8
+  max_steps: 1000
+  learning_rate: 0.0003
+  min_learning_rate: 0.00003
+  warmup_steps: 100
+  weight_decay: 0.1
+  grad_clip: 1.0
+  seed: 42
+  device: cuda
+  eval_interval: 100
+  save_interval: 100
+output:
+  output_dir: ../outputs/baseline

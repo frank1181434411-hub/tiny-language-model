@@ -1,0 +1,109 @@
+# Python environments
+.venv/
+.venv-*/
+venv/
+/env/
+/ENV/
+__pypackages__/
+
+# Python, test and static-analysis caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.pyre/
+.pytype/
+.hypothesis/
+.tox/
+.nox/
+.ipynb_checkpoints/
+/.cache/
+
+# Coverage, test reports and profiling output
+.coverage
+.coverage.*
+coverage.xml
+junit.xml
+htmlcov/
+/test-results/
+/test_logs/
+/.benchmarks/
+*.prof
+*.pstats
+*.lprof
+
+# Packaging and build artifacts
+build/
+dist/
+/.eggs/
+*.egg-info/
+*.egg
+*.whl
+pip-wheel-metadata/
+/wheels/
+
+# Local secrets and editor files
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.local.yaml
+*.local.yml
+*.local.json
+*.local.toml
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.tmp
+*.bak
+
+# Downloaded data, model assets and run output
+/data/
+/datasets/
+/downloads/
+/artifacts/
+/outputs/
+/runs/
+/logs/
+/checkpoints/
+/wandb/
+/lightning_logs/
+/torch_compile_debug/
+/torch_trace/
+*.log
+events.out.tfevents.*
+
+# Model weights and binary datasets, including files outside output directories.
+# Add explicit exceptions for reviewed small binary test fixtures when needed.
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.npy
+*.npz
+*.bin
+*.memmap
+*.mmap
+*.h5
+*.hdf5
+*.parquet
+*.arrow
+
+# Keep experiment documentation/configs, ignore per-run artifacts
+/experiments/runs/
+/experiments/outputs/
+/experiments/checkpoints/
+/experiments/logs/
+/experiments/wandb/
+
+# Do not blanket-ignore text/config files, notebooks or dependency lockfiles.
+# examples/toy_corpus.txt, requirements/*.txt, configs/ and docs/ stay trackable.
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
