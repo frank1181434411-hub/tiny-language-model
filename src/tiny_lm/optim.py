@@ -3,10 +3,8 @@
 """
 
 from __future__ import annotations
-
 import math
 from collections.abc import Iterable
-
 import torch
 from torch.optim import Optimizer
 

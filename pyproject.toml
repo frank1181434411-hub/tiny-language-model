@@ -35,8 +35,9 @@ line-length = 100
 select = ["E", "F", "I", "B", "UP"]
 
 [tool.ruff.lint.per-file-ignores]
-# Keep optimizer calls on one line as requested.
-"src/tiny_lm/optim.py" = ["E501"]
+# Preserve compact imports and single-line optimizer calls as requested.
+"src/tiny_lm/optim.py" = ["E501", "I001"]
+"src/tiny_lm/losses.py" = ["I001"]
 
 [tool.ruff.format]
 # Preserve the requested compact spacing in migrated numerical implementations.
