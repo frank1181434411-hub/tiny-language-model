@@ -2,30 +2,32 @@
 
 用户已指定旧源码目录 `D:/Python/CS336-Private/assignment1-basics`。
 目前已迁移其中的 `cs336_basics/losses.py`、`cs336_basics/optimizer.py`
-以及 `cs336_basics/scheduler.py`、`cs336_basics/data.py` 中的采样函数、`nn.py` 中的基础层与注意力；
+以及 `cs336_basics/scheduler.py`、`checkpointing.py`、`data.py` 中的采样函数、`nn.py` 中的基础层、注意力、TransformerBlock 与 TransformerLM 前向；
 其他映射仍为计划。optimizer 的原算法、精度与测试见 [迁移记录](optimizer.md)。
 loss 的精度修改与测试范围见 [迁移记录](losses.md)。
 调度的参数范围与步数约定见 [迁移记录](scheduler.md)。
 采样的数组约定、token 检查与随机状态见 [迁移记录](data.md)。
 基础层的初始化、精度与梯度检查见 [迁移记录](layers.md)。
 注意力的精度、mask、位置与缓存策略见 [迁移记录](attention.md)。
+Block 与完整 LM 的结构、配置构造和验证见 [迁移记录](transformer.md)。
+checkpoint 的版本、步数、配置与随机状态恢复见 [迁移记录](checkpoint.md)。
 
 | 旧模块/功能 | 目标 | 迁移重点 |
 | --- | --- | --- |
 | train_bpe | `src/tiny_lm/tokenizer/bpe.py` | BPE 统计、合并、特殊 token |
 | tokenizer | `src/tiny_lm/tokenizer/tokenizer.py` | 编码、解码、迭代处理 |
 | 重复的 tokenizer 保存加载 | `src/tiny_lm/tokenizer/serialization.py` | 统一格式与版本 |
-| nn.py | `src/tiny_lm/model/{layers,attention,transformer}.py` | 基础层、RoPE、softmax 与注意力已迁移；模型组装待迁移 |
+| nn.py | `src/tiny_lm/model/{layers,attention,transformer}.py` | 基础层、注意力、Block 与 LM 前向已迁移；生成采样待迁移 |
 | data sampling / 数据预处理 | `src/tiny_lm/data.py`、未来预处理入口 | 采样已迁移；数据格式、文件加载、预处理待迁移 |
 | loss / cross_entropy | `src/tiny_lm/losses.py` | 已迁移；平均 loss、精度处理与 CPU 梯度验证 |
 | optimizer | `src/tiny_lm/optim.py` | 已迁移；AdamW、全局裁剪、精度与状态恢复 |
 | scheduler | `src/tiny_lm/schedule.py` | 已迁移；线性预热、余弦衰减与边界校验 |
-| checkpointing | `src/tiny_lm/checkpoint.py` | 保存、恢复、配置和格式版本 |
+| checkpointing | `src/tiny_lm/checkpoint.py` | 已迁移；v1 格式、原子保存、状态/配置/RNG 恢复与校验 |
 | 训练/验证脚本 | `src/tiny_lm/train.py`、`evaluate.py` | 整理运行入口与统计语义 |
 | inference | `src/tiny_lm/generate.py` | 自回归循环、EOS 与采样 |
 
-按用户要求先后迁移独立的 loss、optimizer、scheduler、采样、基础层和注意力。后续迁移
-模型组装、tokenizer、数据格式与文件加载、checkpoint，最后接入训练、验证与生成。
+按用户要求已迁移独立计算组件并组装 TransformerLM 前向，提供 ModelConfig 构造入口。
+checkpoint 已支持精确 CPU 续训；后续迁移 tokenizer、数据格式与文件加载，接入训练、验证与生成。
 每批迁移确认接口与正确性后再接通 CLI。
 PyTorch、NumPy、regex 已在本地迁移环境按需安装；包依赖随实际实现逐步声明。
 
@@ -37,8 +39,8 @@ PyTorch、NumPy、regex 已在本地迁移环境按需安装；包依赖随实�
   不能直接推定旧实现支持所有枚举；模型词表与 tokenizer 是否匹配。
 - 数据 dtype 的范围是否覆盖 token ID；是否记录 shape、token 数、字节序、
   tokenizer/数据版本与训练/验证划分，是否防止数据泄漏。
-- checkpoint 是否保存配置、模型、优化器、步数与随机数状态；
-  恢复时是否检查兼容性；中断写入和不可信文件应如何处理。
+- checkpoint 的 GPU/分布式状态、GradScaler 与数据工作进程恢复仍待扩展和验证；
+  v1 的 CPU 精确恢复、配置校验与写入失败保护已验证。
 - 生成 EOS 是否正确终止；温度、top-k、最大长度、空提示与上下文截断的边界。
 - 是否存在模块顶层数据读取、训练、目录创建、演示、随机种子修改或设备初始化。
 

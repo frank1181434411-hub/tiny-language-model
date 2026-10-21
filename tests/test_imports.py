@@ -13,16 +13,22 @@ def test_modules_import_without_side_effects(tmp_path, compute):
     if compute:
         pytest.importorskip("torch", reason="compute module imports require PyTorch")
     package = Path(__file__).resolve().parents[1] / "src" / "tiny_lm"
+    compute_modules = [
+        "tiny_lm.optim",
+        "tiny_lm.model.layers",
+        "tiny_lm.model.attention",
+        "tiny_lm.model.transformer",
+    ]
     modules = []
     for path in sorted(package.rglob("*.py")):
         parts = list(path.relative_to(package.parent).with_suffix("").parts)
         if parts[-1] == "__init__":
             parts.pop()
         module = ".".join(parts)
-        if module not in ("tiny_lm.optim", "tiny_lm.model.layers", "tiny_lm.model.attention"):
+        if module not in compute_modules:
             modules.append(module)
     if compute:
-        modules = ["tiny_lm.optim", "tiny_lm.model.layers", "tiny_lm.model.attention"]
+        modules = compute_modules
     script = """
 import importlib
 import os
