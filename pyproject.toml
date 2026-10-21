@@ -12,7 +12,7 @@ dependencies = ["PyYAML>=6.0.2"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.9"]
-compute = ["torch~=2.11.0"]
+compute = ["torch~=2.11.0", "numpy>=1.26"]
 
 [project.scripts]
 tiny-lm = "tiny_lm.cli:main"
@@ -40,13 +40,17 @@ select = ["E", "F", "I", "B", "UP"]
 "src/tiny_lm/losses.py" = ["I001"]
 # Keep the scheduler signature and validation tuples on single lines.
 "src/tiny_lm/schedule.py" = ["E501"]
+"src/tiny_lm/data.py" = ["E501", "I001"]
+"tests/test_data.py" = ["E501"]
 
 [tool.ruff.format]
 # Preserve the requested compact spacing in migrated numerical implementations.
 exclude = [
+    "src/tiny_lm/data.py",
     "src/tiny_lm/losses.py",
     "src/tiny_lm/optim.py",
     "src/tiny_lm/schedule.py",
     "tests/test_optim.py",
     "tests/test_schedule.py",
+    "tests/test_data.py",
 ]
