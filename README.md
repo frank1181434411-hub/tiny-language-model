@@ -2,12 +2,13 @@
 
 一个从 Stanford CS336 Assignment 1 学习成果出发的个人语言模型项目。
 已有自行实现的 BPE、Tokenizer、Transformer、损失函数、AdamW、调度、采样、
-checkpoint 和生成源码，**目前已迁入交叉熵损失、AdamW 和梯度裁剪，其他实现待迁移**。长期目标是提供可安装、可复现的
+checkpoint 和生成源码，**目前已迁入交叉熵损失、AdamW、梯度裁剪和学习率调度，其他实现待迁移**。长期目标是提供可安装、可复现的
 文本预处理、训练、验证、保存与恢复训练、文本续写流程。
 
 当前版本 `0.1.0` 已完成工程框架：`src` 布局、严格的 YAML/dataclass 配置、
 CLI、测试、Ruff、CPU CI 与迁移文档，并提供手写交叉熵 `tiny_lm.losses.cross_entropy`、
-`tiny_lm.optim.AdamW` 和 `tiny_lm.optim.clip_gradient_norm`。
+`tiny_lm.optim.AdamW`、`tiny_lm.optim.clip_gradient_norm` 和
+`tiny_lm.schedule.get_lr_cosine_schedule`。
 模型与数据处理模块仍只有职责说明和 TODO。
 **当前不能训练、验证模型或生成文本；没有正式训练结果或已验证基线。**
 `smoke.yaml` 只检查配置与框架，`baseline.example.yaml` 仅为待硬件和实验确定的模板。
@@ -40,6 +41,7 @@ MSYS2 的 wheel 兼容性可能与标准 Windows CPython 不同；安装失败�
 `compute` 可选依赖组声明 loss 和 optimizer 所需的 PyTorch；
 CPU 安装方法与数值验证说明见 [loss 迁移记录](docs/losses.md)
 和 [optimizer 迁移记录](docs/optimizer.md)。
+学习率调度只依赖标准库 `math`，接口与边界约定见 [scheduler 迁移记录](docs/scheduler.md)。
 显式导入 `tiny_lm.optim` 会加载 torch；基础包、配置与 CLI 保持轻量导入。
 
 ## 当前可运行的命令
@@ -108,7 +110,7 @@ src/tiny_lm/
   data.py               采样（待迁移）
   losses.py             平均交叉熵（已迁移）
   optim.py              AdamW 与全局梯度裁剪（已迁移）
-  schedule.py           调度（待迁移）
+  schedule.py           线性预热与余弦衰减（已迁移）
   checkpoint.py          保存与恢复（待迁移）
   train.py / evaluate.py / generate.py 运行流程（待迁移）
 tests/                   仅覆盖当前已实现能力
@@ -123,7 +125,7 @@ experiments/              实验记录要求
 1. 先确认课程版本、代码归属、依赖和公开发布许可。
 2. 迁移 BPE、Tokenizer 与统一序列化，验证编解码和特殊 token。
 3. 迁移数据格式与采样、模型基础层、注意力、Transformer；loss 已先行迁移。
-4. AdamW 和梯度裁剪已迁移；后续迁移调度和 checkpoint，接入训练状态恢复。
+4. AdamW、梯度裁剪和调度已迁移；后续迁移 checkpoint，接入训练状态恢复。
 5. 接入训练、验证、生成 CLI，完成小数据训练闭环。
 6. 明确硬件与实验配置，建立可复现基线，再验收首版发布。
 

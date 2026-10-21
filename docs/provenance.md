@@ -3,12 +3,16 @@
 - 学习来源：Stanford CS336 Assignment 1。课程年份、作业版本和具体引用链接
   仍由项目所有者确认；源码使用用户指定的本地目录。
 - 用户说明：已自行实现 BPE、Tokenizer、Transformer、损失、AdamW、调度、
-  采样、checkpoint 与生成代码；目前仅迁入 loss，其他实现待迁移，
+  采样、checkpoint 与生成代码；目前已迁入 loss、optimizer 和 scheduler，其他实现待迁移，
   归属仍需逐文件核对。
 - loss 来源：`D:/Python/CS336-Private/assignment1-basics/cs336_basics/losses.py`，
   按用户要求迁至 `src/tiny_lm/losses.py`。保留手写计算流程与主要变量名，
   删除未使用变量、精简注释、调整数值精度并补输入检查；旧源码未修改。
   本次 loss 测试为新项目编写，没有复制课程测试文件或 fixtures。
+- optimizer 来源与原算法、精度处理和状态恢复见 [迁移记录](optimizer.md)。
+- scheduler 来源：`cs336_basics/scheduler.py`，迁至 `src/tiny_lm/schedule.py`。
+  保留原函数名、主要变量与公式，补参数检查、端点直接返回和预热运算顺序调整。
+  新测试独立编写，未复制课程测试或 fixtures，未修改旧源码。
 - 本次新增：工程框架、配置/CLI、测试和项目文档。
   `examples/toy_corpus.txt` 为本次自行编写的小段中英文示例。
 - 后续应区分个人实现、课程骨架、课程测试/adapters、第三方片段，
