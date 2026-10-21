@@ -11,6 +11,7 @@ loss 的精度修改与测试范围见 [迁移记录](losses.md)。
 注意力的精度、mask、位置与缓存策略见 [迁移记录](attention.md)。
 Block 与完整 LM 的结构、配置构造和验证见 [迁移记录](transformer.md)。
 checkpoint 的版本、步数、配置与随机状态恢复见 [迁移记录](checkpoint.md)。
+数值组件已连接为 token 数组训练/验证接口，步数、日志与验证约定见 [训练记录](training.md)。
 
 | 旧模块/功能 | 目标 | 迁移重点 |
 | --- | --- | --- |
@@ -23,11 +24,11 @@ checkpoint 的版本、步数、配置与随机状态恢复见 [迁移记录](ch
 | optimizer | `src/tiny_lm/optim.py` | 已迁移；AdamW、全局裁剪、精度与状态恢复 |
 | scheduler | `src/tiny_lm/schedule.py` | 已迁移；线性预热、余弦衰减与边界校验 |
 | checkpointing | `src/tiny_lm/checkpoint.py` | 已迁移；v1 格式、原子保存、状态/配置/RNG 恢复与校验 |
-| 训练/验证脚本 | `src/tiny_lm/train.py`、`evaluate.py` | 整理运行入口与统计语义 |
+| 训练/验证流程 | `src/tiny_lm/train.py`、`evaluate.py` | 已接通数组接口；采样、更新、验证、保存与续训；文件/CLI 待接入 |
 | inference | `src/tiny_lm/generate.py` | 自回归循环、EOS 与采样 |
 
 按用户要求已迁移独立计算组件并组装 TransformerLM 前向，提供 ModelConfig 构造入口。
-checkpoint 已支持精确 CPU 续训；后续迁移 tokenizer、数据格式与文件加载，接入训练、验证与生成。
+数组训练循环已支持精确 CPU 续训；后续迁移 tokenizer、数据格式与文件加载，接入 CLI 与文本生成。
 每批迁移确认接口与正确性后再接通 CLI。
 PyTorch、NumPy、regex 已在本地迁移环境按需安装；包依赖随实际实现逐步声明。
 
