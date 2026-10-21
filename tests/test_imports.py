@@ -11,7 +11,7 @@ import pytest
 @pytest.mark.parametrize("compute", [False, True])
 def test_modules_import_without_side_effects(tmp_path, compute):
     if compute:
-        pytest.importorskip("torch", reason="optimizer import requires compute dependencies")
+        pytest.importorskip("torch", reason="compute module imports require PyTorch")
     package = Path(__file__).resolve().parents[1] / "src" / "tiny_lm"
     modules = []
     for path in sorted(package.rglob("*.py")):
@@ -19,10 +19,10 @@ def test_modules_import_without_side_effects(tmp_path, compute):
         if parts[-1] == "__init__":
             parts.pop()
         module = ".".join(parts)
-        if module != "tiny_lm.optim":
+        if module not in ("tiny_lm.optim", "tiny_lm.model.layers"):
             modules.append(module)
     if compute:
-        modules = ["tiny_lm.optim"]
+        modules = ["tiny_lm.optim", "tiny_lm.model.layers"]
     script = """
 import importlib
 import os
@@ -32,6 +32,7 @@ import sys
 compute = sys.argv[1] == "compute"
 if compute:
     import torch
+    random_state = torch.get_rng_state().clone()
 
 def audit(event, args):
     if event == "open":
@@ -48,6 +49,8 @@ for module in sys.argv[2:]:
     importlib.import_module(module)
 if not compute:
     assert not ({"torch", "numpy", "regex"} & sys.modules.keys())
+else:
+    assert torch.equal(torch.get_rng_state(), random_state)
 """
     result = subprocess.run(
         [sys.executable, "-B", "-c", script, "compute" if compute else "light", *modules],
