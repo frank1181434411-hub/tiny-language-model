@@ -44,10 +44,14 @@ select = ["E", "F", "I", "B", "UP"]
 "tests/test_data.py" = ["E501"]
 "src/tiny_lm/model/layers.py" = ["E501", "I001"]
 "tests/test_layers.py" = ["E501", "I001"]
+"src/tiny_lm/model/attention.py" = ["E501", "I001"]
+"tests/test_attention.py" = ["E501", "I001"]
 
 [tool.ruff.format]
 # Preserve the requested compact spacing in migrated numerical implementations.
 exclude = [
+    "src/tiny_lm/model/attention.py",
+    "tests/test_attention.py",
     "src/tiny_lm/model/layers.py",
     "tests/test_layers.py",
     "src/tiny_lm/data.py",

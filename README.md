@@ -2,7 +2,7 @@
 
 一个从 Stanford CS336 Assignment 1 学习成果出发的个人语言模型项目。
 已有自行实现的 BPE、Tokenizer、Transformer、损失函数、AdamW、调度、采样、
-checkpoint 和生成源码，**目前已迁入交叉熵损失、AdamW、梯度裁剪、学习率调度、数据采样和模型基础层，其他实现待迁移**。长期目标是提供可安装、可复现的
+checkpoint 和生成源码，**目前已迁入交叉熵损失、AdamW、梯度裁剪、学习率调度、数据采样、模型基础层和注意力，其他实现待迁移**。长期目标是提供可安装、可复现的
 文本预处理、训练、验证、保存与恢复训练、文本续写流程。
 
 当前版本 `0.1.0` 已完成工程框架：`src` 布局、严格的 YAML/dataclass 配置、
@@ -10,7 +10,8 @@ CLI、测试、Ruff、CPU CI 与迁移文档，并提供手写交叉熵 `tiny_lm
 `tiny_lm.optim.AdamW`、`tiny_lm.optim.clip_gradient_norm` 和
 `tiny_lm.schedule.get_lr_cosine_schedule`、`tiny_lm.data.get_batch`。
 `tiny_lm.model.layers` 提供 Linear、Embedding、RMSNorm、silu_fn 和 SwiGLU。
-注意力、模型组装、文本预处理和数据文件加载仍待迁移。
+`tiny_lm.model.attention` 提供 RotaryPositionalEmbedding、softmax、scaled_dot_product_attention
+和 CausalSelfAttention。模型组装、文本预处理和数据文件加载仍待迁移。
 **当前不能训练、验证模型或生成文本；没有正式训练结果或已验证基线。**
 `smoke.yaml` 只检查配置与框架，`baseline.example.yaml` 仅为待硬件和实验确定的模板。
 
@@ -46,7 +47,8 @@ CPU 安装方法与数值验证说明见 [loss 迁移记录](docs/losses.md)
 数据采样支持一维整数数组、memmap 和可选 CPU generator，见 [data 迁移记录](docs/data.md)。
 导入 `tiny_lm.data` 不加载计算依赖，仅在调用 `get_batch` 时加载。
 基础层的初始化与精度约定见 [基础层迁移记录](docs/layers.md)。
-显式导入 `tiny_lm.optim` 或 `tiny_lm.model.layers` 会加载 torch；
+注意力的精度、mask 与位置约定见 [注意力迁移记录](docs/attention.md)。
+显式导入 `tiny_lm.optim`、`tiny_lm.model.layers` 或 `tiny_lm.model.attention` 会加载 torch；
 基础包、模型包入口、配置与 CLI 保持轻量导入。
 
 ## 当前可运行的命令
@@ -111,7 +113,7 @@ src/tiny_lm/
   __main__.py / cli.py   模块与控制台入口
   config.py              dataclass / YAML 加载和校验
   tokenizer/             BPE、编解码、序列化（待迁移）
-  model/                 基础层已迁移；注意力、Transformer 待迁移
+  model/                 基础层、RoPE 与注意力已迁移；Transformer 待迁移
   data.py               随机窗口采样（已迁移）；文件加载与预处理待迁移
   losses.py             平均交叉熵（已迁移）
   optim.py              AdamW 与全局梯度裁剪（已迁移）
@@ -128,7 +130,7 @@ experiments/              实验记录要求
 ## 后续迁移顺序
 
 1. 先确认课程版本、代码归属、依赖和公开发布许可。
-2. 基础层已迁移；继续迁移 RoPE、注意力和 Transformer，逐层验证数值与梯度。
+2. 基础层、RoPE 与注意力已迁移；继续迁移 Transformer，验证模型组装与配置对应关系。
 3. 迁移 BPE、Tokenizer、统一序列化、数据格式和文件加载；采样与 loss 已先行迁移。
 4. AdamW、梯度裁剪和调度已迁移；后续迁移 checkpoint，接入训练状态恢复。
 5. 接入训练、验证、生成 CLI，完成小数据训练闭环。

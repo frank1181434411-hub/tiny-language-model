@@ -19,10 +19,10 @@ def test_modules_import_without_side_effects(tmp_path, compute):
         if parts[-1] == "__init__":
             parts.pop()
         module = ".".join(parts)
-        if module not in ("tiny_lm.optim", "tiny_lm.model.layers"):
+        if module not in ("tiny_lm.optim", "tiny_lm.model.layers", "tiny_lm.model.attention"):
             modules.append(module)
     if compute:
-        modules = ["tiny_lm.optim", "tiny_lm.model.layers"]
+        modules = ["tiny_lm.optim", "tiny_lm.model.layers", "tiny_lm.model.attention"]
     script = """
 import importlib
 import os

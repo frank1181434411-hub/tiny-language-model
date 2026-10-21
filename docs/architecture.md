@@ -1,7 +1,7 @@
 # 架构与数据流
 
 当前已实现：配置加载与校验、CLI 帮助/版本、显式失败的预留入口、平均交叉熵、
-AdamW、全局梯度裁剪、学习率调度、数据采样和模型基础层。下列计算流程中未标注实现的部分仍为规划，
+AdamW、全局梯度裁剪、学习率调度、数据采样、模型基础层和注意力。下列计算流程中未标注实现的部分仍为规划，
 各组件尚未连接成训练或生成流程。
 
 ```text
@@ -12,7 +12,8 @@ AdamW、全局梯度裁剪、学习率调度、数据采样和模型基础层。
   → 数据预处理：写入 token 数据与 dtype、词表版本等元信息
   → data.py：采样输入 x 与下一 token 目标 y（已实现；文件加载待迁移）
   → model/layers.py：Linear、Embedding、RMSNorm、SiLU、SwiGLU（已实现）
-  → attention.py + transformer.py：组织注意力与模型、输出 logits（待迁移）
+  → model/attention.py：RoPE、softmax、缩放点积与因果多头注意力（已实现）
+  → model/transformer.py：组装模型并输出 logits（待迁移）
   → losses.py：计算平均交叉熵（已实现并有 CPU 数值/梯度测试）
   → train.py：组织反向传播（待实现）与 optim.py 梯度裁剪（已实现）
   → schedule.py + optim.py：学习率与参数更新（独立组件已实现）
