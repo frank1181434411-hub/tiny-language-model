@@ -25,11 +25,11 @@ checkpoint 的版本、步数、配置与随机状态恢复见 [迁移记录](ch
 | optimizer | `src/tiny_lm/optim.py` | 已迁移；AdamW、全局裁剪、精度与状态恢复 |
 | scheduler | `src/tiny_lm/schedule.py` | 已迁移；线性预热、余弦衰减与边界校验 |
 | checkpointing | `src/tiny_lm/checkpoint.py` | 已迁移；v1 格式、原子保存、状态/配置/RNG 恢复与校验 |
-| 训练/验证流程 | `src/tiny_lm/train.py`、`evaluate.py` | 已接通数组接口；采样、更新、验证、保存与续训；文件/CLI 待接入 |
+| 训练/验证流程 | `src/tiny_lm/train.py`、`evaluate.py` | 已接通数组接口与文件 CLI；采样、更新、验证、保存、续训和即时指标输出 |
 | inference | `src/tiny_lm/generate.py` | 自回归循环、EOS 与采样 |
 
 按用户要求已迁移独立计算组件并组装 TransformerLM 前向，提供 ModelConfig 构造入口。
-数组训练循环已支持精确 CPU 续训；预处理和只读文件加载已提供 Python API，BPE 训练和预处理 CLI 已接通；后续接入训练/验证 CLI 与文本生成。
+数组训练循环已支持精确 CPU 续训；预处理、只读文件加载及训练/验证 CLI 已接通；后续接入文本生成和 checkpoint 历史数据指纹绑定。
 每批迁移确认接口与正确性后再接通 CLI。
 PyTorch、NumPy、regex 已在本地迁移环境按需安装；包依赖随实际实现逐步声明。
 
@@ -43,7 +43,7 @@ Tokenizer 的模式、ID 校验和记录边界见 [Tokenizer 迁移记录](token
 - 任意文本分块的 UTF-8 字节、词边界与流式状态仍待设计；当前迭代编码明确按独立记录处理。
 - 特殊 token 最长匹配、相邻边界、识别/普通文本模式已验证；跨块识别与禁止特定 token 策略尚未实现。
 - 配置选项与实现是否对应；当前 `norm_mode` 指归一化位置，
-  不能直接推定旧实现支持所有枚举；模型词表与 tokenizer 是否匹配。
+  不能直接推定旧实现支持所有枚举；运行 CLI 已检查模型实际词表与 tokenizer 是否匹配，并拒绝未实现的 GELU。
 - v1 数据已记录 dtype、token 数、字节序、tokenizer 指纹与内容哈希；
   训练/验证切分、防止数据泄漏及 checkpoint 自动绑定数据指纹仍待运行流程集成。
 - checkpoint 的 GPU/分布式状态、GradScaler 与数据工作进程恢复仍待扩展和验证；

@@ -1,9 +1,10 @@
 """
 串联 token 数组采样、前向、loss、反向、裁剪、更新、验证和 checkpoint。
-提供 Python 接口；数据文件加载、tokenizer 与 CLI 仍待接入。
+提供数组 Python 接口；CLI 负责文件加载、tokenizer 校验与进度输出。
 """
 
 from __future__ import annotations
+from collections.abc import Callable
 import math
 import random
 from dataclasses import dataclass
@@ -37,11 +38,12 @@ class TrainingResult:
     generators:dict[str,torch.Generator]
 
 
-def train(config:ProjectConfig,train_data:np.ndarray,validation_data:np.ndarray,*,dtype=None,eval_batches:int=4,resume_from=None,stop_after:int|None=None,save_checkpoints:bool=True)->TrainingResult:
+def train(config:ProjectConfig,train_data:np.ndarray,validation_data:np.ndarray,*,dtype=None,eval_batches:int=4,resume_from=None,stop_after:int|None=None,save_checkpoints:bool=True,on_step:Callable[[TrainingMetrics],None]|None=None)->TrainingResult:
     """
     创建模型和 AdamW，在 token 数组上训练；返回本次更新日志及最终运行对象。
     max_steps 始终是调度终点；stop_after 是本次最多完成的总更新次数，不改变调度。
     checkpoint 保存两个独立采样器和完整配置；续训须使用相同数据、dtype 与 eval_batches。
+    on_step 在本步验证和必要的保存完成后调用，用于输出指标；回调不得改变训练状态。
     """
     import numpy as np
     import torch
@@ -56,6 +58,8 @@ def train(config:ProjectConfig,train_data:np.ndarray,validation_data:np.ndarray,
     _positive_integer("eval_batches",eval_batches)
     if type(save_checkpoints) is not bool:
         raise TypeError("save_checkpoints must be a bool")
+    if on_step is not None and not callable(on_step):
+        raise TypeError("on_step must be callable or None")
     training=config.training
     limit=training.max_steps if stop_after is None else stop_after
     if type(limit) is not int:
@@ -115,4 +119,6 @@ def train(config:ProjectConfig,train_data:np.ndarray,validation_data:np.ndarray,
             path=output_dir/f"step_{completed:08d}.pt"
             save_checkpoint(model,optimizer,completed,path,config=config,generators=generators)
             checkpoints.append(path)
+        if on_step is not None:
+            on_step(history[-1])
     return TrainingResult(model=model,optimizer=optimizer,completed_updates=completed,history=history,checkpoints=checkpoints,generators=generators)

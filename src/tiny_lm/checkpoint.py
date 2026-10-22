@@ -7,6 +7,7 @@ from __future__ import annotations
 import copy
 import io
 import os
+import pickle
 import random
 import tempfile
 from dataclasses import asdict
@@ -205,7 +206,10 @@ def read_checkpoint(src)->dict:
     使用 weights_only=True；不自动执行旧格式迁移或恢复任何运行状态。
     """
     import torch
-    payload=torch.load(src,map_location="cpu",weights_only=True)
+    try:
+        payload=torch.load(src,map_location="cpu",weights_only=True)
+    except (EOFError,IndexError,pickle.UnpicklingError) as exc:
+        raise ValueError("checkpoint file is invalid, truncated or unsupported by weights_only loading") from exc
     _validate_payload(payload)
     return payload
 

@@ -84,7 +84,7 @@ assert restored.encode(text)==ids
 对照训练文本及未见文本的完整 ID 序列；另检查 BPE→保存→加载→编码→解码的小语料流程。
 
 本批迁移提供 Python API；后续已提供 [数据预处理与文件加载](preprocess.md) 和 [预处理命令](preprocess-cli.md)。
-任意文本分块编码、旧格式导入、模型训练 CLI 和文本生成仍待迁移，
+模型训练 CLI 已接通，见 [训练/验证命令](training-cli.md)；任意文本分块编码、旧格式导入和文本生成仍待迁移，
 没有进行正式训练或大语料性能评估。
 
 本地检查记录（2026-10-22，Windows，项目 `.venv`，Python 3.12.10）：

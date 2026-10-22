@@ -2,7 +2,8 @@
 
 `train-tokenizer` 与 `prepare-data` 已接通现有 Python API。
 `python -m tiny_lm` 与安装后的 `tiny-lm` 控制台入口行为一致。
-训练、验证和生成 CLI 仍为预留入口；本次不改变 BPE、编码或预处理算法。
+训练/验证 CLI 已接通，见 [训练/验证命令](training-cli.md)；生成 CLI 仍为预留入口。
+预处理命令不改变 BPE、编码或预处理算法。
 
 ## Git Bash 示例
 
@@ -78,7 +79,7 @@ mkdir -p artifacts/preprocess-cli-demo
 帮助、版本、配置检查和模块导入仍不加载 regex、NumPy 或 PyTorch。
 
 训练和验证文本应先独立划分，使用同一训练所得 tokenizer 分别预处理。
-后续训练入口还需绑定词表和数据指纹；当前 CLI 不自动调用模型训练。
+训练入口已核对模型词表与当前数据/tokenizer 指纹，但 checkpoint 历史指纹仍待绑定；预处理命令不自动调用模型训练。
 
 ## 本地验收
 

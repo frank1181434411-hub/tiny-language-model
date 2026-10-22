@@ -1,11 +1,14 @@
 """
-提供配置检查、BPE 训练和文本预处理命令；训练、验证和生成入口待接通。
+提供配置检查、预处理、模型训练与验证命令；生成入口待接通。
 """
 
 from __future__ import annotations
 import argparse
 import json
+import pickle
 import sys
+from contextlib import ExitStack
+from dataclasses import asdict
 from pathlib import Path
 from tiny_lm import __version__
 from tiny_lm.config import ConfigError,load_config
@@ -14,7 +17,7 @@ _PENDING="尚未实现，等待源码迁移"
 
 
 def build_parser()->argparse.ArgumentParser:
-    parser=argparse.ArgumentParser(prog="tiny-lm",description="个人语言模型项目：配置检查、BPE 训练与文本预处理。")
+    parser=argparse.ArgumentParser(prog="tiny-lm",description="个人语言模型项目：配置检查、预处理、训练与验证。")
     parser.add_argument("--version",action="version",version=f"%(prog)s {__version__}")
     commands=parser.add_subparsers(dest="command",required=True)
 
@@ -36,13 +39,18 @@ def build_parser()->argparse.ArgumentParser:
     prepare.add_argument("--eos-token",help="每条记录末尾追加的已注册特殊 token，默认不追加")
     prepare.add_argument("--write-batch-size",type=int,default=1_000_000,help="每批写盘 token 数，必须为正整数；不限制编码内存")
 
-    train=commands.add_parser("train",help=f"训练模型（{_PENDING}）",description=_PENDING)
+    train=commands.add_parser("train",help="从 token 文件训练模型或恢复训练",description="读取配置指定的 tokenizer、训练/验证数据；按间隔验证和保存 checkpoint。")
     train.add_argument("--config",type=Path,required=True,help="YAML 配置路径")
     train.add_argument("--resume",type=Path,help="恢复训练所用 checkpoint 路径")
+    train.add_argument("--stop-after",type=int,help="本次最多完成的总更新次数；不改变配置中的 max_steps")
 
-    evaluate=commands.add_parser("evaluate",help=f"计算验证 loss（{_PENDING}）",description=_PENDING)
+    evaluate=commands.add_parser("evaluate",help="加载 checkpoint 计算验证 loss",description="只读取验证数据，使用独立采样器估计平均 token loss；不保存模型或恢复训练随机状态。")
     evaluate.add_argument("--config",type=Path,required=True,help="YAML 配置路径")
     evaluate.add_argument("--checkpoint",type=Path,required=True,help="checkpoint 路径")
+    evaluate.add_argument("--seed",type=int,help="独立验证采样种子，默认使用配置中的 training.seed")
+    for command in (train,evaluate):
+        command.add_argument("--dtype",choices=("float16","bfloat16","float32","float64"),default="float32",help="模型参数精度，默认 float32；恢复或验证时须与 checkpoint 一致")
+        command.add_argument("--eval-batches",type=int,default=4,help="每次验证采样 batch 数，必须为正整数，默认 4")
 
     generate=commands.add_parser("generate",help=f"文本续写（{_PENDING}）",description=_PENDING)
     generate.add_argument("--config",type=Path,required=True,help="YAML 配置路径")
@@ -76,16 +84,72 @@ def _preprocess_command(args:argparse.Namespace)->dict:
     return {"output":str(output),"metadata":str(output.with_name(output.name+".json")),"vocab_size":len(tokenizer.vocab)}
 
 
+def _training_command(args:argparse.Namespace)->dict:
+    """
+    校验配置、tokenizer 与 token 文件后调用数组接口；退出时关闭只读映射。
+    验证复用 checkpoint 的模型与 optimizer 校验，关闭训练随机状态恢复。
+    """
+    import torch
+    from tiny_lm.data import load_token_data
+    from tiny_lm.evaluate import _positive_integer,evaluate
+    from tiny_lm.tokenizer.tokenizer import BPETokenizer
+    config=load_config(args.config)
+    _positive_integer("eval_batches",args.eval_batches)
+    seed=config.training.seed if args.command=="train" or args.seed is None else args.seed
+    if not 0<=seed<2**64:
+        raise ValueError("seed must be between 0 and 2**64 - 1")
+    device=torch.device(config.training.device)
+    if device.type not in ("cpu","cuda"):
+        raise ValueError("training and evaluation currently support CPU and CUDA devices only")
+    if device.type=="cuda" and (not torch.cuda.is_available() or (device.index is not None and device.index>=torch.cuda.device_count())):
+        raise ValueError("the configured CUDA device is not available")
+    if args.command=="train" and args.stop_after is not None and not 0<=args.stop_after<=config.training.max_steps:
+        raise ValueError("stop_after must be between 0 and config.training.max_steps")
+    if config.model.ffn_type!="swiglu":
+        raise ValueError("configured ffn_type must be swiglu; GELU is not implemented")
+    tokenizer=BPETokenizer.from_file(config.data.tokenizer_path)
+    if len(tokenizer.vocab)!=config.model.vocab_size:
+        raise ValueError("model.vocab_size must match the actual tokenizer vocabulary size")
+    dtype=getattr(torch,args.dtype)
+    with ExitStack() as stack:
+        def load_data(path):
+            data=load_token_data(path,tokenizer=tokenizer)
+            mapping=getattr(data,"_mmap",None)
+            if mapping is not None:
+                stack.callback(mapping.close)
+            if len(data)<=config.model.context_length:
+                raise ValueError(f"token data must contain at least context_length + 1 tokens: {path}")
+            return data
+        validation_data=load_data(config.data.val_data_path)
+        if args.command=="train":
+            from tiny_lm.train import train
+            def report(metrics):
+                print(json.dumps(asdict(metrics),allow_nan=False),file=sys.stderr,flush=True)
+            result=train(config,load_data(config.data.train_data_path),validation_data,dtype=dtype,eval_batches=args.eval_batches,resume_from=args.resume,stop_after=args.stop_after,on_step=report)
+            return {"completed_updates":result.completed_updates,"checkpoints":[str(path) for path in result.checkpoints],"last_metrics":asdict(result.history[-1]) if result.history else None,"dtype":args.dtype,"eval_batches":args.eval_batches}
+        from tiny_lm.checkpoint import load_checkpoint
+        from tiny_lm.model.transformer import TransformerLM
+        from tiny_lm.optim import AdamW
+        model=TransformerLM.from_config(config.model,device=device,dtype=dtype)
+        optimizer=AdamW(model.parameters(),lr=config.training.learning_rate,weight_decay=config.training.weight_decay)
+        # 独立验证允许新的验证路径和设备；模型结构仍由 checkpoint 严格校验。
+        iteration=load_checkpoint(args.checkpoint,model,optimizer,restore_rng=False)
+        del optimizer
+        generator=torch.Generator(device="cpu").manual_seed(seed)
+        result=evaluate(model,validation_data,batch_size=config.training.batch_size,context_length=config.model.context_length,num_batches=args.eval_batches,generator=generator)
+        return {"checkpoint":str(args.checkpoint.resolve()),"completed_updates":iteration,**asdict(result),"seed":seed,"dtype":args.dtype}
+
+
 def main(argv:list[str]|None=None)->int:
     args=build_parser().parse_args(argv)
-    if args.command in ("train-tokenizer","prepare-data"):
+    if args.command in ("train-tokenizer","prepare-data","train","evaluate"):
         try:
-            result=_preprocess_command(args)
+            result=_preprocess_command(args) if args.command in ("train-tokenizer","prepare-data") else _training_command(args)
         except ImportError as exc:
-            extra="tokenizer" if args.command=="train-tokenizer" else "tokenizer,data"
+            extra="compute" if args.command in ("train","evaluate") else "tokenizer" if args.command=="train-tokenizer" else "tokenizer,data"
             print(f"{args.command}: {exc}. Install dependencies with: python -m pip install '.[{extra}]'",file=sys.stderr)
             return 2
-        except (OSError,ValueError,TypeError) as exc:
+        except (OSError,ValueError,TypeError,RuntimeError,FloatingPointError,EOFError,pickle.UnpicklingError) as exc:
             print(f"{args.command}: {exc}",file=sys.stderr)
             return 2
         print(json.dumps(result,ensure_ascii=False,indent=2))

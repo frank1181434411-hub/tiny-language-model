@@ -14,8 +14,6 @@ from tiny_lm import __version__
 ROOT = Path(__file__).resolve().parents[1]
 PENDING = "尚未实现，等待源码迁移"
 FUTURE_ARGS = [
-    ["train", "--config", "missing.yaml", "--resume", "missing.pt"],
-    ["evaluate", "--config", "missing.yaml", "--checkpoint", "missing.pt"],
     [
         "generate",
         "--config",

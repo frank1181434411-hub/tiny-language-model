@@ -1,12 +1,13 @@
 # 数组训练与验证接口
 
 `tiny_lm.train.train` 和 `tiny_lm.evaluate.evaluate` 已连接现有数值组件。
-本阶段接收一维 NumPy token 数组或 memmap，不读取配置中指定的数据文件，
-不调用 tokenizer，不启用训练/验证 CLI。没有下载语料或运行正式模型实验。
+数组 API 接收一维 NumPy token 数组或 memmap，不读取配置中指定的数据文件，也不调用 tokenizer。
+现已接通 [训练/验证 CLI](training-cli.md)，由命令入口加载和校验文件后调用这些接口。
+没有下载语料或运行正式模型实验。
 
 ## 训练接口
 
-`train(config,train_data,validation_data,*,dtype=None,eval_batches=4,resume_from=None,stop_after=None,save_checkpoints=True)`
+`train(config,train_data,validation_data,*,dtype=None,eval_batches=4,resume_from=None,stop_after=None,save_checkpoints=True,on_step=None)`
 
 - config 为 ProjectConfig；由它构造 TransformerLM 和项目 AdamW。
   config.model 的 GELU 仍不支持，会在模型构造时报错。
@@ -33,7 +34,9 @@ history 仅记录本次实际更新，每条 TrainingMetrics 含：
 - train_loss：该次更新前采样 batch 的平均 token loss。
 - validation_loss：该次更新后若进行了验证则为平均 loss，否则为 None。
 
-训练接口不自动打印日志，history 保存在内存中。返回值可用于检查或自定义展示。
+训练接口默认不自动打印日志，history 保存在内存中。返回值可用于检查或自定义展示。
+可提供 on_step 回调，在本步验证和必要保存成功后接收 TrainingMetrics；CLI 用它即时输出指标。
+回调须为可调用对象，不得改变训练状态或随机状态；回调异常会中止调用，不回滚已完成步骤。
 
 ## 更新、验证与保存顺序
 

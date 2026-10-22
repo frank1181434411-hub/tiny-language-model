@@ -37,6 +37,7 @@ line-length = 100
 select = ["E", "F", "I", "B", "UP"]
 
 [tool.ruff.lint.per-file-ignores]
+"tests/test_training_cli.py" = ["E501", "I001"]
 "src/tiny_lm/cli.py" = ["E501", "I001"]
 "tests/test_preprocess_cli.py" = ["E501", "I001"]
 "src/tiny_lm/tokenizer/*.py" = ["E501", "I001"]
@@ -67,6 +68,7 @@ select = ["E", "F", "I", "B", "UP"]
 [tool.ruff.format]
 # Preserve the requested compact spacing in migrated numerical implementations.
 exclude = [
+    "tests/test_training_cli.py",
     "src/tiny_lm/cli.py",
     "tests/test_preprocess_cli.py",
     "docs/bpe.md",

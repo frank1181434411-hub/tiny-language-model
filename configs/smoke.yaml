@@ -1,4 +1,4 @@
-# 仅用于配置与框架检查；当前无法完成训练。
+# 小型 CPU 流程检查；训练前按 docs/training-cli.md 准备 256 词表和数据文件。
 # 所有相对路径以本文件所在的 configs/ 为基准。
 model:
   vocab_size: 256
