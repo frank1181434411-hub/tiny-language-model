@@ -96,7 +96,8 @@ load_token_data(path,*,tokenizer=None,verify_hash=True)
 checkpoint 尚未自动记录或核对本格式的数据指纹；续训时仍须由调用方确认数据一致。
 新增元信息记录不等于已经完成训练配置/CLI 的集成。
 
-本批未接通 `prepare-data` 或其他 CLI，没有进行正式训练、下载语料或评估大语料性能。
+预处理 API 迁移时未接通 CLI；现已接通 `prepare-data` 和 `train-tokenizer`，见 [预处理命令](preprocess-cli.md)。
+没有进行正式训练、下载语料或评估大语料性能。
 任意文本块的等价流式编码、跨文档采样隔离和旧裸 bin 的自动猜测加载不在本批范围。
 
 ## 本地验证

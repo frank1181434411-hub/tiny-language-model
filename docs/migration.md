@@ -20,7 +20,7 @@ checkpoint 的版本、步数、配置与随机状态恢复见 [迁移记录](ch
 | tokenizer | `src/tiny_lm/tokenizer/tokenizer.py` | 已迁移；编解码、独立记录迭代、输入校验与原生文件接口 |
 | 重复的 tokenizer 保存加载 | `src/tiny_lm/tokenizer/serialization.py` | 原生 v1 JSON 已实现；旧格式导入待迁移 |
 | nn.py | `src/tiny_lm/model/{layers,attention,transformer}.py` | 基础层、注意力、Block 与 LM 前向已迁移；生成采样待迁移 |
-| data sampling / 数据预处理 | `src/tiny_lm/data.py`、`preprocess.py` | 采样、文本预处理、v1 元信息与只读加载已迁移；CLI 待接入 |
+| data sampling / 数据预处理 | `src/tiny_lm/data.py`、`preprocess.py` | 采样、文本预处理、v1 元信息与只读加载已迁移；预处理 CLI 已接入 |
 | loss / cross_entropy | `src/tiny_lm/losses.py` | 已迁移；平均 loss、精度处理与 CPU 梯度验证 |
 | optimizer | `src/tiny_lm/optim.py` | 已迁移；AdamW、全局裁剪、精度与状态恢复 |
 | scheduler | `src/tiny_lm/schedule.py` | 已迁移；线性预热、余弦衰减与边界校验 |
@@ -29,7 +29,7 @@ checkpoint 的版本、步数、配置与随机状态恢复见 [迁移记录](ch
 | inference | `src/tiny_lm/generate.py` | 自回归循环、EOS 与采样 |
 
 按用户要求已迁移独立计算组件并组装 TransformerLM 前向，提供 ModelConfig 构造入口。
-数组训练循环已支持精确 CPU 续训；预处理和只读文件加载已提供 Python API，后续接入 CLI 与文本生成。
+数组训练循环已支持精确 CPU 续训；预处理和只读文件加载已提供 Python API，BPE 训练和预处理 CLI 已接通；后续接入训练/验证 CLI 与文本生成。
 每批迁移确认接口与正确性后再接通 CLI。
 PyTorch、NumPy、regex 已在本地迁移环境按需安装；包依赖随实际实现逐步声明。
 

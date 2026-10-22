@@ -2,7 +2,7 @@
 
 当前已实现：配置加载与校验、CLI 帮助/版本、显式失败的预留入口、平均交叉熵、
 AdamW、全局梯度裁剪、学习率调度、数据采样、模型基础层、注意力、TransformerBlock、TransformerLM 前向和 checkpoint。下列计算流程中未标注实现的部分仍为规划，
-已有接收 token 数组的 Python 训练/验证循环；BPE、Tokenizer、预处理和文件加载 API 已迁移，CLI 尚未连接。
+已有接收 token 数组的 Python 训练/验证循环；BPE、Tokenizer、预处理和文件加载 API 已迁移；train-tokenizer 和 prepare-data CLI 已连接，训练/验证/生成 CLI 待接入。
 
 ```text
 原始 UTF-8 文本
@@ -26,7 +26,8 @@ AdamW、全局梯度裁剪、学习率调度、数据采样、模型基础层、
 
 `config.py` 提供结构化参数，TransformerLM.from_config 接受 ModelConfig 构造模型，
 train 的 Python 接口从 ProjectConfig 构造模型与 optimizer；CLI 仍待接入。
-模块导入不能启动任务或访问训练数据；文件存在性与运行设备检查由未来入口负责。
+模块导入不能启动任务或访问训练数据；预处理命令在调用时检查输入和输出路径，训练设备检查由训练入口负责。
+预处理 CLI 的参数、记录语义与输出保护见 [预处理命令](preprocess-cli.md)。
 checkpoint v1 包含配置、已完成更新次数、模型、优化器与随机数状态，
 检查模型构造配置及参数顺序，并提供同目录临时文件替换。实验记录仍应关联 tokenizer 和数据版本。
 采样支持独立的 CPU generator，可通过具名字典分别保存与恢复训练和验证采样器。

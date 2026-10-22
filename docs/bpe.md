@@ -81,7 +81,7 @@ PowerShell 安装与定向检查：
 
 Tokenizer 的 encode/decode/encode_iterable 已迁移并复用共享预分词和原生文件格式。
 迭代编码按独立文本记录定义，不把任意文本分块当作等价编码。
-后续已提供 [数据预处理与文件加载](preprocess.md)；旧格式导入和 `train-tokenizer` CLI 仍待接入。
+后续已提供 [数据预处理与文件加载](preprocess.md)；`train-tokenizer` CLI 已接通，见 [预处理命令](preprocess-cli.md)；旧格式导入仍待迁移。
 
 本地检查记录（2026-10-22，Windows，项目 `.venv`，Python 3.12.10）：
 
