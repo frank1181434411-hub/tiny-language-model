@@ -25,6 +25,18 @@
   scaled_dot_product_attention 和 CausalSelfAttention，迁至 `src/tiny_lm/model/attention.py`。
   保留手写算法、奇偶维旋转及四个投影参数名，补精度处理、参数校验与缓存重建。
   测试独立编写，旧源码未修改，完整模型仍待迁移；详见 [迁移记录](attention.md)。
+- BPE 来源：`cs336_basics/train_bpe.py`，迁至 `src/tiny_lm/tokenizer/bpe.py`。
+  保留增量计数、合并与同频排序；补校验、最长特殊 token 匹配并保留原始换行。
+  共享规则与原生 v1 保存格式为本项目整理实现；新测试独立编写，旧源码未修改。
+  细节见 [BPE 迁移记录](bpe.md)，课程来源与许可仍待审查。
+- Tokenizer 来源：`cs336_basics/tokenizer.py` 中的 `BPETokenizer`。
+  保留手写最小 rank 合并流程、UTF-8 拼接解码和逐记录编码；补输入校验、
+  输入容器复制、独立特殊 token 映射、普通文本模式和原生文件接口。
+  测试独立编写，旧源码未修改，详见 [Tokenizer 迁移记录](tokenizer.md)。
+- 预处理来源：`cs336_basics/preprocess.py`，迁至 `src/tiny_lm/preprocess.py`。
+  保留编码和批量写盘思路；修正任意文本分块，增加单/多文件记录、显式 EOS、
+  dtype 范围检查、版本化元信息和不覆盖发布；`data.py` 增加校验后的只读加载。
+  测试独立编写，旧源码未修改，详见 [预处理迁移记录](preprocess.md)。
 - 本次新增：工程框架、配置/CLI、测试和项目文档。
   `examples/toy_corpus.txt` 为本次自行编写的小段中英文示例。
 - 后续应区分个人实现、课程骨架、课程测试/adapters、第三方片段，

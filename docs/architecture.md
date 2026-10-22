@@ -2,15 +2,15 @@
 
 当前已实现：配置加载与校验、CLI 帮助/版本、显式失败的预留入口、平均交叉熵、
 AdamW、全局梯度裁剪、学习率调度、数据采样、模型基础层、注意力、TransformerBlock、TransformerLM 前向和 checkpoint。下列计算流程中未标注实现的部分仍为规划，
-已有接收 token 数组的 Python 训练/验证循环；数据文件、文本处理和 CLI 尚未连接。
+已有接收 token 数组的 Python 训练/验证循环；BPE、Tokenizer、预处理和文件加载 API 已迁移，CLI 尚未连接。
 
 ```text
 原始 UTF-8 文本
-  → tokenizer/bpe.py：训练词表与 merges
-  → tokenizer/serialization.py：持久化 tokenizer 与元信息
-  → tokenizer/tokenizer.py：文本编码为 token IDs
-  → 数据预处理：写入 token 数据与 dtype、词表版本等元信息
-  → data.py：采样输入 x 与下一 token 目标 y（已实现；文件加载待迁移）
+  → tokenizer/bpe.py：训练词表与 merges（已实现）
+  → tokenizer/serialization.py：持久化 tokenizer 与元信息（原生 v1 已实现）
+  → tokenizer/tokenizer.py：文本编码为 token IDs（已实现，迭代编码按独立记录处理）
+  → preprocess.py：单/多文件编码，写入 token 数据与版本化元信息（已实现）
+  → data.py：只读加载、校验和采样输入 x 与下一 token 目标 y（已实现）
   → model/layers.py：Linear、Embedding、RMSNorm、SiLU、SwiGLU（已实现）
   → model/attention.py：RoPE、softmax、缩放点积与因果多头注意力（已实现）
   → model/transformer.py：TransformerBlock、TransformerLM 与 logits 输出（已实现）

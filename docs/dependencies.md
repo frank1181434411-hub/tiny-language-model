@@ -5,10 +5,12 @@
 psutil、tiktoken、pytest 和 pytest-timeout。
 
 这是一组按需安装的迁移依赖，清单在 `requirements/migration.txt`。
-项目默认安装和框架 CI 仍只使用 `pyproject.toml` 中的轻量依赖。
+项目默认安装仍只包含 PyYAML；框架 CI 另安装 dev、tokenizer 与 data 可选依赖。
 已迁移的数据采样需要 NumPy，现与 PyTorch 一起列入 `compute` 可选依赖组。
 按实际平台准备好 PyTorch 后，可用 `python -m pip install -e ".[dev,compute]"`
 安装当前计算组件及测试依赖。基础安装仍不强制安装 NumPy/PyTorch。
+`data` extra 单独提供 NumPy，`tokenizer` extra 提供 regex；
+`python -m pip install -e ".[dev,tokenizer,data]"` 可测试预处理与文件加载，无需 PyTorch。
 未被当前实现或测试使用的 W&B、einx、ty 等课程环境依赖不在该清单中。
 
 ## PowerShell 安装命令

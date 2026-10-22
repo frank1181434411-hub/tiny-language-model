@@ -86,6 +86,7 @@ events.out.tfevents.*
 *.npy
 *.npz
 *.bin
+*.bin.json
 *.memmap
 *.mmap
 *.h5

@@ -1,14 +1,54 @@
 """
 从 Assignment 1 迁移的随机窗口采样与下一 token 目标构造。
-文件加载、数据格式与预处理仍待迁移。
+支持带元信息的 token 文件只读加载；文本预处理位于 preprocess.py。
 """
 
 from __future__ import annotations
 from typing import TYPE_CHECKING
+from pathlib import Path
 
 if TYPE_CHECKING:
     import numpy.typing as npt
     import torch
+    from tiny_lm.tokenizer.tokenizer import BPETokenizer
+
+
+def load_token_data(path:str|Path,*,tokenizer:BPETokenizer|None=None,verify_hash:bool=True)->npt.NDArray:
+    """
+    校验旁置元信息后只读加载；默认完整扫描数据哈希和 ID 范围。
+    可传 tokenizer 校验指纹；空数据返回只读空数组，非空返回 memmap。
+    """
+    from tiny_lm.preprocess import _read_metadata,_fingerprint,_sha256_file
+    import numpy as np
+    if type(verify_hash) is not bool:
+        raise TypeError("verify_hash must be a bool")
+    path=Path(path).resolve(strict=True)
+    if not path.is_file():
+        raise ValueError("token data path must be a regular file")
+    metadata=_read_metadata(path)
+    if path.stat().st_size!=metadata["num_bytes"]:
+        raise ValueError("token data file size does not match metadata")
+    if tokenizer is not None:
+        if _fingerprint(tokenizer)!=metadata["tokenizer_sha256"]:
+            raise ValueError("tokenizer fingerprint does not match token data metadata")
+        options=metadata["options"]
+        if options["eos_token"] is not None and tokenizer.special_to_id.get(options["eos_token"])!=options["eos_id"]:
+            raise ValueError("metadata EOS does not match the tokenizer")
+    if verify_hash and _sha256_file(path)!=metadata["sha256"]:
+        raise ValueError("token data SHA-256 does not match metadata")
+    if metadata["num_tokens"]==0:
+        data=np.empty(0,dtype=metadata["dtype"])
+        data.flags.writeable=False
+        return data
+    data=np.memmap(path,dtype=metadata["dtype"],mode="r",shape=(metadata["num_tokens"],))
+    try:
+        for start in range(0,len(data),1_000_000):
+            if int(data[start:start+1_000_000].max())>=metadata["vocab_size"]:
+                raise ValueError("token data contains IDs outside the vocabulary")
+    except BaseException:
+        data._mmap.close()
+        raise
+    return data
 
 
 def get_batch(dataset:npt.NDArray,batch_size:int,context_length:int,device:str|torch.device,*,generator:torch.Generator|None=None)->tuple[torch.Tensor,torch.Tensor]:
