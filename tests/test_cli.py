@@ -12,20 +12,7 @@ import pytest
 from tiny_lm import __version__
 
 ROOT = Path(__file__).resolve().parents[1]
-PENDING = "尚未实现，等待源码迁移"
-FUTURE_ARGS = [
-    [
-        "generate",
-        "--config",
-        "missing.yaml",
-        "--checkpoint",
-        "missing.pt",
-        "--prompt",
-        "Hello",
-        "--max-new-tokens",
-        "5",
-    ],
-]
+COMMANDS = ["check-config", "train-tokenizer", "prepare-data", "train", "evaluate", "generate"]
 
 
 @pytest.fixture(params=["module", "console"])
@@ -53,8 +40,8 @@ def test_help(entry, tmp_path):
     result = run_cli(entry, ["--help"], tmp_path)
     assert result.returncode == 0
     assert "check-config" in result.stdout
-    for args in FUTURE_ARGS:
-        assert args[0] in result.stdout
+    for command in COMMANDS:
+        assert command in result.stdout
     assert list(tmp_path.iterdir()) == []
 
 
@@ -94,17 +81,17 @@ def test_config_error_is_nonzero(entry, tmp_path):
     assert result.stdout == ""
 
 
-@pytest.mark.parametrize("args", FUTURE_ARGS, ids=[args[0] for args in FUTURE_ARGS])
-def test_future_commands_fail_honestly(entry, tmp_path, args):
-    result = run_cli(entry, args, tmp_path)
+@pytest.mark.parametrize("command", COMMANDS)
+def test_required_arguments_fail_without_output(entry, tmp_path, command):
+    result = run_cli(entry, [command], tmp_path)
     assert result.returncode == 2
-    assert PENDING in result.stderr
+    assert "required" in result.stderr
     assert result.stdout == ""
     assert list(tmp_path.iterdir()) == []
 
 
-@pytest.mark.parametrize("command", [args[0] for args in FUTURE_ARGS])
-def test_future_command_help(entry, tmp_path, command):
+@pytest.mark.parametrize("command", COMMANDS)
+def test_command_help(entry, tmp_path, command):
     result = run_cli(entry, [command, "--help"], tmp_path)
     assert result.returncode == 0
-    assert PENDING in result.stdout
+    assert "尚未实现" not in result.stdout

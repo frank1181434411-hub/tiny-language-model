@@ -19,17 +19,17 @@ checkpoint 的版本、步数、配置与随机状态恢复见 [迁移记录](ch
 | train_bpe | `src/tiny_lm/tokenizer/bpe.py` | 已迁移；增量统计、确定性合并、特殊 token 与参数校验 |
 | tokenizer | `src/tiny_lm/tokenizer/tokenizer.py` | 已迁移；编解码、独立记录迭代、输入校验与原生文件接口 |
 | 重复的 tokenizer 保存加载 | `src/tiny_lm/tokenizer/serialization.py` | 原生 v1 JSON 已实现；旧格式导入待迁移 |
-| nn.py | `src/tiny_lm/model/{layers,attention,transformer}.py` | 基础层、注意力、Block 与 LM 前向已迁移；生成采样待迁移 |
+| nn.py | `src/tiny_lm/model/{layers,attention,transformer}.py`、`generate.py` | 基础层、注意力、Block、LM 前向与单提示词生成采样已迁移 |
 | data sampling / 数据预处理 | `src/tiny_lm/data.py`、`preprocess.py` | 采样、文本预处理、v1 元信息与只读加载已迁移；预处理 CLI 已接入 |
 | loss / cross_entropy | `src/tiny_lm/losses.py` | 已迁移；平均 loss、精度处理与 CPU 梯度验证 |
 | optimizer | `src/tiny_lm/optim.py` | 已迁移；AdamW、全局裁剪、精度与状态恢复 |
 | scheduler | `src/tiny_lm/schedule.py` | 已迁移；线性预热、余弦衰减与边界校验 |
 | checkpointing | `src/tiny_lm/checkpoint.py` | 已迁移；v1 格式、原子保存、状态/配置/RNG 恢复与校验 |
 | 训练/验证流程 | `src/tiny_lm/train.py`、`evaluate.py` | 已接通数组接口与文件 CLI；采样、更新、验证、保存、续训和即时指标输出 |
-| inference | `src/tiny_lm/generate.py` | 自回归循环、EOS 与采样 |
+| inference | `src/tiny_lm/generate.py` | 已迁移；checkpoint 模型加载、编解码、滑动上下文、EOS、温度/top-p 和新增 top-k，CLI 已接通 |
 
 按用户要求已迁移独立计算组件并组装 TransformerLM 前向，提供 ModelConfig 构造入口。
-数组训练循环已支持精确 CPU 续训；预处理、只读文件加载及训练/验证 CLI 已接通；后续接入文本生成和 checkpoint 历史数据指纹绑定。
+数组训练循环已支持精确 CPU 续训；预处理、只读文件加载、训练/验证和生成 CLI 已接通；后续实现 checkpoint 历史数据指纹绑定与真实语料基线。
 每批迁移确认接口与正确性后再接通 CLI。
 PyTorch、NumPy、regex 已在本地迁移环境按需安装；包依赖随实际实现逐步声明。
 
@@ -48,7 +48,7 @@ Tokenizer 的模式、ID 校验和记录边界见 [Tokenizer 迁移记录](token
   训练/验证切分、防止数据泄漏及 checkpoint 自动绑定数据指纹仍待运行流程集成。
 - checkpoint 的 GPU/分布式状态、GradScaler 与数据工作进程恢复仍待扩展和验证；
   v1 的 CPU 精确恢复、配置校验与写入失败保护已验证。
-- 生成 EOS 是否正确终止；温度、top-k、最大长度、空提示与上下文截断的边界。
+- 单提示词生成的 EOS、温度、top-k/top-p、最大长度、空提示与截断边界已验证；批量生成和 KV cache 仍待实现。
 - 是否存在模块顶层数据读取、训练、目录创建、演示、随机种子修改或设备初始化。
 
 请同时提供相关测试、作业 adapters、依赖文件、旧配置和调用示例，

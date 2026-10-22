@@ -2,7 +2,7 @@
 
 `train-tokenizer` 与 `prepare-data` 已接通现有 Python API。
 `python -m tiny_lm` 与安装后的 `tiny-lm` 控制台入口行为一致。
-训练/验证 CLI 已接通，见 [训练/验证命令](training-cli.md)；生成 CLI 仍为预留入口。
+训练/验证与生成 CLI 已接通，见 [训练/验证命令](training-cli.md) 和 [文本生成](generation.md)。
 预处理命令不改变 BPE、编码或预处理算法。
 
 ## Git Bash 示例
@@ -89,6 +89,7 @@ mkdir -p artifacts/preprocess-cli-demo
 - 新增 55 项测试，覆盖模块/控制台入口、实际词表大小、文本往返、中文及含空格路径、
   多文件顺序、两种记录模式、两种特殊 token 模式、EOS 与写盘批大小参数。
 - 验证非法参数、无效 UTF-8、缺失文件/父目录、损坏 tokenizer、已有数据或元信息保护，
-  以及缺少 regex/NumPy 时的安装提示；预留训练/验证/生成命令继续明确失败。
+  以及缺少 regex/NumPy 时的安装提示；当时尚未接通的训练/验证/生成命令明确失败。
+  后续这些命令均已接通，当前完整验收见 [文本生成](generation.md)。
 - Ruff 静态检查、格式检查、紧凑码风检查和导入审计通过；CLI 不引入计算依赖的顶层加载。
 - 未下载语料、安装依赖或进行模型训练；远程 CI、Linux 和大语料性能未在本次验证。

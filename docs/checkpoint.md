@@ -3,7 +3,8 @@
 从 Assignment 1 的 `cs336_basics/checkpointing.py` 迁移到 `tiny_lm.checkpoint`。
 保留 save_checkpoint 的前四个位置参数及 load_checkpoint 的前三个位置参数；
 加载仍返回整数 iteration。扩展为带版本、配置及随机状态的训练快照。
-原作业目录未修改，训练/验证 CLI 已接入，生成 CLI 仍待接入。
+原作业目录未修改，训练/验证和生成 CLI 已接入。
+生成模块复用独立的模型状态校验，从保存的结构和 dtype 重建模型；不构造 optimizer 或恢复 RNG，见 [文本生成](generation.md)。
 读取损坏或截断的文件时，weights_only 反序列化的 EOFError、IndexError 和 UnpicklingError
 统一转换为可读的 ValueError；不会回退到不受限反序列化。
 

@@ -148,15 +148,12 @@ def _validate_payload(payload):
         _check_config(payload["model_config"],payload["config"])
 
 
-def _validate_states(payload,model,optimizer):
+def _validate_model_state(payload,model):
     import torch
-    from tiny_lm.optim import AdamW,_check_group
-    if payload["model_class"]!=_class_name(model) or payload["optimizer_class"]!=_class_name(optimizer):
-        raise ValueError("checkpoint model or optimizer class does not match")
+    if payload["model_class"]!=_class_name(model):
+        raise ValueError("checkpoint model class does not match")
     if payload["model_config"]!=_model_config(model):
         raise ValueError("checkpoint model configuration does not match; rebuild the model with the saved configuration")
-    if payload["optimizer_parameter_names"]!=_parameter_names(model,optimizer):
-        raise ValueError("checkpoint optimizer parameter names or ordering do not match")
     current=model.state_dict()
     saved=payload["model_state_dict"]
     if set(current)!=set(saved):
@@ -167,6 +164,16 @@ def _validate_states(payload,model,optimizer):
             raise ValueError("checkpoint model states must contain tensors")
         if value.shape!=other.shape or value.dtype!=other.dtype or value.layout!=other.layout:
             raise ValueError(f"checkpoint model tensor shape, dtype or layout does not match: {name}")
+
+
+def _validate_states(payload,model,optimizer):
+    import torch
+    from tiny_lm.optim import AdamW,_check_group
+    _validate_model_state(payload,model)
+    if payload["optimizer_class"]!=_class_name(optimizer):
+        raise ValueError("checkpoint optimizer class does not match")
+    if payload["optimizer_parameter_names"]!=_parameter_names(model,optimizer):
+        raise ValueError("checkpoint optimizer parameter names or ordering do not match")
     state=payload["optimizer_state_dict"]
     if set(state)!={"state","param_groups"} or not isinstance(state["state"],dict) or not isinstance(state["param_groups"],list):
         raise ValueError("checkpoint optimizer state is invalid")

@@ -3,7 +3,7 @@
 来源：Assignment 1 的 `cs336_basics/nn.py` 中的 TransformerBlock 和 TransformerLM。
 迁移目标为 `tiny_lm.model.transformer`，复用已迁移的
 CausalSelfAttention、RMSNorm、Linear 和 SwiGLU。
-已完成 Block 与完整模型前向组装，训练/验证 CLI 已接入；生成方法仍待迁移，未修改课程目录。
+已完成 Block 与完整模型前向组装，训练/验证 CLI 已接入；生成逻辑已迁移至独立模块，见 [文本生成](generation.md)，未修改课程目录。
 
 ## 结构和接口
 

@@ -1,5 +1,5 @@
 """
-提供配置检查、预处理、模型训练与验证命令；生成入口待接通。
+提供配置检查、预处理、模型训练、验证与文本生成命令。
 """
 
 from __future__ import annotations
@@ -13,11 +13,8 @@ from pathlib import Path
 from tiny_lm import __version__
 from tiny_lm.config import ConfigError,load_config
 
-_PENDING="尚未实现，等待源码迁移"
-
-
 def build_parser()->argparse.ArgumentParser:
-    parser=argparse.ArgumentParser(prog="tiny-lm",description="个人语言模型项目：配置检查、预处理、训练与验证。")
+    parser=argparse.ArgumentParser(prog="tiny-lm",description="个人语言模型项目：配置检查、预处理、训练、验证与生成。")
     parser.add_argument("--version",action="version",version=f"%(prog)s {__version__}")
     commands=parser.add_subparsers(dest="command",required=True)
 
@@ -52,13 +49,17 @@ def build_parser()->argparse.ArgumentParser:
         command.add_argument("--dtype",choices=("float16","bfloat16","float32","float64"),default="float32",help="模型参数精度，默认 float32；恢复或验证时须与 checkpoint 一致")
         command.add_argument("--eval-batches",type=int,default=4,help="每次验证采样 batch 数，必须为正整数，默认 4")
 
-    generate=commands.add_parser("generate",help=f"文本续写（{_PENDING}）",description=_PENDING)
+    generate=commands.add_parser("generate",help="从 checkpoint 按提示文本续写",description="单提示词自回归生成；从 checkpoint 自动推断参数精度，不读取训练或验证数据。")
     generate.add_argument("--config",type=Path,required=True,help="YAML 配置路径")
     generate.add_argument("--checkpoint",type=Path,required=True,help="checkpoint 路径")
     generate.add_argument("--prompt",required=True,help="续写提示文本")
     generate.add_argument("--max-new-tokens",type=int,default=64,help="最大新增 token 数")
     generate.add_argument("--temperature",type=float,default=1.0,help="采样温度")
     generate.add_argument("--top-k",type=int,help="可选 top-k 采样参数")
+    generate.add_argument("--top-p",type=float,default=1.0,help="核采样累计概率，范围 (0,1]；默认 1 不启用")
+    generate.add_argument("--seed",type=int,help="独立生成采样种子，默认使用配置中的 training.seed")
+    generate.add_argument("--eos-token",help="遇到该已注册特殊 token 时结束；默认使用已注册的 <|endoftext|>，否则不按 EOS 停止")
+    generate.add_argument("--special-mode",choices=("recognize","ordinary"),default="recognize",help="提示词默认识别已注册特殊 token；ordinary 按普通文本编码")
     return parser
 
 
@@ -140,13 +141,50 @@ def _training_command(args:argparse.Namespace)->dict:
         return {"checkpoint":str(args.checkpoint.resolve()),"completed_updates":iteration,**asdict(result),"seed":seed,"dtype":args.dtype}
 
 
+def _generation_command(args:argparse.Namespace)->dict:
+    """
+    使用 checkpoint 中的结构与精度重建模型，输出包含提示的完整解码文本和 token IDs。
+    """
+    import torch
+    from tiny_lm.generate import generate,load_generation_model,_check_sampling
+    from tiny_lm.tokenizer.tokenizer import BPETokenizer
+    config=load_config(args.config)
+    seed=config.training.seed if args.seed is None else args.seed
+    if not 0<=seed<2**64:
+        raise ValueError("seed must be between 0 and 2**64 - 1")
+    tokenizer=BPETokenizer.from_file(config.data.tokenizer_path)
+    if len(tokenizer.vocab)!=config.model.vocab_size:
+        raise ValueError("model.vocab_size must match the actual tokenizer vocabulary size")
+    eos_token=args.eos_token
+    if eos_token is None and "<|endoftext|>" in tokenizer.special_to_id:
+        eos_token="<|endoftext|>"
+    if eos_token is not None and eos_token not in tokenizer.special_to_id:
+        raise ValueError("eos_token must be a registered special token")
+    eos_id=None if eos_token is None else tokenizer.special_to_id[eos_token]
+    _check_sampling(len(tokenizer.vocab),args.max_new_tokens,args.temperature,args.top_p,args.top_k,eos_id)
+    prompt_ids=tokenizer.encode(args.prompt,special_mode=args.special_mode)
+    if not prompt_ids:
+        raise ValueError("prompt must encode to at least one token; no implicit BOS is added")
+    model=load_generation_model(args.checkpoint,device=config.training.device,config=config.model)
+    prompt=torch.tensor([prompt_ids],dtype=torch.int64,device=model.token_embeddings.weight.device)
+    generator=torch.Generator(device="cpu").manual_seed(seed)
+    output=generate(model,prompt,args.max_new_tokens,eos_token_id=eos_id,temperature=args.temperature,top_p=args.top_p,top_k=args.top_k,generator=generator)[0].tolist()
+    new_ids=output[len(prompt_ids):]
+    return {"text":tokenizer.decode(output),"token_ids":output,"num_prompt_tokens":len(prompt_ids),"num_generated_tokens":len(new_ids),"finish_reason":"eos" if new_ids and new_ids[-1]==eos_id else "length","seed":seed,"dtype":str(model.token_embeddings.weight.dtype).removeprefix("torch.")}
+
+
 def main(argv:list[str]|None=None)->int:
     args=build_parser().parse_args(argv)
-    if args.command in ("train-tokenizer","prepare-data","train","evaluate"):
+    if args.command!="check-config":
         try:
-            result=_preprocess_command(args) if args.command in ("train-tokenizer","prepare-data") else _training_command(args)
+            if args.command in ("train-tokenizer","prepare-data"):
+                result=_preprocess_command(args)
+            elif args.command=="generate":
+                result=_generation_command(args)
+            else:
+                result=_training_command(args)
         except ImportError as exc:
-            extra="compute" if args.command in ("train","evaluate") else "tokenizer" if args.command=="train-tokenizer" else "tokenizer,data"
+            extra="compute,tokenizer" if args.command=="generate" else "compute" if args.command in ("train","evaluate") else "tokenizer" if args.command=="train-tokenizer" else "tokenizer,data"
             print(f"{args.command}: {exc}. Install dependencies with: python -m pip install '.[{extra}]'",file=sys.stderr)
             return 2
         except (OSError,ValueError,TypeError,RuntimeError,FloatingPointError,EOFError,pickle.UnpicklingError) as exc:
@@ -154,9 +192,6 @@ def main(argv:list[str]|None=None)->int:
             return 2
         print(json.dumps(result,ensure_ascii=False,indent=2))
         return 0
-    if args.command!="check-config":
-        print(f"{args.command}: {_PENDING}",file=sys.stderr)
-        return 2
     try:
         config=load_config(args.config)
     except ConfigError as exc:

@@ -107,6 +107,8 @@ dtype 不匹配会被 checkpoint 权重校验拒绝；eval_batches 尚未写入 
 
 ## 本地验收
 
+以下保留训练/验证 CLI 接入时的检查记录；生成接入后的最新全项目验收为 1300 项通过，见 [文本生成](generation.md)。
+
 2026-10-22，Windows、Python 3.12.10，使用 `D:/Python/.venvs/tiny-language-model`：
 
 - 全项目 1180 项测试通过，119.28 秒；关闭 pytest 缓存，使用独立临时目录。

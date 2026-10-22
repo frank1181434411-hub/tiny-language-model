@@ -68,7 +68,7 @@ class TransformerLM(nn.Module):
     """
     Embedding、多层 TransformerBlock、最终 RMSNorm 与独立词表投影。
     输入 (batch,seq_len) 的整数 token IDs，返回 (batch,seq_len,vocab_size) logits。
-    保留旧参数名称与未绑定的输入/输出权重；生成和训练入口另行迁移。
+    保留旧参数名称与未绑定的输入/输出权重；生成和训练循环位于各自模块。
     """
 
     def __init__(self,vocab_size:int,context_length:int,d_model:int,num_layers:int,num_heads:int,d_ff:int,rope_theta:float,device=None,dtype=None,use_rms_norm:bool=True,norm_mode:str="pre_norm",ffn_type:str="swiglu"):

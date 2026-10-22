@@ -34,7 +34,7 @@ Unix 的 `resource` 模块。安装依赖不会消除 Windows 平台限制。
 原始 tokenizer 测试需在 Linux 运行，或迁移时处理平台兼容性；
 不通过安装同名第三方包替代标准库模块。
 
-安装依赖不会自动迁入旧源码，也不会启用尚未实现的训练、验证或生成命令。
+安装依赖不会自动迁入旧源码。当前训练/验证命令使用 compute extra；生成命令使用 compute 和 tokenizer extras。
 
 ## 本次安装与检查结果
 

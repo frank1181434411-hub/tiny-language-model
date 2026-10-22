@@ -3,7 +3,7 @@
 - 学习来源：Stanford CS336 Assignment 1。课程年份、作业版本和具体引用链接
   仍由项目所有者确认；源码使用用户指定的本地目录。
 - 用户说明：已自行实现 BPE、Tokenizer、Transformer、损失、AdamW、调度、
-  采样、checkpoint 与生成代码；目前已迁入 loss、optimizer、scheduler、采样、模型基础层与注意力，其他实现待迁移，
+  采样、checkpoint 与生成代码；当前主要数值组件、文本处理、训练/验证及单提示词生成已迁移，
   归属仍需逐文件核对。
 - loss 来源：`D:/Python/CS336-Private/assignment1-basics/cs336_basics/losses.py`，
   按用户要求迁至 `src/tiny_lm/losses.py`。保留手写计算流程与主要变量名，
@@ -24,7 +24,7 @@
 - 注意力来源：同一 `nn.py` 中的 RotaryPositionalEmbedding、softmax、
   scaled_dot_product_attention 和 CausalSelfAttention，迁至 `src/tiny_lm/model/attention.py`。
   保留手写算法、奇偶维旋转及四个投影参数名，补精度处理、参数校验与缓存重建。
-  测试独立编写，旧源码未修改，完整模型仍待迁移；详见 [迁移记录](attention.md)。
+  测试独立编写，旧源码未修改；完整模型现已组装，详见 [注意力迁移记录](attention.md) 和 [模型迁移记录](transformer.md)。
 - BPE 来源：`cs336_basics/train_bpe.py`，迁至 `src/tiny_lm/tokenizer/bpe.py`。
   保留增量计数、合并与同频排序；补校验、最长特殊 token 匹配并保留原始换行。
   共享规则与原生 v1 保存格式为本项目整理实现；新测试独立编写，旧源码未修改。
@@ -37,6 +37,11 @@
   保留编码和批量写盘思路；修正任意文本分块，增加单/多文件记录、显式 EOS、
   dtype 范围检查、版本化元信息和不覆盖发布；`data.py` 增加校验后的只读加载。
   测试独立编写，旧源码未修改，详见 [预处理迁移记录](preprocess.md)。
+- 生成来源：`cs336_basics/nn.py` 的 generate、_top_p_filter 与 `inference.py` 的加载/编解码流程，
+  迁至 `src/tiny_lm/generate.py`。保留滑动上下文、温度的 1e-8、核采样和 multinomial；
+  增加可选 top-k、独立 CPU generator、模式恢复、精度和参数检查，限定首版单提示词。
+  模型加载使用项目 v1 checkpoint 和原生 tokenizer，不迁入旧格式猜测及交互循环；
+  测试独立编写，原作业未修改，详见 [文本生成](generation.md)。
 - 本次新增：工程框架、配置/CLI、测试和项目文档。
   `examples/toy_corpus.txt` 为本次自行编写的小段中英文示例。
 - 后续应区分个人实现、课程骨架、课程测试/adapters、第三方片段，

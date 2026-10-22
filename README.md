@@ -2,7 +2,7 @@
 
 一个从 Stanford CS336 Assignment 1 学习成果出发的个人语言模型项目。
 已有自行实现的 BPE、Tokenizer、Transformer、损失函数、AdamW、调度、采样、
-checkpoint 和生成源码，**目前已迁入 BPE、Tokenizer、文本预处理、数据加载、完整 TransformerLM、训练/验证与 checkpoint 的 Python 接口；预处理和训练/验证 CLI 已接通，文本生成仍待接入**。长期目标是提供可安装、可复现的
+checkpoint 和生成源码，**目前已迁入 BPE、Tokenizer、文本预处理、数据加载、完整 TransformerLM、训练/验证、checkpoint 与文本生成；预处理、训练/验证和生成 CLI 已接通**。长期目标是提供可安装、可复现的
 文本预处理、训练、验证、保存与恢复训练、文本续写流程。
 
 当前版本 `0.1.0` 已完成工程框架：`src` 布局、严格的 YAML/dataclass 配置、
@@ -14,7 +14,7 @@ CLI、测试、Ruff、CPU CI 与迁移文档，并提供手写交叉熵 `tiny_lm
 和 CausalSelfAttention。`tiny_lm.model.transformer` 提供 TransformerBlock 和 TransformerLM，
 可通过 `TransformerLM.from_config(config.model,device=...,dtype=...)` 构造。
 Python API 已支持文本编码为带元信息的 token 文件、只读加载、模型前向/反向、数组训练/验证和中断续训。
-**CLI 已支持帮助、版本、配置校验、BPE 训练、文本预处理、模型训练/续训和独立验证；没有正式训练结果或已验证基线。**
+**CLI 已支持帮助、版本、配置校验、BPE 训练、文本预处理、模型训练/续训、独立验证和单提示词生成；没有正式训练结果或已验证基线。**
 `smoke.yaml` 可在准备匹配数据后检查小型 CPU 流程，`baseline.example.yaml` 仅为待硬件和实验确定的模板。
 
 ## 本地安装（Windows PowerShell）
@@ -91,9 +91,8 @@ $TinyLm = Join-Path (Split-Path $ProjectPython) "tiny-lm.exe"
 
 `train-tokenizer` 和 `prepare-data` 已可运行，参数及 Git Bash 示例见 [预处理命令](docs/preprocess-cli.md)。
 `train` 和 `evaluate` 已接通文件加载、checkpoint 和独立验证采样，见 [训练/验证命令](docs/training-cli.md)。
-`generate` 仍提供帮助和基本参数；
-传入所需参数后会提示“尚未实现，等待源码迁移”并返回非零退出码 `2`。
-它不会读取输入文件、加载模型、创建输出或返回模拟结果。
+`generate` 从 checkpoint 自动读取模型结构和精度，支持温度、可选 top-k/top-p、EOS 和独立采样种子，见 [生成命令](docs/generation.md)。
+生成返回包含原提示的完整文本与 token IDs，不读取训练数据，也不写 checkpoint。
 例如 `& $ProjectPython -m tiny_lm train --help` 可查看训练命令参数。
 
 ## 预处理示例（PowerShell，默认单文件）
@@ -150,9 +149,9 @@ print("tokens:",len(data),"dtype:",data.dtype,"vocab:",len(tokenizer.vocab))
 加载的数组可传入现有 [训练/验证 Python 接口](docs/training.md)，
 也可通过训练 CLI 自动读取配置路径并校验文件；checkpoint 历史数据指纹仍待绑定。
 
-本地最新检查：Windows、Python 3.12.10，全量 **1180 项测试通过**；
-本次新增 45 项训练/验证 CLI 与回调测试，移除两个已实现命令对应的 8 项占位测试。
-Ruff 静态检查、格式检查通过，详见 [训练/验证命令验收](docs/training-cli.md)。远程 CI、GPU、Linux 与大语料性能尚未在本次验证。
+本地最新检查：Windows、Python 3.12.10，全量 **1300 项测试通过**；
+本次新增 100 项生成 API/CLI 测试，并将占位命令测试扩展为全部命令的帮助与必填参数检查。
+Ruff 静态检查、格式检查通过，详见 [文本生成验收](docs/generation.md)。远程 CI、GPU、Linux 与大语料性能尚未在本次验证。
 
 ## 配置约定
 
@@ -195,7 +194,7 @@ src/tiny_lm/
   schedule.py           线性预热与余弦衰减（已迁移）
   checkpoint.py          模型/优化器/配置/步数/RNG 保存与恢复（已迁移）
   train.py / evaluate.py  token 数组训练与验证（已实现）；CLI 已接入文件加载与续训
-  generate.py            文本生成（待迁移）
+  generate.py            单提示词生成、top-k/top-p、模型专用加载（已迁移并接通 CLI）
 tests/                   仅覆盖当前已实现能力
 examples/toy_corpus.txt   自行编写的小型中英文流程示例
 docs/                    架构、路线图、迁移映射、来源
@@ -204,7 +203,7 @@ experiments/              实验记录要求
 ```
 
 详细待复核事项见 [迁移文档](docs/migration.md)，阶段验收见
-[路线图](docs/roadmap.md)，训练/验证命令说明见 [训练/验证 CLI](docs/training-cli.md)；
+[路线图](docs/roadmap.md)，训练/验证命令说明见 [训练/验证 CLI](docs/training-cli.md)，续写见 [文本生成](docs/generation.md)；
 [本地检查记录](docs/local-checks.md) 保留初始框架阶段的历史结果。
 示例文本仅供流程测试，不是有效训练语料。
 本仓库尚未授予开源许可证；课程来源与代码许可须按
