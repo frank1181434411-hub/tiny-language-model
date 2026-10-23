@@ -147,11 +147,12 @@ print("tokens:",len(data),"dtype:",data.dtype,"vocab:",len(tokenizer.vocab))
 默认模式仍需容纳单个完整文件及其编码结果，尚未实现任意分块的等价流式编码。
 训练和验证语料应分别处理，BPE 只用训练文本拟合；模型词表大小使用实际 `len(tokenizer.vocab)`。
 加载的数组可传入现有 [训练/验证 Python 接口](docs/training.md)，
-也可通过训练 CLI 自动读取配置路径并校验文件；checkpoint 历史数据指纹仍待绑定。
+也可通过训练 CLI 自动读取配置路径并校验文件；checkpoint v2 已绑定历史数据与 tokenizer 指纹，
+并在续训时核对 eval_batches 和 dtype，见 [输入绑定与旧文件兼容](docs/checkpoint-binding.md)。
 
-本地最新检查：Windows、Python 3.12.10，全量 **1300 项测试通过**；
-本次新增 100 项生成 API/CLI 测试，并将占位命令测试扩展为全部命令的帮助与必填参数检查。
-Ruff 静态检查、格式检查通过，详见 [文本生成验收](docs/generation.md)。远程 CI、GPU、Linux 与大语料性能尚未在本次验证。
+本地最新检查：Windows、Python 3.12.10，全量 **1349 项测试通过**；
+本次新增 49 项输入绑定测试，覆盖内容替换、参数不符与旧 checkpoint 的显式兼容。
+Ruff 静态检查、格式检查通过，详见 [输入绑定验收](docs/checkpoint-binding.md)。远程 CI、GPU、Linux 与大语料性能尚未在本次验证。
 
 ## 配置约定
 
@@ -192,7 +193,8 @@ src/tiny_lm/
   losses.py             平均交叉熵（已迁移）
   optim.py              AdamW 与全局梯度裁剪（已迁移）
   schedule.py           线性预热与余弦衰减（已迁移）
-  checkpoint.py          模型/优化器/配置/步数/RNG 保存与恢复（已迁移）
+  checkpoint.py          v2 模型/优化器/配置/步数/RNG 保存与恢复，兼容读取 v1
+  binding.py             tokenizer、实际 token 内容与运行参数的历史绑定
   train.py / evaluate.py  token 数组训练与验证（已实现）；CLI 已接入文件加载与续训
   generate.py            单提示词生成、top-k/top-p、模型专用加载（已迁移并接通 CLI）
 tests/                   仅覆盖当前已实现能力

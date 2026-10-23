@@ -1,13 +1,14 @@
 # 数组训练与验证接口
 
 `tiny_lm.train.train` 和 `tiny_lm.evaluate.evaluate` 已连接现有数值组件。
-数组 API 接收一维 NumPy token 数组或 memmap，不读取配置中指定的数据文件，也不调用 tokenizer。
+数组 API 接收一维 NumPy token 数组或 memmap，不读取配置中指定的数据文件，不编码原文。
+可传入 tokenizer 记录内容指纹；未提供时仍绑定实际数组和运行参数。
 现已接通 [训练/验证 CLI](training-cli.md)，由命令入口加载和校验文件后调用这些接口。
 没有下载语料或运行正式模型实验。
 
 ## 训练接口
 
-`train(config,train_data,validation_data,*,dtype=None,eval_batches=4,resume_from=None,stop_after=None,save_checkpoints=True,on_step=None)`
+`train(config,train_data,validation_data,*,dtype=None,eval_batches=4,resume_from=None,stop_after=None,save_checkpoints=True,on_step=None,tokenizer=None,allow_unbound_checkpoint=False)`
 
 - config 为 ProjectConfig；由它构造 TransformerLM 和项目 AdamW。
   config.model 的 GELU 仍不支持，会在模型构造时报错。
@@ -19,7 +20,7 @@
   支持非连续数组和 memmap，不复制整份语料；初次扫描仍有 O(n) 的读开销。
   运行期间数据须保持不变。
 - config.data 的路径作为实验元信息保存，不作为本接口的数据来源，
-  checkpoint 不包含实际数组或内容哈希。
+  checkpoint 不包含实际数组，但会保存其逻辑 token 内容哈希和数量。
 - 每次调用先按配置 seed 初始化 Python、NumPy 和 PyTorch 全局 RNG 并创建模型；
   seed 须在 `[0,2**64)`。这是显式训练调用的行为，导入模块不改变随机状态。
 - 训练/验证分别使用两个独立 CPU generator，以 seed 与 seed+1（模 2**64）初始化；
@@ -87,9 +88,10 @@ resume_from 使用 checkpoint 的完整配置、模型、optimizer、步数及�
 checkpoint 的加载与 dtype、设备约定见 [checkpoint 记录](checkpoint.md)。
 
 精确续训要求相同数据内容、dtype、软件/硬件条件和 eval_batches。
-eval_batches 是本接口参数，不在当前配置 schema 或 checkpoint 中记录；
-数据内容和该参数由调用方保持一致。改变验证次数会改变后续验证采样/指标，
-但独立验证 generator 不会改变训练窗口与模型更新。
+checkpoint v2 自动记录并核对数据内容、dtype 和 eval_batches；提供 tokenizer 时还绑定其指纹。
+旧文件缺少绑定时默认拒绝续训，可显式传 allow_unbound_checkpoint=True 允许历史未知信息，
+已有内容或参数不匹配仍拒绝。保存时已绑定 tokenizer 的续训必须再次提供它。
+软件/硬件条件仍由调用方确认，详情见 [输入绑定](checkpoint-binding.md)。
 
 ## 小数据使用示例
 

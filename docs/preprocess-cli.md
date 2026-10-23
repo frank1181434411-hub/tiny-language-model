@@ -79,7 +79,7 @@ mkdir -p artifacts/preprocess-cli-demo
 帮助、版本、配置检查和模块导入仍不加载 regex、NumPy 或 PyTorch。
 
 训练和验证文本应先独立划分，使用同一训练所得 tokenizer 分别预处理。
-训练入口已核对模型词表与当前数据/tokenizer 指纹，但 checkpoint 历史指纹仍待绑定；预处理命令不自动调用模型训练。
+训练入口核对模型词表与当前数据/tokenizer 指纹，checkpoint v2 还会绑定历史输入，见 [输入绑定](checkpoint-binding.md)；预处理命令不自动调用模型训练。
 
 ## 本地验收
 

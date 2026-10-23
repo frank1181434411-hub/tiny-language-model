@@ -2,7 +2,7 @@
 
 `train` 和 `evaluate` 已连接配置、tokenizer、只读 token 文件与现有数组接口。
 模块入口 `python -m tiny_lm` 和控制台入口 `tiny-lm` 行为一致。
-本次保持模型、loss、优化器、学习率、采样与 checkpoint v1 算法和格式不变。
+保持模型、loss、优化器、学习率和采样算法；checkpoint 已升级为 v2 输入绑定，兼容读取 v1。
 
 ## Git Bash 使用
 
@@ -48,6 +48,7 @@ printf 'A small validation text. The model predicts the next token.\n' > data/sm
 | `--stop-after` | 配置的 max_steps | 本次最多完成的总更新次数，范围 0 到 max_steps，不是追加步数 |
 | `--dtype` | `float32` | 模型参数精度：float16、bfloat16、float32、float64 |
 | `--eval-batches` | 4 | 每次验证的随机窗口 batch 数，必须为正整数 |
+| `--allow-unbound-checkpoint` | 关闭 | 显式允许旧 checkpoint 缺失的输入绑定；已知不匹配仍报错 |
 
 训练按配置中的 batch、学习率、验证/保存间隔和设备运行；没有 AMP、GradScaler 或梯度累积。
 每个步骤在更新、间隔验证及必要保存成功后，将一行 JSON 指标写到 stderr 并立即刷新。
@@ -67,7 +68,7 @@ stderr 也包含错误诊断，因此失败时最后一行可能不是 JSON。�
 ## 独立验证
 
 `evaluate` 必填 `--config` 和 `--checkpoint`；支持相同的 `--dtype`、`--eval-batches`，
-以及 `--seed`（默认 config.training.seed）。batch_size 和 context_length 来自配置。
+以及 `--seed`（默认 config.training.seed）和 `--allow-unbound-checkpoint`。batch_size 和 context_length 来自配置。
 
 - 只读取 tokenizer 和验证数据；训练文件及配置中的 output_dir 不必存在。
 - 复用现有 checkpoint 加载与校验接口，临时构造 AdamW 加载并验证其状态后释放，
@@ -93,11 +94,12 @@ CPU/CUDA 为当前支持的设备；不可用 CUDA、MPS 或尚未实现的 GELU
 本次新增参数和运行校验错误使用英文。
 
 精确续训要求相同完整配置、实际数据内容、dtype、eval_batches 和软件/硬件条件。
-dtype 不匹配会被 checkpoint 权重校验拒绝；eval_batches 尚未写入 checkpoint，须由调用方保持一致。
-数据文件哈希和 tokenizer 指纹只校验当前文件之间的一致性，checkpoint v1 尚未绑定历史指纹：
-同一路径下同时替换数据和对应元信息，或替换 tokenizer 及全部数据，不能据此识别历史训练输入已变。
-数据集划分、训练/验证泄漏检查、checkpoint 指纹绑定和大语料性能优化仍待后续实现。
-本次不扩展 checkpoint 格式，不提供跨设备逐位一致或 GPU 已验证的承诺。
+checkpoint v2 记录并核对实际训练/验证 token 内容、tokenizer 指纹、dtype 和 eval_batches。
+同一路径下同时替换数据与元信息也会被续训检查发现；同大小却内容不同的 tokenizer 同样拒绝。
+独立 evaluate 只核对 tokenizer 绑定，允许新的验证集与不同 eval_batches、seed。
+旧 v1 或未绑定的 v2 默认不能用于这些命令；确认旧输入后可显式使用 --allow-unbound-checkpoint，
+该选项只允许缺失信息，不绕过已记录的不匹配，详见 [输入绑定与兼容](checkpoint-binding.md)。
+数据集划分、训练/验证泄漏检查和大语料性能优化仍待实现；不承诺跨设备逐位一致或 GPU 已验证。
 
 ## 数组 API 的指标回调
 
@@ -107,7 +109,7 @@ dtype 不匹配会被 checkpoint 权重校验拒绝；eval_batches 尚未写入 
 
 ## 本地验收
 
-以下保留训练/验证 CLI 接入时的检查记录；生成接入后的最新全项目验收为 1300 项通过，见 [文本生成](generation.md)。
+以下保留训练/验证 CLI 接入时的检查记录；最新全项目验收为 1349 项通过，见 [输入绑定](checkpoint-binding.md)。
 
 2026-10-22，Windows、Python 3.12.10，使用 `D:/Python/.venvs/tiny-language-model`：
 

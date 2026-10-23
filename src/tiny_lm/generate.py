@@ -106,14 +106,15 @@ def generate(model:TransformerLM,prompt_ids:torch.Tensor,max_new_tokens:int,*,eo
     return ret
 
 
-def load_generation_model(src,*,device="cpu",config:ModelConfig|None=None)->TransformerLM:
+def load_generation_model(src,*,device="cpu",config:ModelConfig|None=None,tokenizer=None,allow_unbound_checkpoint:bool=False)->TransformerLM:
     """
-    从 v1 checkpoint 重建模型并推断权重精度；不构造 optimizer，不恢复训练随机状态。
+    从 v1/v2 checkpoint 重建模型并推断权重精度；不构造 optimizer，不恢复训练随机状态。
     可用 ModelConfig 校验模型字段；加载时仍需在 CPU 读取完整 checkpoint。
     """
     import torch
     from tiny_lm.checkpoint import read_checkpoint,_validate_model_state
     from tiny_lm.model.transformer import TransformerLM
+    from tiny_lm.binding import check_bindings,get_tokenizer_fingerprint
     if config is not None and not isinstance(config,ModelConfig):
         raise TypeError("config must be a ModelConfig or None")
     device=torch.device(device)
@@ -122,6 +123,8 @@ def load_generation_model(src,*,device="cpu",config:ModelConfig|None=None)->Tran
     if device.type=="cuda" and (not torch.cuda.is_available() or (device.index is not None and device.index>=torch.cuda.device_count())):
         raise ValueError("the requested CUDA device is not available")
     payload=read_checkpoint(src)
+    fingerprint=None if tokenizer is None else get_tokenizer_fingerprint(tokenizer)
+    check_bindings(payload,tokenizer_sha256=fingerprint,allow_unbound_checkpoint=allow_unbound_checkpoint)
     model_config=payload["model_config"]
     fields={"vocab_size","context_length","d_model","num_layers","num_heads","d_ff","rope_theta","use_rms_norm","norm_mode","ffn_type"}
     if not isinstance(model_config,dict) or set(model_config)!=fields:

@@ -187,9 +187,9 @@ def test_resume_rejects_changed_config_and_past_requested_limit(tmp_path):
     config=_config(tmp_path,max_steps=6)
     part=training.train(config,*_data(),stop_after=3,eval_batches=1)
     with pytest.raises(ValueError,match="configuration"):
-        training.train(replace(config,training=replace(config.training,learning_rate=0.02)),*_data(),resume_from=part.checkpoints[-1])
+        training.train(replace(config,training=replace(config.training,learning_rate=0.02)),*_data(),resume_from=part.checkpoints[-1],eval_batches=1)
     with pytest.raises(ValueError,match="exceeds"):
-        training.train(config,*_data(),resume_from=part.checkpoints[-1],stop_after=2)
+        training.train(config,*_data(),resume_from=part.checkpoints[-1],stop_after=2,eval_batches=1)
 
 
 def test_completed_checkpoint_is_a_noop(tmp_path):

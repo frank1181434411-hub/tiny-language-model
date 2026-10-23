@@ -16,8 +16,10 @@ from tiny_lm.config import load_config
 from tiny_lm.checkpoint import save_checkpoint
 from tiny_lm.tokenizer.tokenizer import BPETokenizer
 from tiny_lm.preprocess import process_corpus
+from tiny_lm.binding import build_run_state
 
 torch=pytest.importorskip("torch")
+np=pytest.importorskip("numpy")
 pytest.importorskip("regex")
 TransformerLM=importlib.import_module("tiny_lm.model.transformer").TransformerLM
 AdamW=importlib.import_module("tiny_lm.optim").AdamW
@@ -51,7 +53,10 @@ def write_checkpoint(config,path,target=122,dtype=torch.float64):
         model.token_embeddings.weight.fill_(1)
         model.ln_final.weight.fill_(1)
         model.lm_head.weight[target].fill_(1)
-    save_checkpoint(model,AdamW(model.parameters()),0,path,config=config)
+    tokenizer=BPETokenizer.from_file(config.data.tokenizer_path)
+    data=np.arange(16,dtype=np.int64)
+    run_state=build_run_state(data,data,dtype=dtype,eval_batches=4,tokenizer=tokenizer)
+    save_checkpoint(model,AdamW(model.parameters()),0,path,config=config,run_state=run_state)
 
 
 @pytest.fixture

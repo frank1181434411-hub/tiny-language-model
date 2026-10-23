@@ -93,7 +93,8 @@ load_token_data(path,*,tokenizer=None,verify_hash=True)
 训练、验证文件分别调用预处理，不自动进行数据集切分；BPE 只应使用训练文本拟合。
 返回的数组可以传给现有 `get_batch`、train 和 evaluate Python API。
 模型 `vocab_size` 应使用实际 `len(tokenizer.vocab)`。
-checkpoint 尚未自动记录或核对本格式的数据指纹；续训时仍须由调用方确认数据一致。
+checkpoint v2 另行计算并绑定逻辑 token 内容哈希，续训时自动核对实际数组，
+与本格式的 bin 文件字节哈希不同，见 [输入绑定](checkpoint-binding.md)。
 新增元信息记录不等于已经完成训练配置/CLI 的集成。
 
 预处理 API 迁移时未接通 CLI；现已接通 `prepare-data` 和 `train-tokenizer`，见 [预处理命令](preprocess-cli.md)。

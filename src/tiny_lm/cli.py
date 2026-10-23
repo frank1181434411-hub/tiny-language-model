@@ -60,6 +60,8 @@ def build_parser()->argparse.ArgumentParser:
     generate.add_argument("--seed",type=int,help="独立生成采样种子，默认使用配置中的 training.seed")
     generate.add_argument("--eos-token",help="遇到该已注册特殊 token 时结束；默认使用已注册的 <|endoftext|>，否则不按 EOS 停止")
     generate.add_argument("--special-mode",choices=("recognize","ordinary"),default="recognize",help="提示词默认识别已注册特殊 token；ordinary 按普通文本编码")
+    for command in (train,evaluate,generate):
+        command.add_argument("--allow-unbound-checkpoint",action="store_true",help="显式允许旧 checkpoint 缺失的历史指纹；不能跳过已有指纹或参数不匹配")
     return parser
 
 
@@ -93,6 +95,7 @@ def _training_command(args:argparse.Namespace)->dict:
     import torch
     from tiny_lm.data import load_token_data
     from tiny_lm.evaluate import _positive_integer,evaluate
+    from tiny_lm.binding import get_tokenizer_fingerprint
     from tiny_lm.tokenizer.tokenizer import BPETokenizer
     config=load_config(args.config)
     _positive_integer("eval_batches",args.eval_batches)
@@ -126,7 +129,7 @@ def _training_command(args:argparse.Namespace)->dict:
             from tiny_lm.train import train
             def report(metrics):
                 print(json.dumps(asdict(metrics),allow_nan=False),file=sys.stderr,flush=True)
-            result=train(config,load_data(config.data.train_data_path),validation_data,dtype=dtype,eval_batches=args.eval_batches,resume_from=args.resume,stop_after=args.stop_after,on_step=report)
+            result=train(config,load_data(config.data.train_data_path),validation_data,dtype=dtype,eval_batches=args.eval_batches,resume_from=args.resume,stop_after=args.stop_after,on_step=report,tokenizer=tokenizer,allow_unbound_checkpoint=args.allow_unbound_checkpoint)
             return {"completed_updates":result.completed_updates,"checkpoints":[str(path) for path in result.checkpoints],"last_metrics":asdict(result.history[-1]) if result.history else None,"dtype":args.dtype,"eval_batches":args.eval_batches}
         from tiny_lm.checkpoint import load_checkpoint
         from tiny_lm.model.transformer import TransformerLM
@@ -134,7 +137,7 @@ def _training_command(args:argparse.Namespace)->dict:
         model=TransformerLM.from_config(config.model,device=device,dtype=dtype)
         optimizer=AdamW(model.parameters(),lr=config.training.learning_rate,weight_decay=config.training.weight_decay)
         # 独立验证允许新的验证路径和设备；模型结构仍由 checkpoint 严格校验。
-        iteration=load_checkpoint(args.checkpoint,model,optimizer,restore_rng=False)
+        iteration=load_checkpoint(args.checkpoint,model,optimizer,restore_rng=False,tokenizer_sha256=get_tokenizer_fingerprint(tokenizer),allow_unbound_checkpoint=args.allow_unbound_checkpoint)
         del optimizer
         generator=torch.Generator(device="cpu").manual_seed(seed)
         result=evaluate(model,validation_data,batch_size=config.training.batch_size,context_length=config.model.context_length,num_batches=args.eval_batches,generator=generator)
@@ -165,7 +168,7 @@ def _generation_command(args:argparse.Namespace)->dict:
     prompt_ids=tokenizer.encode(args.prompt,special_mode=args.special_mode)
     if not prompt_ids:
         raise ValueError("prompt must encode to at least one token; no implicit BOS is added")
-    model=load_generation_model(args.checkpoint,device=config.training.device,config=config.model)
+    model=load_generation_model(args.checkpoint,device=config.training.device,config=config.model,tokenizer=tokenizer,allow_unbound_checkpoint=args.allow_unbound_checkpoint)
     prompt=torch.tensor([prompt_ids],dtype=torch.int64,device=model.token_embeddings.weight.device)
     generator=torch.Generator(device="cpu").manual_seed(seed)
     output=generate(model,prompt,args.max_new_tokens,eos_token_id=eos_id,temperature=args.temperature,top_p=args.top_p,top_k=args.top_k,generator=generator)[0].tolist()
@@ -175,6 +178,8 @@ def _generation_command(args:argparse.Namespace)->dict:
 
 def main(argv:list[str]|None=None)->int:
     args=build_parser().parse_args(argv)
+    if getattr(args,"allow_unbound_checkpoint",False):
+        print("Warning: missing historical bindings are explicitly allowed; original inputs cannot be verified retroactively. Recorded mismatches are still rejected.",file=sys.stderr)
     if args.command!="check-config":
         try:
             if args.command in ("train-tokenizer","prepare-data"):

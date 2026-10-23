@@ -40,9 +40,11 @@
 - 生成来源：`cs336_basics/nn.py` 的 generate、_top_p_filter 与 `inference.py` 的加载/编解码流程，
   迁至 `src/tiny_lm/generate.py`。保留滑动上下文、温度的 1e-8、核采样和 multinomial；
   增加可选 top-k、独立 CPU generator、模式恢复、精度和参数检查，限定首版单提示词。
-  模型加载使用项目 v1 checkpoint 和原生 tokenizer，不迁入旧格式猜测及交互循环；
+  模型加载使用项目版本化 checkpoint 和原生 tokenizer，不迁入旧格式猜测及交互循环；
   测试独立编写，原作业未修改，详见 [文本生成](generation.md)。
 - 本次新增：工程框架、配置/CLI、测试和项目文档。
+  checkpoint v2 输入绑定为项目工程扩展，复用原生 tokenizer 指纹，并新增实际 token 序列哈希；
+  相应测试独立编写，旧作业未修改，见 [输入绑定](checkpoint-binding.md)。
   `examples/toy_corpus.txt` 为本次自行编写的小段中英文示例。
 - 后续应区分个人实现、课程骨架、课程测试/adapters、第三方片段，
   记录作者、来源版本、改动及原始许可/声明。

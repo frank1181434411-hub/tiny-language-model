@@ -31,7 +31,8 @@ smoke 只验证运行流程，4 次更新不能代表有意义的语言生成能
 | 参数 | 默认值 | 约定 |
 | --- | --- | --- |
 | `--config` | 必填 | 提供 tokenizer 路径、设备、默认种子；模型字段须匹配 checkpoint |
-| `--checkpoint` | 必填 | 项目 v1 checkpoint；从中重建模型并自动推断参数 dtype |
+| `--checkpoint` | 必填 | 项目 v2 checkpoint；从中重建模型并自动推断参数 dtype；旧 v1 须显式允许缺失绑定 |
+| `--allow-unbound-checkpoint` | 关闭 | 允许缺失 tokenizer 绑定的旧文件；已有指纹不匹配仍拒绝 |
 | `--prompt` | 必填 | 必须编码为至少一个 token；不自动补 BOS，空白文本可以输入 |
 | `--max-new-tokens` | 64 | 非负整数，只限制新增 token 数；0 返回原提示 |
 | `--temperature` | 1.0 | 有限正数；0 不表示贪心，会明确报错 |
@@ -74,7 +75,7 @@ EOS 保留在 token_ids 和 text 内，不隐式删除特殊 token。
 
 ## Python 接口与状态保护
 
-`load_generation_model(src,*,device="cpu",config=None)` 从 checkpoint.model_config 构造 TransformerLM，
+`load_generation_model(src,*,device="cpu",config=None,tokenizer=None,allow_unbound_checkpoint=False)` 从 checkpoint.model_config 构造 TransformerLM，
 从 embedding 权重推断 dtype；可传 ModelConfig 核对配置。严格核对类、构造参数、权重键、
 shape、dtype、layout 和数值有限性，最终返回 eval 模式的模型。
 与训练恢复共享模型状态校验，但不构造 optimizer、不恢复训练 RNG。
@@ -92,12 +93,15 @@ generator 必须是独立 CPU torch.Generator，不能使用全局默认 generat
 
 ## 当前边界
 
-只接受项目 v1 checkpoint 和原生 tokenizer JSON，不猜测旧权重、旧双文件 tokenizer，
-不自动去除旧 `_orig_mod.` 前缀。CLI 校验词表大小，但 checkpoint v1 尚未绑定 tokenizer 指纹：
-相同大小的另一份 tokenizer 无法仅靠模型权重识别，调用方须使用原训练 tokenizer。
-历史数据指纹绑定、KV cache、批量生成与大模型性能优化仍待后续实现。
+接受项目 v1/v2 checkpoint 和原生 tokenizer JSON，不猜测无版本旧权重、旧双文件 tokenizer，
+不自动去除旧 `_orig_mod.` 前缀。CLI 核对 tokenizer 历史指纹，同大小却内容不同也会拒绝。
+v1 或未绑定 tokenizer 的 v2 默认拒绝文本生成，确认旧 tokenizer 后可显式追加 --allow-unbound-checkpoint；
+已有指纹不匹配不能绕过。低层 load_generation_model 不传 tokenizer 时仅加载模型，不验证外部词表。
+详细规则见 [输入绑定](checkpoint-binding.md)；KV cache、批量生成与大模型性能优化仍待实现。
 
 ## 本地验收
+
+以下保留生成接入时的记录；最新全量 1349 项通过，见 [输入绑定验收](checkpoint-binding.md)。
 
 2026-10-22，Windows、Python 3.12.10，使用 `D:/Python/.venvs/tiny-language-model`：
 

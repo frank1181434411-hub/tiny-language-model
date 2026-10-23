@@ -30,8 +30,9 @@ train 的 Python 接口从 ProjectConfig 构造模型与 optimizer；CLI 加载�
 预处理 CLI 的参数、记录语义与输出保护见 [预处理命令](preprocess-cli.md)。
 训练/验证入口校验模型词表和当前数据指纹，关闭文件映射，并支持即时训练指标输出；见 [训练/验证命令](training-cli.md)。
 生成入口从 checkpoint 重建模型并推断 dtype，默认关闭 top-p 过滤，不构造 optimizer 或恢复训练 RNG；见 [文本生成](generation.md)。
-checkpoint v1 包含配置、已完成更新次数、模型、优化器与随机数状态，
-检查模型构造配置及参数顺序，并提供同目录临时文件替换。实验记录仍应关联 tokenizer 和数据版本。
+checkpoint v2 包含配置、已完成更新次数、模型、优化器、随机数状态和 run_state，兼容读取 v1。
+binding.py 将实际 token 内容、tokenizer、eval_batches 与 dtype 绑定到训练快照，见 [输入绑定](checkpoint-binding.md)。
+加载检查模型构造配置及参数顺序，保存提供同目录临时文件替换。实验记录仍应说明语料来源和划分。
 采样支持独立的 CPU generator，可通过具名字典分别保存与恢复训练和验证采样器。
 `norm_mode` 的 pre/post 位置由 TransformerBlock 决定，RMSNorm 本身不处理位置。
 Python 构造接口支持 SwiGLU 与旧 SiLU 分支，配置中的 GELU 仍待实现并在模型构造时明确报错。

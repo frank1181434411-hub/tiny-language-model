@@ -13,8 +13,9 @@ import tempfile
 from dataclasses import asdict
 from pathlib import Path
 from tiny_lm.config import ModelConfig,ProjectConfig
+from tiny_lm.binding import validate_run_state,check_bindings
 
-FORMAT_VERSION=1
+FORMAT_VERSION=2
 
 
 def _config_dict(config):
@@ -131,10 +132,14 @@ def _validate_payload(payload):
     if not isinstance(payload,dict):
         raise ValueError("checkpoint must contain a dictionary")
     fields={"format_version","iteration","model_class","model_config","model_state_dict","optimizer_class","optimizer_parameter_names","optimizer_state_dict","config","rng_state"}
+    version=payload.get("format_version")
+    if type(version) is not int or version not in (1,FORMAT_VERSION):
+        raise ValueError("unsupported checkpoint format_version; unversioned legacy checkpoints are not supported")
+    if version==2:
+        fields.add("run_state")
     if set(payload)!=fields:
         raise ValueError("checkpoint fields are invalid; unversioned legacy checkpoints are not supported")
-    if type(payload["format_version"]) is not int or payload["format_version"]!=FORMAT_VERSION:
-        raise ValueError("unsupported checkpoint format_version")
+    validate_run_state(payload.get("run_state"))
     if type(payload["iteration"]) is not int or payload["iteration"]<0:
         raise ValueError("iteration must be the nonnegative number of completed optimizer updates")
     for name in ("model_state_dict","optimizer_state_dict","rng_state"):
@@ -164,6 +169,9 @@ def _validate_model_state(payload,model):
             raise ValueError("checkpoint model states must contain tensors")
         if value.shape!=other.shape or value.dtype!=other.dtype or value.layout!=other.layout:
             raise ValueError(f"checkpoint model tensor shape, dtype or layout does not match: {name}")
+    run_state=payload.get("run_state")
+    if run_state is not None and any(str(p.dtype).removeprefix("torch.")!=run_state["dtype"] for p in model.parameters()):
+        raise ValueError("checkpoint run_state dtype does not match model parameter dtype")
 
 
 def _validate_states(payload,model,optimizer):
@@ -221,7 +229,7 @@ def read_checkpoint(src)->dict:
     return payload
 
 
-def save_checkpoint(model,optimizer,iteration:int,out,*,config=None,generators=None):
+def save_checkpoint(model,optimizer,iteration:int,out,*,config=None,generators=None,run_state=None):
     """
     保存已完成 iteration 次 optimizer 更新后的状态，不保存待累积梯度。
     generators 为具名 CPU 采样器；路径保存成功后原子替换，文件流由调用方管理。
@@ -232,7 +240,7 @@ def save_checkpoint(model,optimizer,iteration:int,out,*,config=None,generators=N
     config=_config_dict(config)
     model_config=_model_config(model)
     _check_config(model_config,config)
-    payload=dict(format_version=FORMAT_VERSION,iteration=iteration,model_class=_class_name(model),model_config=model_config,model_state_dict=model.state_dict(),optimizer_class=_class_name(optimizer),optimizer_parameter_names=names,optimizer_state_dict=optimizer.state_dict(),config=config,rng_state=_rng_state(generators))
+    payload=dict(format_version=FORMAT_VERSION,iteration=iteration,model_class=_class_name(model),model_config=model_config,model_state_dict=model.state_dict(),optimizer_class=_class_name(optimizer),optimizer_parameter_names=names,optimizer_state_dict=optimizer.state_dict(),config=config,rng_state=_rng_state(generators),run_state=copy.deepcopy(run_state))
     _validate_payload(payload)
     _validate_states(payload,model,optimizer)
     if isinstance(out,(str,os.PathLike)):
@@ -254,7 +262,7 @@ def save_checkpoint(model,optimizer,iteration:int,out,*,config=None,generators=N
         torch.save(payload,out)
 
 
-def load_checkpoint(src,model,optimizer,*,config=None,generators=None,restore_rng:bool=True)->int:
+def load_checkpoint(src,model,optimizer,*,config=None,generators=None,restore_rng:bool=True,run_state=None,tokenizer_sha256=None,allow_unbound_checkpoint:bool=False)->int:
     """
     恢复到现有模型和 optimizer，返回已完成更新次数；下一步使用该次数计算学习率。
     默认恢复全局与具名随机状态；只加载权重/optimizer 时可关闭随机状态恢复。
@@ -266,6 +274,7 @@ def load_checkpoint(src,model,optimizer,*,config=None,generators=None,restore_rn
     generators=_generators(generators)
     expected_config=_config_dict(config)
     payload=read_checkpoint(src)
+    check_bindings(payload,run_state=run_state,tokenizer_sha256=tokenizer_sha256,allow_unbound_checkpoint=allow_unbound_checkpoint)
     if expected_config is not None and payload["config"]!=expected_config:
         raise ValueError("checkpoint experiment configuration does not match")
     _validate_states(payload,model,optimizer)

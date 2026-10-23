@@ -38,7 +38,7 @@ class TrainingResult:
     generators:dict[str,torch.Generator]
 
 
-def train(config:ProjectConfig,train_data:np.ndarray,validation_data:np.ndarray,*,dtype=None,eval_batches:int=4,resume_from=None,stop_after:int|None=None,save_checkpoints:bool=True,on_step:Callable[[TrainingMetrics],None]|None=None)->TrainingResult:
+def train(config:ProjectConfig,train_data:np.ndarray,validation_data:np.ndarray,*,dtype=None,eval_batches:int=4,resume_from=None,stop_after:int|None=None,save_checkpoints:bool=True,on_step:Callable[[TrainingMetrics],None]|None=None,tokenizer=None,allow_unbound_checkpoint:bool=False)->TrainingResult:
     """
     创建模型和 AdamW，在 token 数组上训练；返回本次更新日志及最终运行对象。
     max_steps 始终是调度终点；stop_after 是本次最多完成的总更新次数，不改变调度。
@@ -48,6 +48,7 @@ def train(config:ProjectConfig,train_data:np.ndarray,validation_data:np.ndarray,
     import numpy as np
     import torch
     from tiny_lm.checkpoint import load_checkpoint,save_checkpoint
+    from tiny_lm.binding import build_run_state
     from tiny_lm.data import get_batch
     from tiny_lm.losses import cross_entropy
     from tiny_lm.model.transformer import TransformerLM
@@ -60,6 +61,10 @@ def train(config:ProjectConfig,train_data:np.ndarray,validation_data:np.ndarray,
         raise TypeError("save_checkpoints must be a bool")
     if on_step is not None and not callable(on_step):
         raise TypeError("on_step must be callable or None")
+    if type(allow_unbound_checkpoint) is not bool:
+        raise TypeError("allow_unbound_checkpoint must be a bool")
+    if tokenizer is not None and getattr(tokenizer,"vocab",None) is not None and len(tokenizer.vocab)!=config.model.vocab_size:
+        raise ValueError("tokenizer vocabulary size must match config.model.vocab_size")
     training=config.training
     limit=training.max_steps if stop_after is None else stop_after
     if type(limit) is not int:
@@ -78,6 +83,7 @@ def train(config:ProjectConfig,train_data:np.ndarray,validation_data:np.ndarray,
         raise ValueError("the configured CUDA device is not available")
     _check_data(train_data,config.model.context_length,config.model.vocab_size,"train_data")
     _check_data(validation_data,config.model.context_length,config.model.vocab_size,"validation_data")
+    run_state=build_run_state(train_data,validation_data,dtype=dtype,eval_batches=eval_batches,tokenizer=tokenizer)
     random.seed(training.seed)
     np.random.seed(training.seed%2**32)
     torch.manual_seed(training.seed)
@@ -86,7 +92,7 @@ def train(config:ProjectConfig,train_data:np.ndarray,validation_data:np.ndarray,
     generators={"train":torch.Generator(device="cpu").manual_seed(training.seed),"validation":torch.Generator(device="cpu").manual_seed((training.seed+1)%2**64)}
     completed=0
     if resume_from is not None:
-        completed=load_checkpoint(resume_from,model,optimizer,config=config,generators=generators)
+        completed=load_checkpoint(resume_from,model,optimizer,config=config,generators=generators,run_state=run_state,allow_unbound_checkpoint=allow_unbound_checkpoint)
         if completed>limit:
             raise ValueError("checkpoint iteration exceeds the requested stop_after or max_steps")
     history=[]
@@ -117,7 +123,7 @@ def train(config:ProjectConfig,train_data:np.ndarray,validation_data:np.ndarray,
         history.append(TrainingMetrics(step=completed,learning_rate=lr,train_loss=loss_value,validation_loss=validation_loss))
         if save_checkpoints and (completed%training.save_interval==0 or completed==limit):
             path=output_dir/f"step_{completed:08d}.pt"
-            save_checkpoint(model,optimizer,completed,path,config=config,generators=generators)
+            save_checkpoint(model,optimizer,completed,path,config=config,generators=generators,run_state=run_state)
             checkpoints.append(path)
         if on_step is not None:
             on_step(history[-1])

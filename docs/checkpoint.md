@@ -4,14 +4,15 @@
 保留 save_checkpoint 的前四个位置参数及 load_checkpoint 的前三个位置参数；
 加载仍返回整数 iteration。扩展为带版本、配置及随机状态的训练快照。
 原作业目录未修改，训练/验证和生成 CLI 已接入。
+当前写入 v2，兼容读取 v1；新增 run_state 绑定与旧文件使用方式见 [输入绑定](checkpoint-binding.md)。
 生成模块复用独立的模型状态校验，从保存的结构和 dtype 重建模型；不构造 optimizer 或恢复 RNG，见 [文本生成](generation.md)。
 读取损坏或截断的文件时，weights_only 反序列化的 EOFError、IndexError 和 UnpicklingError
 统一转换为可读的 ValueError；不会回退到不受限反序列化。
 
 ## 接口与步数
 
-- `save_checkpoint(model,optimizer,iteration,out,*,config=None,generators=None)`
-- `load_checkpoint(src,model,optimizer,*,config=None,generators=None,restore_rng=True)`
+- `save_checkpoint(model,optimizer,iteration,out,*,config=None,generators=None,run_state=None)`
+- `load_checkpoint(src,model,optimizer,*,config=None,generators=None,restore_rng=True,run_state=None,tokenizer_sha256=None,allow_unbound_checkpoint=False)`
 - `read_checkpoint(src)` 读取 CPU 上的内容，供查看配置或先构造模型，不恢复运行状态。
 
 iteration 定义为已经完成的 optimizer 更新次数，在一次更新完成后保存。
@@ -19,10 +20,13 @@ iteration 定义为已经完成的 optimizer 更新次数，在一次更新完�
 参数可能缺失梯度，因此 AdamW 每个参数的 step 可以小于全局 iteration，但不能大于它。
 不保存未完成的梯度累积；成功恢复后清除模型的旧梯度，保留调用方的 train/eval 模式。
 
-## v1 格式
+## v2 格式与 v1 兼容
 
 文件包含 format_version、iteration、model_class、model_config、model_state_dict、
-optimizer_class、optimizer_parameter_names、optimizer_state_dict、config 与 rng_state。
+optimizer_class、optimizer_parameter_names、optimizer_state_dict、config、rng_state 与 run_state。
+run_state 记录两份数据的逻辑内容哈希、tokenizer 指纹、eval_batches 和 dtype；
+通用保存接口默认 run_state=null，训练入口自动填写。读取 v1 时保留原有十个字段，不伪造绑定。
+低层状态加载兼容 v1；续训与 CLI 文本操作默认要求对应绑定，缺失时须显式允许，已知不匹配始终拒绝。
 拒绝未知版本或缺字段；旧作业的无版本三字段文件不自动升级，因为没有足够信息恢复
 模型构造语义、随机状态和可复现续训。
 
@@ -47,7 +51,7 @@ config 可选传 ModelConfig 或 ProjectConfig；后者还记录训练、数据�
 带 CUDA RNG 的快照要求本机 CUDA 可用且设备数量一致；该分支尚未在 GPU 实测。
 跨设备仅加载状态时可指定 restore_rng=False，此时不改变全局或具名随机状态，
 也无需提供保存时的 generator。不能据此声称跨设备训练完全一致。
-独立 NumPy Generator、数据加载工作进程、第三方 RNG、GradScaler 和分布式状态不在 v1 范围内。
+独立 NumPy Generator、数据加载工作进程、第三方 RNG、GradScaler 和分布式状态不在当前范围内。
 
 ## 状态与失败处理
 
