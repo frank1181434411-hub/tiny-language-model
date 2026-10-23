@@ -14,8 +14,13 @@ CLI、测试、Ruff、CPU CI 与迁移文档，并提供手写交叉熵 `tiny_lm
 和 CausalSelfAttention。`tiny_lm.model.transformer` 提供 TransformerBlock 和 TransformerLM，
 可通过 `TransformerLM.from_config(config.model,device=...,dtype=...)` 构造。
 Python API 已支持文本编码为带元信息的 token 文件、只读加载、模型前向/反向、数组训练/验证和中断续训。
-**CLI 已支持帮助、版本、配置校验、BPE 训练、文本预处理、模型训练/续训、独立验证和单提示词生成；没有正式训练结果或已验证基线。**
+**CLI 已支持帮助、版本、配置校验、BPE 训练、文本预处理、模型训练/续训、独立验证和单提示词生成；已完成 TinyStories 50 步试跑和 1000 步 CPU 初始基线。**
 `smoke.yaml` 可在准备匹配数据后检查小型 CPU 流程，`baseline.example.yaml` 仅为待硬件和实验确定的模板。
+本地 TinyStories 5M 样本已整理为训练/验证集，并生成 2048 词表及 token 文件，
+见 [数据准备记录与复现](docs/tinystories-local.md)。[50 步模型试跑](experiments/tinystories-pilot.md)
+在固定验证窗口上的 loss 从 7.6704 降至 5.6847，单线程续训对照逐位一致；生成仍不连贯。
+[1000 步 CPU 初始基线](experiments/tinystories-baseline.md)也已完成，训练耗时 75.58 秒，
+固定窗口验证 loss 为 3.2367；生成已有句子结构，但仍有重复与情节跳跃。
 
 ## 本地安装（Windows PowerShell）
 
