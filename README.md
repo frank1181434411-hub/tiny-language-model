@@ -21,6 +21,8 @@ Python API 已支持文本编码为带元信息的 token 文件、只读加载�
 在固定验证窗口上的 loss 从 7.6704 降至 5.6847，单线程续训对照逐位一致；生成仍不连贯。
 [1000 步 CPU 初始基线](experiments/tinystories-baseline.md)也已完成，训练耗时 75.58 秒，
 固定窗口验证 loss 为 3.2367；生成已有句子结构，但仍有重复与情节跳跃。
+[四 checkpoint 系统评估](experiments/tinystories-evaluation.md)已完成：三组固定采样下，
+第 1000 步验证 loss 为 3.2358，当前未发现明显过拟合迹象；40 条生成样本显示故事一致性仍不足。
 
 ## 本地安装（Windows PowerShell）
 

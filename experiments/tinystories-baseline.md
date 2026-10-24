@@ -64,3 +64,5 @@ export MKL_NUM_THREADS=1
 重新训练应复制 YAML 并设置新的 output_dir，再执行 train，避免覆盖现有结果。
 当前已达到 max_steps；继续训练需要另行设计学习率与恢复配置，不能直接改 max_steps 后强行加载。
 下一步建议增加固定评估窗口与多条提示词，观察训练/验证差距，再决定是否扩充语料或训练预算。
+
+2026-10-24 更新：上述评估已完成，详见 [四 checkpoint 系统评估](tinystories-evaluation.md)。

@@ -3,6 +3,8 @@
 已完成 [TinyStories 50 步 CPU 试跑](tinystories-pilot.md)，包括中断续训对照和固定样本验证。
 [1000 步 CPU 初始基线](tinystories-baseline.md)也已完成；消融实验尚未开始。每次运行至少记录：
 
+后续已完成 [四 checkpoint 固定评估](tinystories-evaluation.md)，包含训练/验证 loss 曲线和 40 条完整生成样本。
+
 | 字段 | 要求 |
 | --- | --- |
 | 标识 | 实验名称、时间、Git revision 与未提交改动说明 |
