@@ -1,0 +1,202 @@
+{
+  "format": "tiny-lm-expanded-tinystories-v1",
+  "repository": "roneneldan/TinyStories",
+  "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+  "license": "cdla-sharing-1.0",
+  "sampling": "stratified random byte blocks; discard both edge fragments; seeded SHA256 ordering of complete normalized stories; not uniform over stories",
+  "normalization": "CRLF/CR to LF; strip outer whitespace; retain internal paragraphs",
+  "overlap_rule": "casefold word-normalized exact match or word 5-gram set Jaccard >= 0.8 against evaluation; normalized exact dedup within train",
+  "limitations": "no semantic dedup; no near-dedup within training; partial source hashes only",
+  "baseline_files_sha256": {
+    "manifest.json": "4a80668a5e9314abd12c8bd107c5d2bc2fa1975bcc417c33ec1b8d704dbb49c4",
+    "tokenizer.json": "059f33f795b63a313c7fbf1b1969d8c45a71346afb53a3bbc59e6e51aa7d12c8",
+    "train.bin": "0f1af760ef0d32042fb17d1423405b5622176043b27897cfffceaa8b9ead1c2c",
+    "train.bin.json": "b34ff9fbb1cc4786dbfe80760887d923ef29f34ec32ec2e9895f8928bbcc3238",
+    "train.txt": "c4e8c347136e7c9c307a5ae83a6fa21286995bc0507b253b21e9775155e7411c",
+    "val.bin": "c179af58fc396be6a66f666107c30f91b819befd6f0a3b697537e5b621ba9dcf",
+    "val.bin.json": "66e9caedf53e0a4fef63b24746256f5ebe28abaed19f273320b3eeda407a2200",
+    "val.txt": "ee7049d316e476d409bb0be36c32a7c70234b23b17f733d04d06981c2e6d3ce9"
+  },
+  "range_downloads": [
+    {
+      "split": "valid",
+      "start": 646792,
+      "end": 1695367,
+      "sha256": "528d00d2024c2643d0f30cc25510faa89fd83fb59348a2a1eb8c6f6a496874d8",
+      "complete_records": 1307,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\valid-646792-1695367.raw"
+    },
+    {
+      "split": "valid",
+      "start": 14523337,
+      "end": 15571912,
+      "sha256": "4c4fdd4c04ac3c5d3d1ced0aa53539a7f562fe37f0e3bb347fa910d1a0ad9306",
+      "complete_records": 914,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\valid-14523337-15571912.raw"
+    },
+    {
+      "split": "train",
+      "start": 85822412,
+      "end": 90016715,
+      "sha256": "67861bfe4b0d572aa18d0b7da354aff1a69f9932d5a718421096245eb6c75c5d",
+      "complete_records": 4724,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-85822412-90016715.raw"
+    },
+    {
+      "split": "train",
+      "start": 135210200,
+      "end": 139404503,
+      "sha256": "99c9f76f41e482ecfe2ca538580b406793879a4bc6b3b7d385cbc4d978b94fcc",
+      "complete_records": 4759,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-135210200-139404503.raw"
+    },
+    {
+      "split": "train",
+      "start": 243892080,
+      "end": 248086383,
+      "sha256": "4177ad997ea78a0feb288e54bc44f4678da25bf60eed8b6286f9a0f02aeb6b84",
+      "complete_records": 4609,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-243892080-248086383.raw"
+    },
+    {
+      "split": "train",
+      "start": 460332014,
+      "end": 464526317,
+      "sha256": "22ceec1d0c04acd2dcb843c73c3e6685b6cecfecc4c4c83787bbb6b6191841ae",
+      "complete_records": 4793,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-460332014-464526317.raw"
+    },
+    {
+      "split": "train",
+      "start": 517984198,
+      "end": 522178501,
+      "sha256": "4a7b571ae93c45c1696e5454f5bf66b623182242d5d77d866ff3ccbec31af0dd",
+      "complete_records": 4603,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-517984198-522178501.raw"
+    },
+    {
+      "split": "train",
+      "start": 634206813,
+      "end": 638401116,
+      "sha256": "49567105ffcf1e6ce9d001a247ad45236f40ea45bc233f9050df88aeec681ccc",
+      "complete_records": 4436,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-634206813-638401116.raw"
+    },
+    {
+      "split": "train",
+      "start": 751564420,
+      "end": 755758723,
+      "sha256": "03438450a135afb2bdccf641cf33aa51ef8144bae4df8e898437bfc65b636e3a",
+      "complete_records": 4686,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-751564420-755758723.raw"
+    },
+    {
+      "split": "train",
+      "start": 860601642,
+      "end": 864795945,
+      "sha256": "34fb9ad34a3836fc86955858d3e3023ae43889a3fb61d77085c0d00d32e1dca3",
+      "complete_records": 4675,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-860601642-864795945.raw"
+    },
+    {
+      "split": "train",
+      "start": 1060988269,
+      "end": 1065182572,
+      "sha256": "0a5a7afb0b6f31da452a42fee0ca4dd2159f635fe192ed4f4b9088581a6b6f15",
+      "complete_records": 4787,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-1060988269-1065182572.raw"
+    },
+    {
+      "split": "train",
+      "start": 1096165042,
+      "end": 1100359345,
+      "sha256": "42a706a139e43a5e976f91f83bf85d99aeb0a707a82c4132031d236a98f739ba",
+      "complete_records": 4757,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-1096165042-1100359345.raw"
+    },
+    {
+      "split": "train",
+      "start": 1293501037,
+      "end": 1297695340,
+      "sha256": "a52a812acc87522d0998c123961b24320a93f05a0577765bb635f9e0364fcb7a",
+      "complete_records": 4348,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-1293501037-1297695340.raw"
+    },
+    {
+      "split": "train",
+      "start": 1422354308,
+      "end": 1426548611,
+      "sha256": "4ea54333aa49891c91757bbd7146bbf3c3c02d75eeeed4b886ba23529e5ac914",
+      "complete_records": 4723,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-1422354308-1426548611.raw"
+    },
+    {
+      "split": "train",
+      "start": 1516409021,
+      "end": 1520603324,
+      "sha256": "b9732c7ce0923b251edfe6825cfeceea3d9d3478c120faf9037c288c62ba43c5",
+      "complete_records": 4846,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-1516409021-1520603324.raw"
+    },
+    {
+      "split": "train",
+      "start": 1575147493,
+      "end": 1579341796,
+      "sha256": "173fdc105fc69ea78315c1989ad5a49467bdf614975b4680676d76a1c263427c",
+      "complete_records": 4383,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-1575147493-1579341796.raw"
+    },
+    {
+      "split": "train",
+      "start": 1763000921,
+      "end": 1767195224,
+      "sha256": "ff0c59e4061436311f2d0841aa778dcb7ae7b29fb02093a5535a71425fbbabc6",
+      "complete_records": 5062,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-1763000921-1767195224.raw"
+    },
+    {
+      "split": "train",
+      "start": 1860643343,
+      "end": 1864837646,
+      "sha256": "4b23144f0c7d3924f59aa533b76e2a80302544ba72c1eaf5a6ef05a96b3226f5",
+      "complete_records": 4844,
+      "cache_file": "D:\\Python\\tiny-language-model\\downloads\\tinystories-ranges-v1\\train-1860643343-1864837646.raw"
+    }
+  ],
+  "download_bytes": 69206016,
+  "rejected": {
+    "exact_train_duplicates": 44,
+    "evaluation_overlap": 2
+  },
+  "retained_baseline_train": 6133,
+  "elapsed_seconds": 204.67381639999803,
+  "splits": {
+    "train": {
+      "num_stories": 50000,
+      "num_tokens": 12046442,
+      "eos_count": 50000,
+      "sha256": "23c6c50807da90f676d37815b2dd648e02c300fc1307f4e25d9dd584e2f2b21a",
+      "roundtrip_verified": true
+    },
+    "heldout": {
+      "num_stories": 1000,
+      "num_tokens": 256961,
+      "eos_count": 1000,
+      "sha256": "7540c5488146798f38660d6f978fcdfee1fd31d526e9ab29d85cc5bcb09d0c65",
+      "roundtrip_verified": true
+    },
+    "val": {
+      "num_stories": 323,
+      "num_tokens": 69576,
+      "byte_identical_to_baseline": true
+    }
+  },
+  "verification": {
+    "old_files_unchanged": true,
+    "tokenizer_and_validation_byte_identical": true,
+    "all_original_training_stories_retained": true,
+    "normalized_exact_cross_split_overlap": 0,
+    "train_unique_normalized_stories": 50000,
+    "download_block_hashes_verified": true
+  }
+}

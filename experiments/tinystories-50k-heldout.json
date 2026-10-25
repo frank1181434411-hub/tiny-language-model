@@ -1,0 +1,79 @@
+{
+  "python": "3.12.10",
+  "torch": "2.11.0+cpu",
+  "threads": 1,
+  "selection": "minimum historical validation loss; tie broken by earliest step; heldout not used for selection",
+  "batch_size": 8,
+  "context_length": 128,
+  "batches_per_seed": 32,
+  "seeds": [
+    1337,
+    2026,
+    42
+  ],
+  "tokens_per_checkpoint": 98304,
+  "heldout_num_tokens": 256961,
+  "source_sha256": {
+    "D:\\Python\\tiny-language-model\\outputs\\tinystories-evaluation-15000-v1\\report.json": "23001221749911b74e45e953979a522ff6a8fb8e0e410a35c6bc4e21a368e7f4",
+    "D:\\Python\\tiny-language-model\\outputs\\tinystories-evaluation-50k-v1\\report.json": "91c184eabab691cc1bfab4630f2e3db3325d1c227f667f03fa2ecc4da5b6073a",
+    "D:\\Python\\tiny-language-model\\data\\tinystories-expanded-50k-v1\\heldout.bin": "7540c5488146798f38660d6f978fcdfee1fd31d526e9ab29d85cc5bcb09d0c65",
+    "D:\\Python\\tiny-language-model\\data\\tinystories-expanded-50k-v1\\tokenizer.json": "059f33f795b63a313c7fbf1b1969d8c45a71346afb53a3bbc59e6e51aa7d12c8",
+    "D:\\Python\\tiny-language-model\\outputs\\tinystories-cpu-15000-v1\\step_00015000.pt": "4231acd345efb8c2ad3588af558ee86ec44615bb98c6cc220546bfd5d2ec88f6",
+    "D:\\Python\\tiny-language-model\\outputs\\tinystories-cpu-50k-v1\\step_00015000.pt": "91f3b708ff063cdbd8472b99bd180d960329a4c9e484ecd0a7c349e5ec3e6c79"
+  },
+  "models": [
+    {
+      "evaluation_report": "D:\\Python\\tiny-language-model\\outputs\\tinystories-evaluation-15000-v1\\report.json",
+      "checkpoint": "D:\\Python\\tiny-language-model\\outputs\\tinystories-cpu-15000-v1\\step_00015000.pt",
+      "step": 15000,
+      "selection_val_loss": 2.3680420021216073,
+      "seed_metrics": [
+        {
+          "seed": 1337,
+          "loss": 2.7422341406345367,
+          "num_tokens": 32768
+        },
+        {
+          "seed": 2026,
+          "loss": 2.69458544254303,
+          "num_tokens": 32768
+        },
+        {
+          "seed": 42,
+          "loss": 2.691493682563305,
+          "num_tokens": 32768
+        }
+      ],
+      "loss": 2.7094377552469573,
+      "seed_sd": 0.028444541054674106,
+      "perplexity": 15.020827758650977
+    },
+    {
+      "evaluation_report": "D:\\Python\\tiny-language-model\\outputs\\tinystories-evaluation-50k-v1\\report.json",
+      "checkpoint": "D:\\Python\\tiny-language-model\\outputs\\tinystories-cpu-50k-v1\\step_00015000.pt",
+      "step": 15000,
+      "selection_val_loss": 2.354562637706598,
+      "seed_metrics": [
+        {
+          "seed": 1337,
+          "loss": 2.5132430121302605,
+          "num_tokens": 32768
+        },
+        {
+          "seed": 2026,
+          "loss": 2.4880826845765114,
+          "num_tokens": 32768
+        },
+        {
+          "seed": 42,
+          "loss": 2.4605222642421722,
+          "num_tokens": 32768
+        }
+      ],
+      "loss": 2.487282653649648,
+      "seed_sd": 0.026369477650928036,
+      "perplexity": 12.028545945548778
+    }
+  ],
+  "elapsed_seconds": 9.4284037000034
+}

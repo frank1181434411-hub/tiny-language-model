@@ -6,6 +6,7 @@
 后续已完成 [四 checkpoint 固定评估](tinystories-evaluation.md)，包含训练/验证 loss 曲线和 40 条完整生成样本。
 2026-10-25 已完成 [同结构 5000 步实验](tinystories-5000.md)，包含五个 checkpoint 的评估及 50 条完整生成样本。
 同日已完成 [同结构 15000 步实验](tinystories-15000.md)，训练 16 分 27 秒，包含六个 checkpoint 的评估及 60 条完整生成样本。
+随后完成 [5 万篇、15000 步数据对照](tinystories-50k.md)，训练 24 分 51 秒，包含六个 checkpoint、60 条样本及新旧模型的独立留出评价。
 
 | 字段 | 要求 |
 | --- | --- |

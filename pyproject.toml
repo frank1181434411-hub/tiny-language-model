@@ -37,6 +37,9 @@ line-length = 100
 select = ["E", "F", "I", "B", "UP"]
 
 [tool.ruff.lint.per-file-ignores]
+"scripts/expand_tinystories.py" = ["E501", "I001"]
+"scripts/evaluate_tinystories_heldout.py" = ["E501", "I001"]
+"tests/test_expand_tinystories.py" = ["E501", "I001"]
 "scripts/evaluate_tinystories.py" = ["E501", "I001"]
 "scripts/run_tinystories_pilot.py" = ["E501", "I001"]
 "scripts/prepare_tinystories_sample.py" = ["E501", "I001"]
@@ -76,6 +79,9 @@ select = ["E", "F", "I", "B", "UP"]
 [tool.ruff.format]
 # Preserve the requested compact spacing in migrated numerical implementations.
 exclude = [
+    "scripts/expand_tinystories.py",
+    "scripts/evaluate_tinystories_heldout.py",
+    "tests/test_expand_tinystories.py",
     "scripts/evaluate_tinystories.py",
     "scripts/run_tinystories_pilot.py",
     "scripts/prepare_tinystories_sample.py",

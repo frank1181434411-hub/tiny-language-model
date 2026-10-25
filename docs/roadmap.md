@@ -6,7 +6,7 @@
 | 源码迁移 | 按迁移映射整理模块；确认归属和依赖；消除演示入口与导入副作用 | loss、optimizer、scheduler、采样、TransformerLM、checkpoint、BPE、Tokenizer、预处理、文件加载与单提示词生成已迁移 |
 | 正确性验证 | tokenizer 往返和特殊边界；模型组件/loss/优化器数值及梯度对照；调度、采样与 checkpoint 测试 | loss、optimizer 的 CPU 检查见各迁移记录；[调度](scheduler.md)、[采样](data.md)、[基础层](layers.md)、[注意力](attention.md)、[完整模型](transformer.md)、[checkpoint](checkpoint.md)、[BPE](bpe.md) 与 [Tokenizer](tokenizer.md) 见对应记录，其余待验证 |
 | 训练闭环 | 小数据可预处理、训练、验证、保存、恢复、续写；恢复状态与步数语义明确 | [预处理 CLI](preprocess-cli.md)、[训练/验证 CLI](training-cli.md) 与 [生成 CLI](generation.md) 已接通并测试；[历史输入绑定](checkpoint-binding.md) 已实现 |
-| 基线实验 | 固定配置、种子、数据版本与硬件；报告实际 loss、token 数、耗时和样本；可复跑比较 | 50 步试跑、1000 步基线、[5000 步](../experiments/tinystories-5000.md)和[15000 步实验](../experiments/tinystories-15000.md)及固定评估已完成；数据扩充对照与消融待运行 |
+| 基线实验 | 固定配置、种子、数据版本与硬件；报告实际 loss、token 数、耗时和样本；可复跑比较 | 50 步试跑、1000 步基线、5000/15000 步实验与[5 万篇数据对照](../experiments/tinystories-50k.md)已完成；其他消融未运行 |
 | 首版发布 | 安装与文档从干净环境验收；许可审查完成；发布包和复现说明齐备 | 待开始 |
 
 已使用本地 TinyStories 样本完成短程训练，无需下载语料或模型。CPU 试跑通过不代表 GPU
@@ -18,7 +18,9 @@
    50 步试跑及单线程续训核对、1000 步初始基线与四 checkpoint 固定评估已完成；
    5000 步训练及五 checkpoint 固定评估也已完成，验证 loss 为 2.5907，训练/验证差距扩大到 0.0832。
    后续 15000 步训练耗时 16 分 27 秒，六 checkpoint 固定评估终点验证 loss 为 2.3680，差距为 0.2264；故事逻辑仍不稳定。
-   下一步优先核对或扩充语料、保留独立评估数据，再以相同结构做对照。
+   [5 万篇扩充数据](tinystories-expanded.md)已准备：保留原训练故事、验证集和词表，新增独立留出集并完成词面重复检查。
+   同结构 15000 步数据对照已完成，耗时 24 分 51 秒；原验证 loss 为 2.3546，独立留出 loss 从 2.7094 改善至 2.4873。
+   生成故事仍不稳定。本阶段先总结并停止追加训练；若以后开展新实验，训练中验证间隔优先改为 2500 步，仍保留单轮时间预算。
    TinyStories 为合成故事语料，多线程逐位复现的限制见试跑记录。
 2. 在目标 GPU 上验证精度、显存、吞吐量与续训，再根据测量决定 AMP、梯度累积和 KV cache 的优先级。
 3. 根据实际需要补批量生成、保持边界语义的流式文本处理；完成干净环境安装和发布验收。

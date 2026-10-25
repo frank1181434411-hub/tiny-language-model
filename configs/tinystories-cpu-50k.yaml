@@ -1,0 +1,31 @@
+# 约 5 万篇数据对照；只准备配置，尚未训练。
+# 与原 15000 步实验保持模型、优化器、学习率计划和验证集一致。
+# OMP_NUM_THREADS=1、MKL_NUM_THREADS=1、dtype=float32、eval_batches=4。
+model:
+  vocab_size: 2048
+  context_length: 128
+  num_layers: 2
+  d_model: 128
+  num_heads: 4
+  d_ff: 352
+  norm_mode: pre_norm
+  ffn_type: swiglu
+  rope_theta: 10000.0
+data:
+  train_data_path: ../data/tinystories-expanded-50k-v1/train.bin
+  val_data_path: ../data/tinystories-expanded-50k-v1/val.bin
+  tokenizer_path: ../data/tinystories-expanded-50k-v1/tokenizer.json
+training:
+  batch_size: 8
+  max_steps: 15000
+  learning_rate: 0.001
+  min_learning_rate: 0.0001
+  warmup_steps: 50
+  weight_decay: 0.1
+  grad_clip: 1.0
+  seed: 42
+  device: cpu
+  eval_interval: 500
+  save_interval: 2500
+output:
+  output_dir: ../outputs/tinystories-cpu-50k-v1

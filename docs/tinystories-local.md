@@ -76,3 +76,5 @@ Ruff 静态检查、格式检查通过；本次未改变核心分词、预处理
 现已提供 configs/tinystories-pilot.yaml 并完成 50 步试跑，接下来可从头运行
 configs/tinystories-cpu.yaml 的 1000 步配置；该轮随后已完成，详见 [基线记录](../experiments/tinystories-baseline.md)，重跑应使用新输出目录。
 现有 256 词表 smoke.yaml 不能直接用于这份数据。
+
+后续扩充数据采用独立目录并保留本页全部原始输入，方案与核验结果见 [5 万篇扩充记录](tinystories-expanded.md)。
