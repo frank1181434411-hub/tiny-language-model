@@ -24,7 +24,10 @@ def main():
     parser.add_argument("--config",type=Path,default=Path("configs/tinystories-cpu.yaml"))
     parser.add_argument("--prompts",type=Path,default=Path("experiments/tinystories-prompts.json"))
     parser.add_argument("--output-dir",type=Path,default=Path("outputs/tinystories-evaluation-v1"))
+    parser.add_argument("--steps",type=int,nargs="+",default=[250,500,750,1000])
     args=parser.parse_args()
+    if any(step<=0 for step in args.steps) or args.steps!=sorted(set(args.steps)):
+        parser.error("--steps must be distinct positive integers in ascending order")
     os.environ["OMP_NUM_THREADS"]="1"
     os.environ["MKL_NUM_THREADS"]="1"
     import torch
@@ -41,7 +44,7 @@ def main():
     prompts=json.loads(args.prompts.read_text(encoding="utf-8"))
     if len(prompts)!=10 or len({row["id"] for row in prompts})!=10 or any(not row["prompt"].strip() for row in prompts):
         raise ValueError("exactly ten distinct IDs with nonempty prompts are required")
-    steps=(250,500,750,1000)
+    steps=tuple(args.steps)
     checkpoints={step:config.output.output_dir/f"step_{step:08d}.pt" for step in steps}
     sources=[args.config.resolve(),args.prompts.resolve(),config.data.tokenizer_path,config.data.train_data_path,config.data.val_data_path,*checkpoints.values()]
     hashes={str(path):fingerprint(path) for path in sources}

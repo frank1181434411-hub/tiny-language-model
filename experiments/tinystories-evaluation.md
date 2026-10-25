@@ -98,3 +98,5 @@ Windows 下可用 scripts/plot_tinystories_evaluation.ps1 绘图，传入 Metric
 再对照本轮相同窗口与提示。不能直接改旧配置的 max_steps 后恢复已经结束的 1000 步 checkpoint。
 这是基于仍在下降的验证 loss 提出的试验，不是对效果的保证；若后续训练/验证差距明显扩大，
 则优先扩充和核对数据，而不是继续增加步数。本轮尚未启动该训练。
+
+2026-10-25 更新：上述 5000 步实验已完成，详见 [训练与固定评估结果](tinystories-5000.md)。

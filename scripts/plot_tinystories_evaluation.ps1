@@ -1,6 +1,11 @@
 param(
     [string]$MetricsPath = "$PSScriptRoot/../outputs/tinystories-evaluation-v1/metrics.csv",
-    [string]$ImagePath = "$PSScriptRoot/../experiments/tinystories-evaluation-loss.png"
+    [string]$ImagePath = "$PSScriptRoot/../experiments/tinystories-evaluation-loss.png",
+    [int]$XMinimum = 250,
+    [int]$XMaximum = 1000,
+    [int]$XInterval = 250,
+    [double]$YMinimum = 3.1,
+    [double]$YMaximum = 4.1
 )
 $ErrorActionPreference = 'Stop'
 if (Test-Path -LiteralPath $ImagePath) { throw 'Output image already exists; choose a new path.' }
@@ -13,12 +18,12 @@ try {
     $chart.BackColor = [System.Drawing.Color]::White
     $area = New-Object System.Windows.Forms.DataVisualization.Charting.ChartArea
     $area.AxisX.Title = 'Completed training steps'
-    $area.AxisX.Minimum = 250
-    $area.AxisX.Maximum = 1000
-    $area.AxisX.Interval = 250
+    $area.AxisX.Minimum = $XMinimum
+    $area.AxisX.Maximum = $XMaximum
+    $area.AxisX.Interval = $XInterval
     $area.AxisY.Title = 'Mean token cross-entropy (nats)'
-    $area.AxisY.Minimum = 3.1
-    $area.AxisY.Maximum = 4.1
+    $area.AxisY.Minimum = $YMinimum
+    $area.AxisY.Maximum = $YMaximum
     $area.AxisY.Interval = 0.2
     $area.AxisX.MajorGrid.LineColor = [System.Drawing.Color]::Gainsboro
     $area.AxisY.MajorGrid.LineColor = [System.Drawing.Color]::Gainsboro

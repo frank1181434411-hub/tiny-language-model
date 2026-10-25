@@ -1,0 +1,31 @@
+# 同结构、同数据的 5000 步 CPU 实验；从头启动，不恢复 1000 步实验。
+# 保持预热 50 步；余弦衰减终点改为 5000，因此两轮学习率轨迹不同。
+# OMP_NUM_THREADS=1、MKL_NUM_THREADS=1、dtype=float32、eval_batches=4。
+model:
+  vocab_size: 2048
+  context_length: 128
+  num_layers: 2
+  d_model: 128
+  num_heads: 4
+  d_ff: 352
+  norm_mode: pre_norm
+  ffn_type: swiglu
+  rope_theta: 10000.0
+data:
+  train_data_path: ../data/tinystories-local-v1/train.bin
+  val_data_path: ../data/tinystories-local-v1/val.bin
+  tokenizer_path: ../data/tinystories-local-v1/tokenizer.json
+training:
+  batch_size: 8
+  max_steps: 5000
+  learning_rate: 0.001
+  min_learning_rate: 0.0001
+  warmup_steps: 50
+  weight_decay: 0.1
+  grad_clip: 1.0
+  seed: 42
+  device: cpu
+  eval_interval: 100
+  save_interval: 1000
+output:
+  output_dir: ../outputs/tinystories-cpu-5000-v1
