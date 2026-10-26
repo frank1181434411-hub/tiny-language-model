@@ -6,6 +6,7 @@
 从 checkpoint 恢复到四步 → 独立验证 → 文本生成。
 使用仓库自带语料、CPU FP32 和极小模型，不下载语料或模型；执行第 5、6 节会真实更新模型参数。
 四步训练只用于检查流程，不应期待通顺的生成结果或据此评价泛化能力。
+2026-10-26 已在原训练设备的现有项目环境实跑通过，详见[本次验收记录](end-to-end-checks.md)。
 
 下面各节请在同一个 PowerShell 窗口中按顺序执行，任一步失败先停止排查。
 所有产物放入新的 `artifacts/e2e-demo-v1/`，不使用已有 TinyStories 数据和权重。
@@ -37,6 +38,9 @@ if ($LASTEXITCODE -ne 0) { throw "Dependency check failed" }
 ```powershell
 $env:OMP_NUM_THREADS="1"
 $env:MKL_NUM_THREADS="1"
+$env:PYTHONIOENCODING="utf-8"
+[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new($false)
+$OutputEncoding=[Console]::OutputEncoding
 $DemoRoot="artifacts/e2e-demo-v1"
 $DemoConfig="$DemoRoot/config.yaml"
 $Tokenizer="$DemoRoot/tokenizer.json"
@@ -46,6 +50,9 @@ $ValidationData="$DemoRoot/val.bin"
 $Checkpoint2="$DemoRoot/checkpoints/step_00000002.pt"
 $Checkpoint4="$DemoRoot/checkpoints/step_00000004.pt"
 ```
+
+UTF-8 设置用于避免生成文本中的替换字符在 GBK 终端或日志回显时编码失败，同样只影响当前进程及子进程。
+`$ProjectPython` 应改为当前机器实际解释器；本次实跑使用 `D:/Python/.venvs/tiny-language-model/Scripts/python.exe`。
 
 ## 2. 创建独立配置与验证文本
 
@@ -193,5 +200,6 @@ artifacts/e2e-demo-v1/
 换目录继续使用已有产物前，阅读[跨设备复现指南](reproduction.md)中的生成、评估和严格续训区别。
 
 本示例于 2026-10-26 根据已有文档、smoke 配置与 CLI 参数整理。
-本次仅检查文档链接和命令片段语法，没有实际执行上述预处理、四步训练、验证或生成；
-后续运行结果应单独记录，不将已有其他测试的通过状态算作本示例实测。
+初稿只检查了文档链接和命令片段语法；随后已完成本机十个命令块的实际执行。
+本次训练从第 2 步恢复到第 4 步，独立验证 loss 为 5.641384243965149，生成新增 32 tokens 并以 length 结束。
+命令、适配项、日志位置与检查范围见[验收记录](end-to-end-checks.md)，不将本机现有环境实跑等同于干净安装或跨设备验收。
