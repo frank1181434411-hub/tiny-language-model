@@ -7,7 +7,7 @@ BPE、Tokenizer、Transformer、交叉熵、AdamW 和学习率调度，以及文
 **当前已完成核心源码迁移和训练闭环，并完成 TinyStories 5 万篇、15000 步 CPU 数据对照。**
 生成仍有角色混乱、情节跳跃和重复，尚不能稳定讲述连贯故事。本阶段先整理项目与复现资料，暂停追加训练。
 
-[使用与技术文档](docs/README.md) · [实验索引](experiments/README.md) · [路线图](docs/roadmap.md) · [来源与许可](docs/provenance.md)
+[使用与技术文档](docs/README.md) · [跨设备复现](docs/reproduction.md) · [实验索引](experiments/README.md) · [路线图](docs/roadmap.md) · [来源与许可](docs/provenance.md)
 
 ## 当前能力与实验结果
 
@@ -122,6 +122,8 @@ Python API、记录边界和内存约束见[预处理说明](docs/preprocess.md)
 **Git 拉取不会带回被忽略的语料、tokenizer、token 文件、checkpoint 或运行输出。**
 复现实验需要按报告准备数据或另外转移对应产物；二进制 token 文件须带上旁置 JSON。
 历史报告中的绝对 Python 路径属于当时设备，执行时替换为自己的项目解释器。
+材料清单、传输校验、生成/评估命令与续训限制见[跨设备复现指南](docs/reproduction.md)，
+已采集和待补齐的环境信息见[设备清单](docs/environments.md)。
 
 ## 开发检查与当前限制
 
