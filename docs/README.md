@@ -7,6 +7,7 @@
 | 需要完成的工作 | 文档 |
 | --- | --- |
 | 创建环境、安装依赖、校验配置 | [项目首页](../README.md)、[依赖与历史环境](dependencies.md) |
+| 从自带文本走完整个小型 CPU 流程 | [端到端示例](end-to-end.md) |
 | 区分开发与训练设备、补齐环境记录 | [设备与环境清单](environments.md) |
 | 转移产物、在新设备生成/评估/复现训练 | [跨设备复现指南](reproduction.md) |
 | 训练 tokenizer、准备单文件或多文件数据 | [预处理命令](preprocess-cli.md) |

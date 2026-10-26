@@ -72,6 +72,9 @@ Linux 环境的解释器路径为 `.venv/bin/python`；MSYS2 环境可能使用 
 安装后也提供 `tiny-lm`；激活虚拟环境后可直接执行 `tiny-lm --help`。
 两种入口行为一致，各子命令使用 `--help` 查看完整参数。
 
+首次使用可按[小型端到端示例](docs/end-to-end.md)依次完成数据准备、四步 CPU 训练、
+中断恢复、验证与生成；示例使用独立目录，详细说明每一步的预期产物和检查范围。
+
 | 命令 | 用途与说明 |
 | --- | --- |
 | `check-config` | 校验配置并显示解析后的路径；不加载模型、不创建输出 |
@@ -94,7 +97,7 @@ New-Item -ItemType Directory -Force artifacts/preprocess-cli-demo | Out-Null
 输出为 tokenizer.json、train.bin 与 train.bin.json；已有同名文件会报错，重复演示时换用新目录。
 示例仅验证预处理流程，不训练模型；自带文本不是有效训练语料。
 此处的 300 词表与 `smoke.yaml` 的 256 词表不匹配，
-运行小型训练闭环请使用[训练/验证文档中的配套准备步骤](docs/training-cli.md)。
+运行小型训练闭环请使用[端到端示例中的配套准备步骤](docs/end-to-end.md)。
 
 预处理默认严格读取 UTF-8、保留换行、不追加 EOS；支持有序多文件输入。
 Python API、记录边界和内存约束见[预处理说明](docs/preprocess.md)。
