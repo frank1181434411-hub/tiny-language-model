@@ -43,7 +43,8 @@ Tokenizer 的模式、ID 校验和记录边界见 [Tokenizer 迁移记录](token
 - 任意文本分块的 UTF-8 字节、词边界与流式状态仍待设计；当前迭代编码明确按独立记录处理。
 - 特殊 token 最长匹配、相邻边界、识别/普通文本模式已验证；跨块识别与禁止特定 token 策略尚未实现。
 - 配置选项与实现是否对应；当前 `norm_mode` 指归一化位置，
-  不能直接推定旧实现支持所有枚举；运行 CLI 已检查模型实际词表与 tokenizer 是否匹配，并拒绝未实现的 GELU。
+  不能直接推定旧实现支持所有枚举；运行 CLI 已检查模型实际词表与 tokenizer 是否匹配。
+  GELU 已作为项目新增分支接通模型与 CLI，使用 PyTorch 内置精确激活，见 [模型文档](transformer.md)。
 - v1 数据已记录 dtype、token 数、字节序、tokenizer 指纹与内容哈希；
   checkpoint 已自动绑定逻辑 token 内容指纹；训练/验证切分与防止数据泄漏仍待运行流程集成。
 - checkpoint 的 GPU/分布式状态、GradScaler 与数据工作进程恢复仍待扩展和验证；

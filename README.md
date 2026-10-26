@@ -12,7 +12,7 @@ BPE、Tokenizer、Transformer、交叉熵、AdamW 和学习率调度，以及文
 ## 当前能力与实验结果
 
 - 文本：BPE 训练、版本化 tokenizer 保存/加载、编码/解码、单文件及显式多文件预处理。
-- 模型：完整 TransformerLM、RoPE、RMSNorm、SwiGLU、手写 loss 与 AdamW。
+- 模型：完整 TransformerLM、RoPE、RMSNorm、SwiGLU/GELU 前馈、手写 loss 与 AdamW。
 - 训练：配置校验、只读 token 数据加载、训练/验证、checkpoint 与随机状态恢复、历史输入绑定。
 - 生成：单提示词续写、temperature、top-k/top-p、EOS 与独立采样种子。
 - 工程：Python 3.11+、src 布局、可选计算依赖、pytest、Ruff 与 CPU CI 配置。
@@ -113,8 +113,9 @@ Python API、记录边界和内存约束见[预处理说明](docs/preprocess.md)
 - batch、总步数、验证/保存间隔为正整数；seed、warmup 非负，`warmup_steps<max_steps`。
   `0<=min_learning_rate<=learning_rate` 且 `learning_rate>0`；
   `weight_decay>=0`、`grad_clip>0`，数值必须有限。
-- `norm_mode` 支持 pre_norm/post_norm。配置的 ffn_type 暂接受 swiglu/gelu，
-  但 GELU 尚未实现，会明确报错；旧 SiLU 分支仅通过模型 Python 构造接口提供。
+- `norm_mode` 支持 pre_norm/post_norm，`ffn_type` 支持 swiglu/gelu。
+  GELU 为两层无 bias 线性映射中的精确激活（非 tanh 近似）；旧 SiLU 分支仅通过模型 Python 构造接口提供。
+  用法、精度和 checkpoint 约定见 [Transformer 文档](docs/transformer.md)。
 - device 配置接受 cpu、mps、cuda、cuda:N；训练 API 当前支持 CPU/CUDA，
   实际执行时才检查设备可用性。GPU 验收尚未完成。
 - `smoke.yaml` 用于准备匹配数据后的极小 CPU 流程；

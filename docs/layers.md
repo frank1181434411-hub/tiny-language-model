@@ -36,9 +36,9 @@ RoPE、softmax、注意力、TransformerBlock 与 TransformerLM 尚未迁移。
 
 ## 配置、依赖与导入
 
-未来由模型构造入口将 d_model、d_ff、vocab_size 映射到对应层；本次没有接通配置构造。
-`norm_mode` 表示 pre/post 归一化位置，由未来 TransformerBlock 决定。
-只实现 SwiGLU；配置接受 `ffn_type: gelu` 不代表 GELU 已有实现。
+基础层迁移时没有接通配置构造；现在由 TransformerLM/TransformerBlock 映射模型参数和归一化位置。
+本模块提供 SwiGLU；GELU 前馈由 TransformerBlock 使用两个 Linear 与 PyTorch 内置精确 GELU 组装，
+配置支持 `ffn_type: gelu`，完整接口与精度约定见 [Transformer 文档](transformer.md)。
 
 显式导入 `tiny_lm.model.layers` 会加载 PyTorch，因为类继承 nn.Module。
 基础包、`tiny_lm.model`、配置与 CLI 仍保持轻量。现有 `compute` 依赖已包含 PyTorch，

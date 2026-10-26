@@ -91,7 +91,8 @@ YAML 中相对路径以 YAML 所在目录为准；命令行的 config、resume�
 完整数据哈希和全部 ID 范围，并要求至少 context_length+1 个 token。
 只读 memmap 在成功或异常退出时都关闭，不遗留文件映射。
 
-CPU/CUDA 为当前支持的设备；不可用 CUDA、MPS 或尚未实现的 GELU 在运行前明确报错。
+CPU/CUDA 为当前支持的设备；不可用 CUDA 或 MPS 在运行前明确报错。
+配置支持 SwiGLU/GELU 前馈；GELU 使用精确激活，详见 [模型文档](transformer.md)。
 普通输入、文件、配置、checkpoint 和运行数值错误返回退出码 2，在 stderr 输出诊断，
 不输出成功摘要；缺少依赖会给出安装提示。原有配置加载器仍沿用中文配置错误信息，
 本次新增参数和运行校验错误使用英文。

@@ -43,6 +43,8 @@
   模型加载使用项目版本化 checkpoint 和原生 tokenizer，不迁入旧格式猜测及交互循环；
   测试独立编写，原作业未修改，详见 [文本生成](generation.md)。
 - 本次新增：工程框架、配置/CLI、测试和项目文档。
+  GELU 前馈为本项目新增分支，通过已有 Linear 与 `torch.nn.GELU(approximate="none")` 组装，
+  不声称该激活是手写或从旧作业迁入；相关数值与集成测试独立编写。
   checkpoint v2 输入绑定为项目工程扩展，复用原生 tokenizer 指纹，并新增实际 token 序列哈希；
   相应测试独立编写，旧作业未修改，见 [输入绑定](checkpoint-binding.md)。
   `examples/toy_corpus.txt` 为本次自行编写的小段中英文示例。

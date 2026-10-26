@@ -109,8 +109,6 @@ def _training_command(args:argparse.Namespace)->dict:
         raise ValueError("the configured CUDA device is not available")
     if args.command=="train" and args.stop_after is not None and not 0<=args.stop_after<=config.training.max_steps:
         raise ValueError("stop_after must be between 0 and config.training.max_steps")
-    if config.model.ffn_type!="swiglu":
-        raise ValueError("configured ffn_type must be swiglu; GELU is not implemented")
     tokenizer=BPETokenizer.from_file(config.data.tokenizer_path)
     if len(tokenizer.vocab)!=config.model.vocab_size:
         raise ValueError("model.vocab_size must match the actual tokenizer vocabulary size")

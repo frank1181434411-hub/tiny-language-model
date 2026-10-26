@@ -12,7 +12,7 @@ from tiny_lm.model.layers import Embedding,Linear,RMSNorm,SwiGLU,_check_input,_c
 
 class TransformerBlock(nn.Module):
     """
-    保留双残差连接、可选 RMSNorm 和 SwiGLU/SiLU 前馈网络。
+    双残差连接、可选 RMSNorm 和 SwiGLU/SiLU/GELU 前馈网络。
     输入和输出形状均为 (batch,seq_len,d_model)，支持 pre_norm/post_norm。
     归一化与注意力核心沿用低精度提升规则，投影、前馈与残差沿用张量 dtype/autocast。
     """
@@ -29,8 +29,8 @@ class TransformerBlock(nn.Module):
             raise ValueError("norm_mode must be pre_norm or post_norm (legacy aliases: pre, post)")
         if not isinstance(ffn_type,str):
             raise TypeError("ffn_type must be a string")
-        if ffn_type not in ("swiglu","silu","SwiGLU","SiLu"):
-            raise ValueError("ffn_type must be swiglu or silu (legacy aliases: SwiGLU, SiLu); GELU is not implemented")
+        if ffn_type not in ("swiglu","silu","gelu","SwiGLU","SiLu"):
+            raise ValueError("ffn_type must be swiglu, silu or gelu (legacy aliases: SwiGLU, SiLu)")
         self.d_model=d_model
         self.use_rms_norm=use_rms_norm
         self.norm_mode={"pre":"pre_norm","post":"post_norm"}.get(norm_mode,norm_mode)
@@ -44,6 +44,8 @@ class TransformerBlock(nn.Module):
             self.ln2=nn.Identity()
         if self.ffn_type=="swiglu":
             self.ffn=SwiGLU(d_model,d_ff,device=device,dtype=dtype)
+        elif self.ffn_type=="gelu":
+            self.ffn=nn.Sequential(Linear(d_model,d_ff,device=device,dtype=dtype),nn.GELU(approximate="none"),Linear(d_ff,d_model,device=device,dtype=dtype))
         else:
             self.ffn=nn.Sequential(Linear(d_model,d_ff,device=device,dtype=dtype),nn.SiLU(),Linear(d_ff,d_model,device=device,dtype=dtype))
 

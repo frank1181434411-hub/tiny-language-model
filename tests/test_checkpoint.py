@@ -29,8 +29,8 @@ def preserve_global_rng():
     torch.set_rng_state(state[2])
 
 
-def _model(dtype=torch.float32):
-    return TransformerLM(11,6,4,1,2,7,10000.0,dtype=dtype)
+def _model(dtype=torch.float32,ffn_type="swiglu"):
+    return TransformerLM(11,6,4,1,2,7,10000.0,dtype=dtype,ffn_type=ffn_type)
 
 
 def _config():
@@ -82,11 +82,12 @@ def _step(model,optimizer,generator,step):
 
 @pytest.mark.parametrize("dtype",[torch.float16,torch.bfloat16,torch.float32,torch.float64])
 @pytest.mark.parametrize("use_path",[False,True])
-def test_resume_matches_uninterrupted_training(tmp_path,dtype,use_path):
+@pytest.mark.parametrize("ffn_type",["swiglu","gelu"])
+def test_resume_matches_uninterrupted_training(tmp_path,dtype,use_path,ffn_type):
     torch.manual_seed(12)
     random.seed(13)
     np.random.seed(14)
-    model=_model(dtype)
+    model=_model(dtype,ffn_type)
     optimizer=AdamW(model.parameters())
     train=torch.Generator().manual_seed(15)
     validation=torch.Generator().manual_seed(16)
@@ -94,7 +95,7 @@ def test_resume_matches_uninterrupted_training(tmp_path,dtype,use_path):
     for step in range(2):
         _step(model,optimizer,train,step)
     target=tmp_path/"state.pt" if use_path else io.BytesIO()
-    checkpoint.save_checkpoint(model,optimizer,2,target,config=_config(),generators=generators)
+    checkpoint.save_checkpoint(model,optimizer,2,target,config=replace(_config(),ffn_type=ffn_type),generators=generators)
     expected=[_step(model,optimizer,train,step) for step in range(2,5)]
     expected_validation=torch.rand(3,generator=validation)
     expected_rng=(random.random(),np.random.random(),torch.rand(3))
@@ -109,7 +110,7 @@ def test_resume_matches_uninterrupted_training(tmp_path,dtype,use_path):
     resumed_validation=torch.Generator().manual_seed(101)
     if not use_path:
         target.seek(0)
-    completed=checkpoint.load_checkpoint(target,resumed,resumed_optimizer,config=_config(),generators={"train":resumed_train,"validation":resumed_validation})
+    completed=checkpoint.load_checkpoint(target,resumed,resumed_optimizer,config=replace(_config(),ffn_type=ffn_type),generators={"train":resumed_train,"validation":resumed_validation})
     assert completed==2
     actual=[_step(resumed,resumed_optimizer,resumed_train,step) for step in range(completed,5)]
     _assert_equal(actual,expected)
@@ -121,6 +122,19 @@ def test_resume_matches_uninterrupted_training(tmp_path,dtype,use_path):
     assert all(state["exp_avg"].dtype==expected_dtype for state in resumed_optimizer.state.values())
     if use_path:
         assert list(tmp_path.iterdir())==[target]
+
+
+@pytest.mark.parametrize(("saved_ffn","target_ffn"),[("gelu","silu"),("silu","gelu")])
+def test_same_shape_ffn_mismatch_is_rejected_before_loading(saved_ffn,target_ffn):
+    source=_model(ffn_type=saved_ffn)
+    target=_model(ffn_type=target_ffn)
+    optimizer=AdamW(target.parameters())
+    before=copy.deepcopy(target.state_dict())
+    stream=_save(source,AdamW(source.parameters()))
+    with pytest.raises(ValueError,match="model configuration"):
+        checkpoint.load_checkpoint(stream,target,optimizer,restore_rng=False)
+    _assert_equal(target.state_dict(),before)
+    assert not optimizer.state
 
 
 def test_zero_step_clears_old_optimizer_state_and_gradients_but_preserves_mode():

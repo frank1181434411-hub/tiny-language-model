@@ -149,7 +149,11 @@ def test_incompatible_inputs(project,capsys,problem):
     assert not (project.parent/"unused-output").exists()
 
 
-def test_real_file_training_checkpoint_can_generate(project,capsys):
+@pytest.mark.parametrize("ffn_type",["swiglu","gelu"])
+def test_real_file_training_checkpoint_can_generate(project,capsys,ffn_type):
+    options=yaml.safe_load(project.read_text(encoding="utf-8"))
+    options["model"]["ffn_type"]=ffn_type
+    project.write_text(yaml.safe_dump(options),encoding="utf-8")
     config=load_config(project)
     tokenizer=BPETokenizer.from_file(config.data.tokenizer_path)
     for name,path in (("train",config.data.train_data_path),("val",config.data.val_data_path)):

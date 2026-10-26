@@ -86,7 +86,9 @@ def equal(left,right):
 
 
 @pytest.mark.parametrize("dtype",["float32","float64"])
-def test_cli_train_resume_and_evaluate_match_array_api(entry,project,tmp_path,dtype):
+@pytest.mark.parametrize("ffn_type",["swiglu","gelu"])
+def test_cli_train_resume_and_evaluate_match_array_api(entry,project,tmp_path,dtype,ffn_type):
+    update_config(project,"model","ffn_type",ffn_type)
     config=load_config(project)
     training_data=load_token_data(config.data.train_data_path)
     validation_data=load_token_data(config.data.val_data_path)
@@ -152,7 +154,7 @@ def test_help(entry,tmp_path,command):
 
 
 @pytest.mark.parametrize("command",["train","evaluate"])
-@pytest.mark.parametrize("problem",["vocab","fingerprint","hash","short","empty","missing_metadata","missing_tokenizer","device","gelu","seed","config"])
+@pytest.mark.parametrize("problem",["vocab","fingerprint","hash","short","empty","missing_metadata","missing_tokenizer","device","ffn","seed","config"])
 def test_invalid_inputs_fail_before_output(project,command,problem,capsys):
     folder=project.parent
     if problem=="vocab":
@@ -174,8 +176,8 @@ def test_invalid_inputs_fail_before_output(project,command,problem,capsys):
         (folder/"tokenizer.json").unlink()
     elif problem=="device":
         update_config(project,"training","device","mps")
-    elif problem=="gelu":
-        update_config(project,"model","ffn_type","gelu")
+    elif problem=="ffn":
+        update_config(project,"model","ffn_type","relu")
     elif problem=="seed":
         update_config(project,"training","seed",2**64)
     else:

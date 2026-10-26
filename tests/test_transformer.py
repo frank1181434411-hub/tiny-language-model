@@ -53,6 +53,9 @@ def _reference(x,weights,norm_mode,ffn_type,use_rms_norm,positions=None):
     def ffn(value):
         if ffn_type=="swiglu":
             return F.linear(F.silu(F.linear(value,weights["ffn.w1.weight"]))*F.linear(value,weights["ffn.w3.weight"]),weights["ffn.w2.weight"])
+        if ffn_type=="gelu":
+            hidden=F.linear(value,weights["ffn.0.weight"])
+            return F.linear(0.5*hidden*(1+torch.erf(hidden/2**0.5)),weights["ffn.2.weight"])
         return F.linear(F.silu(F.linear(value,weights["ffn.0.weight"])),weights["ffn.2.weight"])
 
     if norm_mode=="pre_norm":
@@ -69,7 +72,7 @@ def _close(actual,expected,dtype):
 
 @pytest.mark.parametrize("dtype",DTYPES)
 @pytest.mark.parametrize("norm_mode",["pre_norm","post_norm"])
-@pytest.mark.parametrize("ffn_type",["swiglu","silu"])
+@pytest.mark.parametrize("ffn_type",["swiglu","silu","gelu"])
 @pytest.mark.parametrize("use_rms_norm",[False,True])
 def test_forward_and_all_gradients_against_float64(dtype,norm_mode,ffn_type,use_rms_norm):
     block=_block(dtype=dtype,norm_mode=norm_mode,ffn_type=ffn_type,use_rms_norm=use_rms_norm)
@@ -90,7 +93,7 @@ def test_forward_and_all_gradients_against_float64(dtype,norm_mode,ffn_type,use_
 
 
 @pytest.mark.parametrize("norm_mode",["pre_norm","post_norm"])
-@pytest.mark.parametrize("ffn_type",["swiglu","silu"])
+@pytest.mark.parametrize("ffn_type",["swiglu","silu","gelu"])
 def test_input_and_parameter_finite_differences(norm_mode,ffn_type):
     block=_block(norm_mode=norm_mode,ffn_type=ffn_type)
     names,parameters=zip(*block.named_parameters(),strict=True)
@@ -117,7 +120,7 @@ def test_causality_positions_and_input_unchanged(dtype,norm_mode):
 
 
 @pytest.mark.parametrize("norm_mode",["pre_norm","post_norm"])
-@pytest.mark.parametrize("ffn_type",["swiglu","silu"])
+@pytest.mark.parametrize("ffn_type",["swiglu","silu","gelu"])
 @pytest.mark.parametrize("use_rms_norm",[False,True])
 def test_parameter_names_and_serialized_roundtrip(norm_mode,ffn_type,use_rms_norm):
     block=_block(norm_mode=norm_mode,ffn_type=ffn_type,use_rms_norm=use_rms_norm)
@@ -158,7 +161,7 @@ def test_no_rope_noncontiguous_and_empty_batch():
         block(x,torch.arange(3))
 
 
-@pytest.mark.parametrize(("options","error","message"),[({"norm_mode":"invalid"},ValueError,"norm_mode"),({"norm_mode":None},TypeError,"norm_mode"),({"ffn_type":"gelu"},ValueError,"GELU"),({"ffn_type":1},TypeError,"ffn_type"),({"use_rms_norm":1},TypeError,"use_rms_norm"),({"d_model":0},ValueError,"d_model"),({"d_ff":0},ValueError,"d_ff"),({"d_ff":True},TypeError,"d_ff"),({"num_heads":3},ValueError,"divisible"),({"num_heads":4},ValueError,"even"),({"max_seq_len":0},ValueError,"max_len"),({"theta":0},ValueError,"theta"),({"theta":None},ValueError,"provided together"),])
+@pytest.mark.parametrize(("options","error","message"),[({"norm_mode":"invalid"},ValueError,"norm_mode"),({"norm_mode":None},TypeError,"norm_mode"),({"ffn_type":"relu"},ValueError,"ffn_type"),({"ffn_type":1},TypeError,"ffn_type"),({"use_rms_norm":1},TypeError,"use_rms_norm"),({"d_model":0},ValueError,"d_model"),({"d_ff":0},ValueError,"d_ff"),({"d_ff":True},TypeError,"d_ff"),({"num_heads":3},ValueError,"divisible"),({"num_heads":4},ValueError,"even"),({"max_seq_len":0},ValueError,"max_len"),({"theta":0},ValueError,"theta"),({"theta":None},ValueError,"provided together"),])
 def test_invalid_configuration(options,error,message):
     with pytest.raises(error,match=message):
         _block(**options)
@@ -218,7 +221,7 @@ def _close_lm_gradient(actual,expected,dtype):
 
 @pytest.mark.parametrize("dtype",DTYPES)
 @pytest.mark.parametrize("norm_mode",["pre_norm","post_norm"])
-@pytest.mark.parametrize("ffn_type",["swiglu","silu"])
+@pytest.mark.parametrize("ffn_type",["swiglu","silu","gelu"])
 @pytest.mark.parametrize("use_rms_norm",[False,True])
 def test_lm_logits_and_all_parameter_gradients(dtype,norm_mode,ffn_type,use_rms_norm):
     model=_model(dtype=dtype,norm_mode=norm_mode,ffn_type=ffn_type,use_rms_norm=use_rms_norm)
@@ -237,8 +240,9 @@ def test_lm_logits_and_all_parameter_gradients(dtype,norm_mode,ffn_type,use_rms_
 
 
 @pytest.mark.parametrize("norm_mode",["pre_norm","post_norm"])
-def test_lm_parameter_finite_differences(norm_mode):
-    model=_model(num_layers=1,norm_mode=norm_mode)
+@pytest.mark.parametrize("ffn_type",["swiglu","gelu"])
+def test_lm_parameter_finite_differences(norm_mode,ffn_type):
+    model=_model(num_layers=1,norm_mode=norm_mode,ffn_type=ffn_type)
     names,parameters=zip(*model.named_parameters(),strict=True)
     token_ids=torch.tensor([[1,2]])
     def forward(*weights):
@@ -300,7 +304,7 @@ def test_lm_invalid_token_inputs(tokens,error,message):
         _model()(tokens)
 
 
-def test_lm_from_config_and_unsupported_ffn():
+def test_lm_from_config_and_gelu():
     from dataclasses import replace
     from pathlib import Path
     from tiny_lm.config import load_config
@@ -316,19 +320,23 @@ def test_lm_from_config_and_unsupported_ffn():
     assert model(torch.tensor([[1,2,3]])).shape==(1,3,config.vocab_size)
     post=TransformerLM.from_config(replace(config,norm_mode="post_norm"))
     assert post.layers[0].norm_mode=="post_norm"
-    with pytest.raises(ValueError,match="GELU"):
-        TransformerLM.from_config(replace(config,ffn_type="gelu"))
+    gelu=TransformerLM.from_config(replace(config,ffn_type="gelu"),dtype=torch.float64)
+    assert gelu.get_config()["ffn_type"]=="gelu"
+    assert gelu.layers[0].ffn[0].weight.shape==(config.d_ff,config.d_model)
+    assert gelu.layers[0].ffn[2].weight.shape==(config.d_model,config.d_ff)
+    assert gelu(torch.tensor([[1,2,3]])).shape==(1,3,config.vocab_size)
     with pytest.raises(TypeError,match="ModelConfig"):
         TransformerLM.from_config({})
 
 
-def test_lm_loss_optimizer_and_sampling_integration():
+@pytest.mark.parametrize("ffn_type",["swiglu","gelu"])
+def test_lm_loss_optimizer_and_sampling_integration(ffn_type):
     import numpy as np
     from tiny_lm.data import get_batch
     from tiny_lm.losses import cross_entropy
     from tiny_lm.optim import AdamW,clip_gradient_norm
     from tiny_lm.schedule import get_lr_cosine_schedule
-    model=_model(dtype=torch.float32)
+    model=_model(dtype=torch.float32,ffn_type=ffn_type)
     optimizer=AdamW(model.parameters(),lr=0.01)
     x,y=get_batch(np.arange(33,dtype=np.int64)%11,2,4,"cpu",generator=torch.Generator().manual_seed(5))
     before=model.lm_head.weight.detach().clone()
@@ -346,3 +354,19 @@ def test_lm_loss_optimizer_and_sampling_integration():
     assert not torch.equal(before,model.lm_head.weight)
     assert torch.isfinite(model(x)).all()
     assert all(state["step"]==2 for state in optimizer.state.values())
+
+
+@pytest.mark.parametrize("dtype",DTYPES)
+def test_gelu_activation_values_and_gradients(dtype):
+    activation=_block(dtype=dtype,ffn_type="gelu").ffn[1]
+    x=torch.tensor([-100.0,-8.0,-3.0,-1.0,-0.01,0.0,0.01,1.0,3.0,8.0,100.0],dtype=dtype,requires_grad=True)
+    reference=x.detach().double().requires_grad_()
+    expected=0.5*reference*(1+torch.erf(reference/2**0.5))
+    actual=activation(x)
+    actual_gradient=torch.autograd.grad(actual.sum(),x)[0]
+    expected_gradient=torch.autograd.grad(expected.sum(),reference)[0]
+    assert actual.dtype==dtype
+    assert torch.isfinite(actual).all()
+    assert torch.isfinite(actual_gradient).all()
+    _close(actual,expected,dtype)
+    _close(actual_gradient,expected_gradient,dtype)
