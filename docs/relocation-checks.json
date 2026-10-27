@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-27",
+  "bundle_root": "D:\\Python\\reproduction-check-20261027\\reproduction-50k-v1",
+  "commands_passed": 5,
+  "total_command_seconds": 29.114952100091614,
+  "generated_token_ids_exactly_equal": true,
+  "generated_text_exactly_equal": true,
+  "generated_new_tokens": 128,
+  "generation_finish_reason": "length",
+  "validation": [
+    {
+      "seed": 1337,
+      "previous_loss": 2.363883964717388,
+      "relocated_loss": 2.363883964717388,
+      "difference": 0.0,
+      "num_tokens": 32768
+    },
+    {
+      "seed": 2026,
+      "previous_loss": 2.3793849647045135,
+      "relocated_loss": 2.3793849647045135,
+      "difference": 0.0,
+      "num_tokens": 32768
+    },
+    {
+      "seed": 42,
+      "previous_loss": 2.3204189836978912,
+      "relocated_loss": 2.3204189836978912,
+      "difference": 0.0,
+      "num_tokens": 32768
+    }
+  ],
+  "mean_validation_loss": 2.354562637706598,
+  "all_project_modules_from_extracted_bundle": true,
+  "original_project_read_attempts": 0,
+  "configuration_paths_resolve_inside_bundle": true,
+  "current_gelu_source_preserved": true,
+  "bundled_checkpoints_ffn": "swiglu",
+  "all_338_manifest_files_unchanged_after_execution": true,
+  "used_existing_dependency_environment": true,
+  "new_device_tested": false,
+  "log_encoding_note": "Isolated Python ignores PYTHONIOENCODING; config stdout contains GBK Chinese text and was decoded with gb18030. JSON command outputs contain ASCII only. All commands returned 0."
+}
