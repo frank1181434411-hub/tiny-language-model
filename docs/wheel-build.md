@@ -3,6 +3,7 @@
 [文档索引](README.md) · [来源与许可](provenance.md)
 
 本次完成正式 wheel 文件构建及静态内容检查，未执行 wheel 独立安装或端到端运行验收。
+同日后续已完成[本机独立环境安装与四步流程验收](wheel-install-checks.md)，下文保留构建阶段的记录。
 `py3-none-any` 是包的构建标签，不代表所有 Python 版本、操作系统或 GPU 环境已经测试。
 
 ## 构建环境与命令

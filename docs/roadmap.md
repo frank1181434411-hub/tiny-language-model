@@ -7,7 +7,7 @@
 | 正确性验证 | tokenizer 往返和特殊边界；模型组件/loss/优化器数值及梯度对照；调度、采样与 checkpoint 测试 | loss、optimizer 的 CPU 检查见各迁移记录；[调度](scheduler.md)、[采样](data.md)、[基础层](layers.md)、[注意力](attention.md)、[完整模型](transformer.md)、[checkpoint](checkpoint.md)、[BPE](bpe.md) 与 [Tokenizer](tokenizer.md) 见对应记录，其余待验证 |
 | 训练闭环 | 小数据可预处理、训练、验证、保存、恢复、续写；恢复状态与步数语义明确 | [预处理 CLI](preprocess-cli.md)、[训练/验证 CLI](training-cli.md) 与 [生成 CLI](generation.md) 已接通并测试；[历史输入绑定](checkpoint-binding.md) 已实现 |
 | 基线实验 | 固定配置、种子、数据版本与硬件；报告实际 loss、token 数、耗时和样本；可复跑比较 | 50 步试跑、1000 步基线、5000/15000 步实验与[5 万篇数据对照](../experiments/tinystories-50k.md)已完成；其他消融未运行 |
-| 首版发布 | 安装与文档从干净环境验收；许可审查完成；发布包和复现说明齐备 | 独立环境 CPU 源码安装及跨设备复现已验收；已添加 MIT 与上游声明，发布 wheel 安装及单独材料分发审查待完成 |
+| 首版发布 | 安装与文档从干净环境验收；许可审查完成；发布包和复现说明齐备 | 独立环境 CPU 源码复现及本机 wheel 安装已验收；MIT 与上游声明已添加，发布整理及单独材料分发审查待完成 |
 
 已使用本地 TinyStories 样本完成短程训练，无需下载语料或模型。CPU 试跑通过不代表 GPU
 或充分训练后的模型效果已通过验收。首版发布与当前框架版本号不是同一验收事件。
@@ -17,8 +17,8 @@
 2026-10-28 已完成[独立环境跨设备 CPU 复现](cross-device-checks.md)：四步端到端示例成功，
 固定生成文本与 token IDs 一致，三组验证均值差异约 -1.49e-8。
 同日完成[本地来源核查](provenance.md)，添加原创贡献的 MIT 许可并保留 Stanford/GPT-2 声明。
-下一项是独立发布 wheel 的安装验收，包括检查许可文件是否随包分发；单独材料包仍需分发审查。
-本次 editable 安装不替代发布包验收，不追加长时间训练。
+随后完成[本机 wheel 独立安装验收](wheel-install-checks.md)：安装来源、许可文件、CLI、四步训练恢复及验证生成均通过。
+下一项可整理首版安装说明、更新日志和 Release；单独材料包仍需分发审查，不追加长时间训练。
 
 2026-10-27 已完成[材料包换目录复现验收](relocation-checks.md)，固定提示和三组验证 loss 与原记录一致。
 当时复用已有依赖环境，未验收独立安装。

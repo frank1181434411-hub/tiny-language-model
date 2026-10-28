@@ -131,7 +131,8 @@ Python API、记录边界和内存约束见[预处理说明](docs/preprocess.md)
 
 2026-10-28 已完成[跨设备 CPU 复现验收](docs/cross-device-checks.md)：独立虚拟环境安装材料包源码，
 四步示例成功，固定生成文本与 token IDs 一致，三组验证均值与原报告相差约 -1.49e-8。
-此次为 editable 源码安装，发布 wheel 安装仍未验收。
+上述验收为 editable 源码安装。同日后续已完成[本机 wheel 独立安装验收](docs/wheel-install-checks.md)：
+新环境实际安装 wheel，确认导入 site-packages，并通过 CLI 与四步端到端流程。
 
 ## 开发检查与当前限制
 
@@ -145,7 +146,7 @@ Python API、记录边界和内存约束见[预处理说明](docs/preprocess.md)
 
 已有[输入绑定阶段的验收记录](docs/checkpoint-binding.md)为 Windows/Python 3.12.10 下
 1349 项测试通过及 Ruff 检查通过。这是历史记录，不代表每次文档或实验更新都重新运行了全量检查。
-后续数据准备与实验各自记录了实际检查范围；Linux、GPU 和干净环境发布验收仍待完成。
+后续数据准备与实验各自记录了实际检查范围；本机 Windows CPU wheel 安装已验收，Linux、GPU 与正式发布整理仍待完成。
 
 当前生成仅支持单提示词、每步重算上下文；尚无 KV cache、AMP 或梯度累积。
 预处理尚不支持任意文本分块的等价流式编码，训练窗口可以跨故事边界，

@@ -1,0 +1,122 @@
+{
+  "date": "2026-10-28",
+  "scope": "Local Windows CPU wheel installation in a fresh virtual environment",
+  "wheel_sha256": "51116e78da2f740f86bac1dba6cd9db704639ed776884cf8c23ac6aed42b9551",
+  "environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26100-SP0",
+    "executable": "D:\\Python\\wheel-acceptance-20261028\\.venv\\Scripts\\python.exe",
+    "prefix": "D:\\Python\\wheel-acceptance-20261028\\.venv",
+    "origins": {
+      "tiny_lm": "D:\\Python\\wheel-acceptance-20261028\\.venv\\Lib\\site-packages\\tiny_lm\\__init__.py",
+      "torch": "D:\\Python\\wheel-acceptance-20261028\\.venv\\Lib\\site-packages\\torch\\__init__.py",
+      "numpy": "D:\\Python\\wheel-acceptance-20261028\\.venv\\Lib\\site-packages\\numpy\\__init__.py",
+      "regex": "D:\\Python\\wheel-acceptance-20261028\\.venv\\Lib\\site-packages\\regex\\__init__.py",
+      "yaml": "D:\\Python\\wheel-acceptance-20261028\\.venv\\Lib\\site-packages\\yaml\\__init__.py"
+    },
+    "direct_url": {
+      "archive_info": {
+        "hash": "sha256=51116e78da2f740f86bac1dba6cd9db704639ed776884cf8c23ac6aed42b9551",
+        "hashes": {
+          "sha256": "51116e78da2f740f86bac1dba6cd9db704639ed776884cf8c23ac6aed42b9551"
+        }
+      },
+      "url": "file:///D:/Python/wheel-acceptance-20261028/tiny_language_model-0.1.0-py3-none-any.whl"
+    },
+    "license_files": [
+      "tiny_language_model-0.1.0.dist-info/licenses/LICENSE",
+      "tiny_language_model-0.1.0.dist-info/licenses/THIRD_PARTY_NOTICES.md",
+      "tiny_language_model-0.1.0.dist-info/licenses/licenses/OpenAI-GPT2-LICENSE.txt",
+      "tiny_language_model-0.1.0.dist-info/licenses/licenses/Stanford-CS336-LICENSE.txt"
+    ],
+    "packages": {
+      "filelock": "3.32.3",
+      "fsspec": "2026.7.0",
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "mpmath": "1.3.0",
+      "networkx": "3.6.1",
+      "numpy": "2.5.4",
+      "pip": "25.0.1",
+      "PyYAML": "6.0.3",
+      "regex": "2026.9.29",
+      "setuptools": "78.1.0",
+      "sympy": "1.14.0",
+      "tiny-language-model": "0.1.0",
+      "torch": "2.11.0+cpu",
+      "typing_extensions": "4.16.0"
+    },
+    "torch_threads": 1,
+    "torch_interop_threads": 4,
+    "cuda": null,
+    "gelu_present": true
+  },
+  "completed_updates": 4,
+  "evaluation": {
+    "checkpoint": "D:\\Python\\wheel-acceptance-20261028\\e2e-demo-wheel-v1\\checkpoints\\step_00000004.pt",
+    "completed_updates": 4,
+    "loss": 5.756909012794495,
+    "num_batches": 4,
+    "num_tokens": 128,
+    "seed": 42,
+    "dtype": "float32"
+  },
+  "generation": {
+    "text": "HelloK���O\r\u0016<�\u001f�_�YS\r\u0000��k6e���L#�p\u001d\u001f$",
+    "token_ids": [
+      72,
+      101,
+      108,
+      108,
+      111,
+      75,
+      187,
+      213,
+      242,
+      79,
+      13,
+      22,
+      60,
+      210,
+      31,
+      168,
+      95,
+      151,
+      89,
+      83,
+      13,
+      0,
+      186,
+      212,
+      107,
+      54,
+      101,
+      221,
+      241,
+      203,
+      76,
+      35,
+      202,
+      112,
+      29,
+      31,
+      36
+    ],
+    "num_prompt_tokens": 5,
+    "num_generated_tokens": 32,
+    "finish_reason": "length",
+    "seed": 42,
+    "dtype": "float32"
+  },
+  "all_project_imports_from_new_site_packages": true,
+  "old_source_read_attempts": 0,
+  "checked_cli_processes": 8,
+  "logs": "D:\\Python\\wheel-acceptance-20261028\\logs",
+  "not_tested": [
+    "Linux",
+    "GPU",
+    "another-device wheel installation",
+    "long training",
+    "full pytest suite"
+  ]
+}
