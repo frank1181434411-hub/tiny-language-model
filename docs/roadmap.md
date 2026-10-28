@@ -18,7 +18,8 @@
 固定生成文本与 token IDs 一致，三组验证均值差异约 -1.49e-8。
 同日完成[本地来源核查](provenance.md)，添加原创贡献的 MIT 许可并保留 Stanford/GPT-2 声明。
 随后完成[本机 wheel 独立安装验收](wheel-install-checks.md)：安装来源、许可文件、CLI、四步训练恢复及验证生成均通过。
-下一项可整理首版安装说明、更新日志和 Release；单独材料包仍需分发审查，不追加长时间训练。
+已整理[更新日志](../CHANGELOG.md)和 [alpha.2 Release 草稿](release-alpha2.md)。包版本已统一为 0.1.0a2，重新构建并完成[新 wheel 独立安装验收](wheel-alpha2-checks.md)。下一项提交并推送最终文件，核对发布提交后创建标签与预发布；旧 0.1.0 wheel 保留为历史快照。
+单独材料包仍需分发审查，不追加长时间训练。
 
 2026-10-27 已完成[材料包换目录复现验收](relocation-checks.md)，固定提示和三组验证 loss 与原记录一致。
 当时复用已有依赖环境，未验收独立安装。

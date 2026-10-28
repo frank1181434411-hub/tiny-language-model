@@ -9,6 +9,8 @@ BPE、Tokenizer、Transformer、交叉熵、AdamW 和学习率调度，以及文
 
 [使用与技术文档](docs/README.md) · [跨设备复现](docs/reproduction.md) · [实验索引](experiments/README.md) · [路线图](docs/roadmap.md) · [来源与许可](docs/provenance.md)
 
+[更新日志](CHANGELOG.md)与 [v0.1.0-alpha.2 发布草稿](docs/release-alpha2.md)已整理；Python 包版本为 `0.1.0a2`，对应 Git 标签 `v0.1.0-alpha.2`。标签与 Release 尚未发布。
+
 ## 当前能力与实验结果
 
 - 文本：BPE 训练、版本化 tokenizer 保存/加载、编码/解码、单文件及显式多文件预处理。

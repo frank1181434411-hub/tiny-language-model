@@ -1,0 +1,388 @@
+{
+  "date": "2026-10-28",
+  "build": {
+    "version": "0.1.0a2",
+    "wheel": "tiny_language_model-0.1.0a2-py3-none-any.whl",
+    "bytes": 60127,
+    "sha256": "947509a8677d1c20ec3fa3a24cc8e1e3d9e317529f3f62b317fae08e52ed33b2",
+    "source_files": 23,
+    "license_files": [
+      "tiny_language_model-0.1.0a2.dist-info/licenses/LICENSE",
+      "tiny_language_model-0.1.0a2.dist-info/licenses/THIRD_PARTY_NOTICES.md",
+      "tiny_language_model-0.1.0a2.dist-info/licenses/licenses/OpenAI-GPT2-LICENSE.txt",
+      "tiny_language_model-0.1.0a2.dist-info/licenses/licenses/Stanford-CS336-LICENSE.txt"
+    ],
+    "record_verified": true,
+    "sources_byte_identical": true
+  },
+  "acceptance": {
+    "version": "0.1.0a2",
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "commands": [
+      {
+        "name": "pip-check",
+        "argv": [
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "-m",
+          "pip",
+          "check"
+        ],
+        "returncode": 0,
+        "seconds": 1.25481850001961
+      },
+      {
+        "name": "module-version",
+        "argv": [
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "-m",
+          "tiny_lm",
+          "--version"
+        ],
+        "returncode": 0,
+        "seconds": 0.32503289985470474
+      },
+      {
+        "name": "console-version",
+        "argv": [
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Scripts\\tiny-lm.exe",
+          "--version"
+        ],
+        "returncode": 0,
+        "seconds": 0.33097560005262494
+      },
+      {
+        "name": "console-help",
+        "argv": [
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Scripts\\tiny-lm.exe",
+          "--help"
+        ],
+        "returncode": 0,
+        "seconds": 0.28419519984163344
+      },
+      {
+        "name": "console-config",
+        "argv": [
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Scripts\\tiny-lm.exe",
+          "check-config",
+          "--config",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\config.yaml"
+        ],
+        "returncode": 0,
+        "seconds": 0.306270900182426
+      },
+      {
+        "name": "tokenizer",
+        "argv": [
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\installed_cli.py",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\logs-v2\\tokenizer.imports.json",
+          "train-tokenizer",
+          "--input",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\toy_corpus.txt",
+          "--vocab-size",
+          "256",
+          "--output",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\tokenizer.json"
+        ],
+        "returncode": 0,
+        "seconds": 0.4852423998527229
+      },
+      {
+        "name": "train-data",
+        "argv": [
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\installed_cli.py",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\logs-v2\\train-data.imports.json",
+          "prepare-data",
+          "--input",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\toy_corpus.txt",
+          "--tokenizer",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\tokenizer.json",
+          "--output",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\train.bin"
+        ],
+        "returncode": 0,
+        "seconds": 2.2998556999955326
+      },
+      {
+        "name": "val-data",
+        "argv": [
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\installed_cli.py",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\logs-v2\\val-data.imports.json",
+          "prepare-data",
+          "--input",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\validation.txt",
+          "--tokenizer",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\tokenizer.json",
+          "--output",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\val.bin"
+        ],
+        "returncode": 0,
+        "seconds": 0.850556300021708
+      },
+      {
+        "name": "train-2",
+        "argv": [
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\installed_cli.py",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\logs-v2\\train-2.imports.json",
+          "train",
+          "--config",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\config.yaml",
+          "--stop-after",
+          "2",
+          "--dtype",
+          "float32",
+          "--eval-batches",
+          "4"
+        ],
+        "returncode": 0,
+        "seconds": 28.36223870003596
+      },
+      {
+        "name": "resume-4",
+        "argv": [
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\installed_cli.py",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\logs-v2\\resume-4.imports.json",
+          "train",
+          "--config",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\config.yaml",
+          "--resume",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\checkpoints\\step_00000002.pt",
+          "--dtype",
+          "float32",
+          "--eval-batches",
+          "4"
+        ],
+        "returncode": 0,
+        "seconds": 11.975341100012884
+      },
+      {
+        "name": "evaluate",
+        "argv": [
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\installed_cli.py",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\logs-v2\\evaluate.imports.json",
+          "evaluate",
+          "--config",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\config.yaml",
+          "--checkpoint",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\checkpoints\\step_00000004.pt",
+          "--dtype",
+          "float32",
+          "--eval-batches",
+          "4",
+          "--seed",
+          "42"
+        ],
+        "returncode": 0,
+        "seconds": 10.873530100099742
+      },
+      {
+        "name": "generate",
+        "argv": [
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\installed_cli.py",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\logs-v2\\generate.imports.json",
+          "generate",
+          "--config",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\config.yaml",
+          "--checkpoint",
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\checkpoints\\step_00000004.pt",
+          "--prompt",
+          "Hello",
+          "--max-new-tokens",
+          "32",
+          "--temperature",
+          "0.8",
+          "--top-k",
+          "20",
+          "--top-p",
+          "1",
+          "--seed",
+          "42"
+        ],
+        "returncode": 0,
+        "seconds": 7.163499200018123
+      }
+    ],
+    "verified": true,
+    "results": {
+      "tokenizer": {
+        "output": "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\tokenizer.json",
+        "vocab_size": 256,
+        "num_merges": 0,
+        "special_tokens": []
+      },
+      "train-data": {
+        "output": "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\train.bin",
+        "metadata": "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\train.bin.json",
+        "vocab_size": 256
+      },
+      "val-data": {
+        "output": "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\val.bin",
+        "metadata": "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\val.bin.json",
+        "vocab_size": 256
+      },
+      "train-2": {
+        "completed_updates": 2,
+        "checkpoints": [
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\checkpoints\\step_00000002.pt"
+        ],
+        "last_metrics": {
+          "step": 2,
+          "learning_rate": 0.001,
+          "train_loss": 5.744614601135254,
+          "validation_loss": 5.707887530326843
+        },
+        "dtype": "float32",
+        "eval_batches": 4
+      },
+      "resume-4": {
+        "completed_updates": 4,
+        "checkpoints": [
+          "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\checkpoints\\step_00000004.pt"
+        ],
+        "last_metrics": {
+          "step": 4,
+          "learning_rate": 0.0003250000000000001,
+          "train_loss": 5.823607444763184,
+          "validation_loss": 5.737265348434448
+        },
+        "dtype": "float32",
+        "eval_batches": 4
+      },
+      "evaluate": {
+        "checkpoint": "D:\\Python\\alpha2-wheel-acceptance-20261028\\e2e-alpha2-v2\\checkpoints\\step_00000004.pt",
+        "completed_updates": 4,
+        "loss": 5.641384243965149,
+        "num_batches": 4,
+        "num_tokens": 128,
+        "seed": 42,
+        "dtype": "float32"
+      },
+      "generate": {
+        "text": "HelloK���O\r\u0016<�\u001f�_�YS\r\u0000��k6e���L#�p\u001d\u001f$",
+        "token_ids": [
+          72,
+          101,
+          108,
+          108,
+          111,
+          75,
+          187,
+          213,
+          242,
+          79,
+          13,
+          22,
+          60,
+          210,
+          31,
+          168,
+          95,
+          151,
+          89,
+          83,
+          13,
+          0,
+          186,
+          212,
+          107,
+          54,
+          101,
+          221,
+          241,
+          203,
+          76,
+          35,
+          202,
+          112,
+          29,
+          31,
+          36
+        ],
+        "num_prompt_tokens": 5,
+        "num_generated_tokens": 32,
+        "finish_reason": "length",
+        "seed": 42,
+        "dtype": "float32"
+      }
+    },
+    "module_sources": {
+      "tiny_lm": "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Lib\\site-packages\\tiny_lm\\__init__.py",
+      "torch": "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Lib\\site-packages\\torch\\__init__.py",
+      "numpy": "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Lib\\site-packages\\numpy\\__init__.py",
+      "regex": "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Lib\\site-packages\\regex\\__init__.py",
+      "yaml": "D:\\Python\\alpha2-wheel-acceptance-20261028\\.venv\\Lib\\site-packages\\yaml\\__init__.py"
+    },
+    "gelu_forward_finite": true,
+    "license_files": [
+      "tiny_language_model-0.1.0a2.dist-info/licenses/LICENSE",
+      "tiny_language_model-0.1.0a2.dist-info/licenses/THIRD_PARTY_NOTICES.md",
+      "tiny_language_model-0.1.0a2.dist-info/licenses/licenses/OpenAI-GPT2-LICENSE.txt",
+      "tiny_language_model-0.1.0a2.dist-info/licenses/licenses/Stanford-CS336-LICENSE.txt"
+    ],
+    "direct_url": {
+      "archive_info": {
+        "hash": "sha256=947509a8677d1c20ec3fa3a24cc8e1e3d9e317529f3f62b317fae08e52ed33b2",
+        "hashes": {
+          "sha256": "947509a8677d1c20ec3fa3a24cc8e1e3d9e317529f3f62b317fae08e52ed33b2"
+        }
+      },
+      "url": "file:///D:/Python/alpha2-wheel-acceptance-20261028/tiny_language_model-0.1.0a2-py3-none-any.whl"
+    },
+    "wheel_sha256": "947509a8677d1c20ec3fa3a24cc8e1e3d9e317529f3f62b317fae08e52ed33b2",
+    "packages": {
+      "torch": "2.11.0+cpu",
+      "numpy": "2.5.4",
+      "regex": "2026.9.29",
+      "PyYAML": "6.0.3",
+      "pip": "25.0.1",
+      "setuptools": "81.0.0"
+    },
+    "input_sha256": {
+      "toy_corpus.txt": "be64288b7c818ef884c974c06df2d0a98c36a535780718f85c5abdf1ecab6eda",
+      "validation.txt": "1187226b3b832e5b5cb84371133782a03bfecd2c1d8a0a29f0cb2aafd8a4d4e8"
+    }
+  }
+}

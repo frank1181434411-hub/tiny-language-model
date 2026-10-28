@@ -35,11 +35,13 @@ htmlcov/
 
 # Packaging and build artifacts
 build/
-dist/
+/dist/*
 /.eggs/
 *.egg-info/
 *.egg
 *.whl
+!/dist/tiny_language_model-0.1.0a2-py3-none-any.whl
+!/dist/tiny_language_model-0.1.0a2-py3-none-any.whl.sha256
 pip-wheel-metadata/
 /wheels/
 

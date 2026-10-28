@@ -4,11 +4,14 @@
 
 ## 使用入口
 
+版本汇总见[更新日志](../CHANGELOG.md)，待发布文案见 [v0.1.0-alpha.2 草稿](release-alpha2.md)。
+
 | 需要完成的工作 | 文档 |
 | --- | --- |
 | 创建环境、安装依赖、校验配置 | [项目首页](../README.md)、[依赖与历史环境](dependencies.md) |
 | 查看 wheel 内容与构建结果 | [wheel 构建记录](wheel-build.md) |
 | 查看新环境安装 wheel 的实际结果 | [本机 wheel 安装验收](wheel-install-checks.md) |
+| 查看 alpha.2 版本附件及独立安装结果 | [0.1.0a2 wheel 验收](wheel-alpha2-checks.md) |
 | 从自带文本走完整个小型 CPU 流程 | [端到端示例](end-to-end.md) |
 | 查看四步演示的实际命令验收结果 | [端到端实跑记录](end-to-end-checks.md) |
 | 查找已整理的模型、数据与源码材料包 | [材料包记录](material-bundle.md) |
@@ -49,5 +52,6 @@
 - [初始框架检查](local-checks.md)：框架建立阶段的历史记录。
 - [输入绑定阶段验收](checkpoint-binding.md)：1349 项 CPU 测试的记录与范围。
 
-当前已完成 CPU 训练闭环和数据规模对照；生成故事仍不稳定，GPU 与干净环境发布验收待完成。
+当前已完成 CPU 训练闭环、数据规模对照、跨设备源码复现和 0.1.0a2 wheel 独立安装验收。
+生成故事仍不稳定，GPU 验收与 alpha.2 标签及 Release 发布尚未完成。
 各轮实验的原始结论和未来计划按当时状态保留，当前实验进度请从[实验索引](../experiments/README.md)进入。
