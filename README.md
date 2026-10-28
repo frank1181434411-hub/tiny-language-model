@@ -172,5 +172,7 @@ experiments/             实验索引、报告、指标与生成样本
 .github/workflows/ci.yml CPU CI
 ```
 
-本仓库尚未授予开源许可证；课程来源、代码归属和许可待按[来源说明](docs/provenance.md)核实。
+本项目原创代码与文档采用 [MIT 许可证](LICENSE)，署名为 frank1181434411-hub。
+课程来源及 GPT-2 预分词规则的原始声明保留在[第三方声明](THIRD_PARTY_NOTICES.md)，
+核查依据与范围见[来源说明](docs/provenance.md)。外部依赖、语料、权重和材料包不因本许可证而被重新授权。
 当前版本号不代表已完成首版发布验收。

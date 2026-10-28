@@ -1,7 +1,8 @@
 # 来源、归属与许可
 
-- 学习来源：Stanford CS336 Assignment 1。课程年份、作业版本和具体引用链接
-  仍由项目所有者确认；源码使用用户指定的本地目录。
+- 学习来源：Stanford CS336 Spring 2025 Assignment 1，本地 README 标明该课程年份；
+  [上游仓库](https://github.com/stanford-cs336/assignment1-basics)与
+  [课程归档](https://cs336.stanford.edu/spring2025/)可供核对。具体上游 commit 未从本地导入历史确定。
 - 用户说明：已自行实现 BPE、Tokenizer、Transformer、损失、AdamW、调度、
   采样、checkpoint 与生成代码；当前主要数值组件、文本处理、训练/验证及单提示词生成已迁移，
   归属仍需逐文件核对。
@@ -28,7 +29,7 @@
 - BPE 来源：`cs336_basics/train_bpe.py`，迁至 `src/tiny_lm/tokenizer/bpe.py`。
   保留增量计数、合并与同频排序；补校验、最长特殊 token 匹配并保留原始换行。
   共享规则与原生 v1 保存格式为本项目整理实现；新测试独立编写，旧源码未修改。
-  细节见 [BPE 迁移记录](bpe.md)，课程来源与许可仍待审查。
+  细节见 [BPE 迁移记录](bpe.md)，许可核查结果见下文。
 - Tokenizer 来源：`cs336_basics/tokenizer.py` 中的 `BPETokenizer`。
   保留手写最小 rank 合并流程、UTF-8 拼接解码和逐记录编码；补输入校验、
   输入容器复制、独立特殊 token 映射、普通文本模式和原生文件接口。
@@ -50,9 +51,44 @@
   `examples/toy_corpus.txt` 为本次自行编写的小段中英文示例。
 - 后续应区分个人实现、课程骨架、课程测试/adapters、第三方片段，
   记录作者、来源版本、改动及原始许可/声明。
-- 待核实：课程材料的许可和解答公开政策、测试与骨架能否再分发、
-  第三方依赖与未来数据集的许可、署名及用途限制。
+- 第三方依赖与数据集保留各自许可；后续新增第三方材料需继续记录来源、署名及用途限制。
 
-开源是项目目标，不是当前许可结论。本次不添加 MIT 或其他 LICENSE，
-也不替未经审查的课程代码选择许可证。完成来源与权利审查后，
-由项目所有者确定发布范围和合适许可；本文件本身不授予许可。
+## 2026-10-28 本地来源核查与 MIT 授权
+
+依据项目所有者关于个人实现的说明及本次授权，原创软件和文档采用根目录
+[MIT LICENSE](../LICENSE)，版权署名为 `2026 frank1181434411-hub`。
+[第三方声明](../THIRD_PARTY_NOTICES.md)及 `licenses/` 保留已识别上游的原始许可，
+不把第三方部分的版权改署为项目所有者。
+
+核查对象为当前项目的 Git 跟踪文件、已有迁移记录，以及
+`D:/Python/CS336-Private/assignment1-basics` 的许可证、README、源码和 Git 历史。
+旧仓库未修改，未运行作业代码。证据定位如下：
+
+| 项目 | 本地证据与结论 |
+| --- | --- |
+| 当前项目核查基点 | `9ca9226f13701e016078174d061dd66a6b1486f4` |
+| 旧仓库 HEAD | `1d64a631e13f2fc9a5f5c5dcc5d685026aafc01d` |
+| 初始骨架 | `b879f4f` 下 `cs336_basics/` 仅有 `__init__.py` 和 `pretokenization_example.py` |
+| 后续实现记录 | `fb53bae` / `549f511` 为 nn，`5dcc4d9` 为 BPE，`795e7e8` 为 tokenizer，`a415235` 为采样，`1d64a63` 为预处理；作者名为 frank1181434411-hub |
+| 本地课程许可 | `assignment1-basics/LICENSE` 为 MIT，署名 `Copyright 2025 Stanford University`；[官方许可](https://github.com/stanford-cs336/assignment1-basics/blob/main/LICENSE)与其一致 |
+| 原许可文件 SHA-256 | `c9b91dfeafb7a8690279a75f68d93b6b8c7acb7337d1ac66162f8bc276bd30fe` |
+| 新项目课程测试 | Git 文件清单没有课程 adapters、fixtures 或作业 PDF；已有迁移记录说明新测试独立编写 |
+
+这些证据支持迁移来源说明，但 Git 作者名与文件名检查不能证明每行代码的独创性。
+部分本地实现文件缺少单独的提交历史；不将它们标为已通过完整逐行第三方比对。
+若以后发现其他引用，应追加相应声明。
+
+`src/tiny_lm/tokenizer/rules.py` 的正则来自旧实现中注明的 GPT-2 预分词规则，
+缩写分支做了分组改写。对照 [OpenAI encoder.py](https://github.com/openai/gpt-2/blob/master/src/encoder.py)，
+在 `licenses/OpenAI-GPT2-LICENSE.txt` 保留其 Modified MIT 许可；没有迁入完整 GPT-2 编码器或权重。
+Stanford 原许可文本保存在 `licenses/Stanford-CS336-LICENSE.txt`。
+构建配置显式收录项目许可及上述声明，实际 wheel 安装验收仍是后续任务。
+
+本次 MIT 授权不覆盖外部依赖、TinyStories 原始语料、派生数据文件、训练 tokenizer、
+模型权重及复现材料包。报告中的第三方文本或生成样本也不构成对原语料的重新授权。
+未来分发这些材料需分别核查来源与许可；仓库的软件授权不能替代材料包分发审查。
+
+课程软件许可与课程学术要求分别记录：[2025 课程页面](https://cs336.stanford.edu/spring2025/)
+列有协作、AI 工具和现成实现的使用要求，本地课程 AGENTS.md 也强调教学用途。
+本次是在作业之外整理项目来源与许可证，不代表课程方认可公开作业解答，
+也不代表已核实项目所有者是否另有选课或提交义务。
