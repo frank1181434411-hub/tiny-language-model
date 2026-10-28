@@ -11,6 +11,7 @@
 | 查看四步演示的实际命令验收结果 | [端到端实跑记录](end-to-end-checks.md) |
 | 查找已整理的模型、数据与源码材料包 | [材料包记录](material-bundle.md) |
 | 查看材料包解压到新目录后的实测结果 | [换目录复现验收](relocation-checks.md) |
+| 查看另一台设备独立环境的实际结果 | [跨设备 CPU 复现验收](cross-device-checks.md) |
 | 区分开发与训练设备、补齐环境记录 | [设备与环境清单](environments.md) |
 | 转移产物、在新设备生成/评估/复现训练 | [跨设备复现指南](reproduction.md) |
 | 训练 tokenizer、准备单文件或多文件数据 | [预处理命令](preprocess-cli.md) |

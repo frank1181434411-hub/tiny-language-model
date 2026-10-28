@@ -129,6 +129,10 @@ Python API、记录边界和内存约束见[预处理说明](docs/preprocess.md)
 材料清单、传输校验、生成/评估命令与续训限制见[跨设备复现指南](docs/reproduction.md)，
 已采集和待补齐的环境信息见[设备清单](docs/environments.md)。
 
+2026-10-28 已完成[跨设备 CPU 复现验收](docs/cross-device-checks.md)：独立虚拟环境安装材料包源码，
+四步示例成功，固定生成文本与 token IDs 一致，三组验证均值与原报告相差约 -1.49e-8。
+此次为 editable 源码安装，发布 wheel 安装仍未验收。
+
 ## 开发检查与当前限制
 
 在安装对应功能依赖后，使用项目虚拟环境执行：

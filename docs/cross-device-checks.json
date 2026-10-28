@@ -1,0 +1,716 @@
+{
+  "date": "2026-10-28",
+  "archive_sha256": "6cf5922589e0aaad55c6e7fb65ab983f70798c377c63acaa72dc274177ff7bd5",
+  "bundle_root": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+  "log_directory": "D:\\Python\\reproduction-acceptance-20261028\\verification",
+  "environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "executable": "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+    "prefix": "D:\\Python\\reproduction-acceptance-20261028\\.venv",
+    "base_prefix": "C:\\Users\\ERAZER\\AppData\\Local\\Programs\\Python\\Python312",
+    "platform": "Windows-11-10.0.26100-SP0",
+    "user_site_enabled": false,
+    "torch_cuda": null,
+    "torch_threads": 1,
+    "torch_interop_threads": 4,
+    "tiny_lm_origin": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1\\src\\tiny_lm\\__init__.py",
+    "dependency_origins": {
+      "numpy": "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Lib\\site-packages\\numpy\\__init__.py",
+      "regex": "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Lib\\site-packages\\regex\\__init__.py",
+      "torch": "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Lib\\site-packages\\torch\\__init__.py",
+      "yaml": "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Lib\\site-packages\\yaml\\__init__.py"
+    },
+    "gelu_source_present": true,
+    "direct_url": {
+      "dir_info": {
+        "editable": true
+      },
+      "url": "file:///D:/Python/reproduction-acceptance-20261028/reproduction-50k-v1"
+    },
+    "packages": [
+      {
+        "name": "filelock",
+        "version": "3.32.3"
+      },
+      {
+        "name": "fsspec",
+        "version": "2026.7.0"
+      },
+      {
+        "name": "Jinja2",
+        "version": "3.1.6"
+      },
+      {
+        "name": "MarkupSafe",
+        "version": "3.0.3"
+      },
+      {
+        "name": "mpmath",
+        "version": "1.3.0"
+      },
+      {
+        "name": "networkx",
+        "version": "3.6.1"
+      },
+      {
+        "name": "numpy",
+        "version": "2.5.4"
+      },
+      {
+        "name": "packaging",
+        "version": "26.3"
+      },
+      {
+        "name": "pip",
+        "version": "25.0.1"
+      },
+      {
+        "name": "PyYAML",
+        "version": "6.0.3"
+      },
+      {
+        "name": "regex",
+        "version": "2026.9.29"
+      },
+      {
+        "name": "setuptools",
+        "version": "78.1.0"
+      },
+      {
+        "name": "sympy",
+        "version": "1.14.0"
+      },
+      {
+        "name": "tiny-language-model",
+        "version": "0.1.0"
+      },
+      {
+        "name": "torch",
+        "version": "2.11.0+cpu"
+      },
+      {
+        "name": "typing_extensions",
+        "version": "4.16.0"
+      },
+      {
+        "name": "wheel",
+        "version": "0.48.0"
+      }
+    ],
+    "environment": {
+      "OMP_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "PYTHONPATH": null,
+      "PYTHONHOME": null
+    }
+  },
+  "hardware": {
+    "processor": {
+      "Name": "Intel(R) N150",
+      "NumberOfCores": 4,
+      "NumberOfLogicalProcessors": 4
+    },
+    "memory": {
+      "TotalPhysicalMemory": 16912056320
+    },
+    "operating_system": {
+      "Caption": "Microsoft Windows 11 专业版",
+      "Version": "10.0.26100",
+      "OSArchitecture": "64-bit"
+    },
+    "graphics": {
+      "Name": "Intel(R) Graphics",
+      "DriverVersion": "32.0.101.6127"
+    }
+  },
+  "new_virtual_environment": true,
+  "installation": "editable source from extracted bundle; no release wheel acceptance",
+  "e2e": {
+    "directory": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1\\artifacts\\e2e-demo-v2",
+    "completed_updates": 4,
+    "validation_loss": 5.6413843631744385,
+    "validation_num_tokens": 128,
+    "generated_new_tokens": 32,
+    "finish_reason": "length"
+  },
+  "generation": {
+    "prompt": "Once upon a time, there was a little girl",
+    "seed": 42,
+    "temperature": 0.8,
+    "top_k": 20,
+    "top_p": 1.0,
+    "text_exactly_equal": true,
+    "token_ids_exactly_equal": true,
+    "first_different_token_index": null,
+    "previous_new_tokens": 128,
+    "current_new_tokens": 128,
+    "previous_finish_reason": "length",
+    "current_finish_reason": "length"
+  },
+  "validation": [
+    {
+      "seed": 1337,
+      "previous_loss": 2.363883964717388,
+      "current_loss": 2.3638839572668076,
+      "difference": -7.450580596923828e-09,
+      "num_tokens": 32768
+    },
+    {
+      "seed": 2026,
+      "previous_loss": 2.3793849647045135,
+      "current_loss": 2.379384934902191,
+      "difference": -2.9802322387695312e-08,
+      "num_tokens": 32768
+    },
+    {
+      "seed": 42,
+      "previous_loss": 2.3204189836978912,
+      "current_loss": 2.3204189762473106,
+      "difference": -7.450580596923828e-09,
+      "num_tokens": 32768
+    }
+  ],
+  "previous_mean_validation_loss": 2.354562637706598,
+  "current_mean_validation_loss": 2.3545626228054366,
+  "mean_difference": -1.4901161193847656e-08,
+  "all_project_modules_from_bundle": true,
+  "original_project_read_attempts": 0,
+  "cli_commands_passed": 13,
+  "all_338_manifest_files_unchanged_after_execution": true,
+  "gelu_source_preserved": true,
+  "existing_checkpoint_ffn": "swiglu",
+  "long_training_started": false,
+  "wheel_installation_accepted": false,
+  "commands": [
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\verification\\environment.py"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:39:16.170554+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 24.36703639999905
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "-m",
+        "pip",
+        "check"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:39:40.676415+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 1.0973303000009764
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\verification\\setup_demo.py"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:39:41.926166+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 0.20699679999961518
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\verification\\run_bundle_cli.py",
+        "e2e-config",
+        "check-config",
+        "--config",
+        "artifacts/e2e-demo-v2/config.yaml"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:39:42.320186+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 0.46088480000071286
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\verification\\run_bundle_cli.py",
+        "e2e-tokenizer",
+        "train-tokenizer",
+        "--input",
+        "examples/toy_corpus.txt",
+        "--vocab-size",
+        "256",
+        "--output",
+        "artifacts/e2e-demo-v2/tokenizer.json"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:39:42.895169+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 0.5672109000006458
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\verification\\run_bundle_cli.py",
+        "e2e-prepare-train",
+        "prepare-data",
+        "--input",
+        "examples/toy_corpus.txt",
+        "--tokenizer",
+        "artifacts/e2e-demo-v2/tokenizer.json",
+        "--output",
+        "artifacts/e2e-demo-v2/train.bin"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:39:43.619294+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 1.0089410999989923
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\verification\\run_bundle_cli.py",
+        "e2e-prepare-val",
+        "prepare-data",
+        "--input",
+        "artifacts/e2e-demo-v2/validation.txt",
+        "--tokenizer",
+        "artifacts/e2e-demo-v2/tokenizer.json",
+        "--output",
+        "artifacts/e2e-demo-v2/val.bin"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:39:44.741449+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 1.4235119999993913
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\verification\\run_bundle_cli.py",
+        "e2e-train",
+        "train",
+        "--config",
+        "artifacts/e2e-demo-v2/config.yaml",
+        "--stop-after",
+        "2",
+        "--dtype",
+        "float32",
+        "--eval-batches",
+        "4"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:39:46.392610+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 47.11779529999876
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\verification\\run_bundle_cli.py",
+        "e2e-resume",
+        "train",
+        "--config",
+        "artifacts/e2e-demo-v2/config.yaml",
+        "--resume",
+        "artifacts/e2e-demo-v2/checkpoints/step_00000002.pt",
+        "--dtype",
+        "float32",
+        "--eval-batches",
+        "4"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:40:33.700687+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 16.133835399999953
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\verification\\run_bundle_cli.py",
+        "e2e-evaluate",
+        "evaluate",
+        "--config",
+        "artifacts/e2e-demo-v2/config.yaml",
+        "--checkpoint",
+        "artifacts/e2e-demo-v2/checkpoints/step_00000004.pt",
+        "--dtype",
+        "float32",
+        "--eval-batches",
+        "4",
+        "--seed",
+        "42"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:40:49.970261+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 11.499302300000636
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\verification\\run_bundle_cli.py",
+        "e2e-generate",
+        "generate",
+        "--config",
+        "artifacts/e2e-demo-v2/config.yaml",
+        "--checkpoint",
+        "artifacts/e2e-demo-v2/checkpoints/step_00000004.pt",
+        "--prompt",
+        "Hello",
+        "--max-new-tokens",
+        "32",
+        "--temperature",
+        "0.8",
+        "--top-k",
+        "20",
+        "--top-p",
+        "1",
+        "--seed",
+        "42"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:41:01.600824+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 9.733855700000277
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\verification\\run_bundle_cli.py",
+        "50k-config",
+        "check-config",
+        "--config",
+        "configs/tinystories-cpu-50k.yaml"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:41:11.464085+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 0.44195869999930437
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\verification\\run_bundle_cli.py",
+        "50k-girl",
+        "generate",
+        "--config",
+        "configs/tinystories-cpu-50k.yaml",
+        "--checkpoint",
+        "outputs/tinystories-cpu-50k-v1/step_00015000.pt",
+        "--prompt",
+        "Once upon a time, there was a little girl",
+        "--max-new-tokens",
+        "128",
+        "--temperature",
+        "0.8",
+        "--top-k",
+        "20",
+        "--top-p",
+        "1",
+        "--seed",
+        "42"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:42:12.175973+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 10.259787799999685
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\verification\\run_bundle_cli.py",
+        "50k-val-1337",
+        "evaluate",
+        "--config",
+        "configs/tinystories-cpu-50k.yaml",
+        "--checkpoint",
+        "outputs/tinystories-cpu-50k-v1/step_00015000.pt",
+        "--dtype",
+        "float32",
+        "--eval-batches",
+        "32",
+        "--seed",
+        "1337"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:42:22.544794+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 14.511158699999214
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\verification\\run_bundle_cli.py",
+        "50k-val-2026",
+        "evaluate",
+        "--config",
+        "configs/tinystories-cpu-50k.yaml",
+        "--checkpoint",
+        "outputs/tinystories-cpu-50k-v1/step_00015000.pt",
+        "--dtype",
+        "float32",
+        "--eval-batches",
+        "32",
+        "--seed",
+        "2026"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:42:37.173554+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 14.360245400001077
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\verification\\run_bundle_cli.py",
+        "50k-val-42",
+        "evaluate",
+        "--config",
+        "configs/tinystories-cpu-50k.yaml",
+        "--checkpoint",
+        "outputs/tinystories-cpu-50k-v1/step_00015000.pt",
+        "--dtype",
+        "float32",
+        "--eval-batches",
+        "32",
+        "--seed",
+        "42"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:42:51.654028+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 15.423869599999307
+    },
+    {
+      "command": [
+        "D:\\Python\\reproduction-acceptance-20261028\\.venv\\Scripts\\python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1\\verify_bundle.py"
+      ],
+      "cwd": "D:\\Python\\reproduction-acceptance-20261028\\reproduction-50k-v1",
+      "started_utc": "2026-10-28T02:43:07.234819+00:00",
+      "environment_overrides": {
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "TEMP": "D:\\Python\\reproduction-acceptance-20261028\\temp",
+        "TMP": "D:\\Python\\reproduction-acceptance-20261028\\temp"
+      },
+      "returncode": 0,
+      "elapsed_seconds": 0.744733699999415
+    }
+  ],
+  "harness_note": "Initial driver failed parsing the human-readable check-config prefix; external parser corrected and successful commands reused without repeating training. Original failure logs retained."
+}
