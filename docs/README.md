@@ -7,6 +7,7 @@
 | 需要完成的工作 | 文档 |
 | --- | --- |
 | 创建环境、安装依赖、校验配置 | [项目首页](../README.md)、[依赖与历史环境](dependencies.md) |
+| 查看 wheel 内容与构建结果 | [wheel 构建记录](wheel-build.md)（独立安装待验收） |
 | 从自带文本走完整个小型 CPU 流程 | [端到端示例](end-to-end.md) |
 | 查看四步演示的实际命令验收结果 | [端到端实跑记录](end-to-end-checks.md) |
 | 查找已整理的模型、数据与源码材料包 | [材料包记录](material-bundle.md) |
