@@ -13,6 +13,11 @@
 
 ## 1. 准备项目环境
 
+若已按 [README 的 wheel 安装步骤](../README.md)完成安装，保留其绝对路径 `$ProjectPython`，
+跳过本节下面两个创建/安装环境的代码块，只执行后面的线程与 DemoRoot 变量设置。
+当前目录仍设为同版本仓库根目录，以便读取 `configs/smoke.yaml` 和 `examples/toy_corpus.txt`。
+这样后续步骤使用已安装的 wheel；不要再执行 editable 安装覆盖它。
+
 需要 Python 3.11+、PyYAML、PyTorch、NumPy 和 regex。已有项目环境时直接设置解释器路径：
 
 ```powershell

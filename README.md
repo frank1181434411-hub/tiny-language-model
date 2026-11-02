@@ -36,6 +36,43 @@ BPE、Tokenizer、Transformer、交叉熵、AdamW 和学习率调度，以及文
 
 ## 安装（Windows PowerShell）
 
+### 使用已验收的 wheel
+
+当前附件版本为 `0.1.0a2`，实际验收环境为 Windows 11、标准 CPython 3.12.10、CPU。
+项目声明 Python 3.11+，但不代表所有版本均已实测。下面使用已拉取仓库中的附件；
+Release 发布后也可下载相同 wheel 与校验文件。配置和示例文本不包含在 wheel 内，
+请保留同版本仓库的 `configs/` 与 `examples/`；发布后可下载该标签的 Source code ZIP 获取它们。
+
+以下在仓库根目录执行。`.venv-wheel` 应为新目录，若已存在请换一个名称；
+使用标准 CPython，避免误用 MSYS2 Python。
+
+```powershell
+Set-Location D:\Python\tiny-language-model
+$Wheel = (Resolve-Path './dist/tiny_language_model-0.1.0a2-py3-none-any.whl').Path
+$ExpectedHash = (Get-Content "$Wheel.sha256" -Raw).Trim().Split()[0]
+if ((Get-FileHash $Wheel -Algorithm SHA256).Hash -ne $ExpectedHash) { throw 'Wheel SHA-256 mismatch' }
+if (Test-Path './.venv-wheel') { throw 'Choose a new virtual environment directory' }
+py -3.12 -m venv .venv-wheel
+if ($LASTEXITCODE -ne 0) { throw 'Virtual environment creation failed' }
+$ProjectPython = (Resolve-Path './.venv-wheel/Scripts/python.exe').Path
+& $ProjectPython -m pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu
+if ($LASTEXITCODE -ne 0) { throw 'CPU PyTorch installation failed' }
+& $ProjectPython -m pip install "${Wheel}[compute,tokenizer]"
+if ($LASTEXITCODE -ne 0) { throw 'Wheel installation failed' }
+& $ProjectPython -m pip check
+if ($LASTEXITCODE -ne 0) { throw 'Dependency check failed' }
+& $ProjectPython -m tiny_lm --version
+& $ProjectPython -m tiny_lm check-config --config configs/smoke.yaml
+```
+
+若没有 `py` 启动器，将 `py -3.12` 换成已安装的标准 CPython 3.12 解释器完整路径。
+版本应显示 `0.1.0a2`。这条路径无需安装开发依赖，也无需运行下面的 editable 安装命令。
+继续运行[四步端到端示例](docs/end-to-end.md)：保留这里的 `$ProjectPython`，
+在示例第 1 节只执行线程和 DemoRoot 变量设置，再从第 2 节开始；不要重新设置解释器或执行 `pip install -e`。
+示例目录存在时换用新的 DemoRoot，不覆盖旧产物。
+
+### 修改源码或运行开发测试
+
 在项目根目录使用 Python 3.11 或以上的标准 Windows CPython 创建独立环境。
 已有项目环境时跳过创建步骤：
 

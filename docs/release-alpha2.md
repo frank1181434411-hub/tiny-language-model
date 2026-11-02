@@ -1,12 +1,12 @@
 # v0.1.0-alpha.2 发布说明草稿
 
-2026-10-28 整理，未创建标签或发布 Release。
+2026-10-28 整理；2026-11-02 补充本地收尾及线上操作。本轮没有创建标签或发布 Release，线上是否已有同名版本须在操作前核对。
 当前包版本为 `0.1.0a2`，已重新构建并通过[独立安装验收](wheel-alpha2-checks.md)。旧 0.1.0 wheel 保留为历史快照。
 
 ## 页面填写
 
 - Tag：`v0.1.0-alpha.2`；若标签已经存在，先核对其提交，不能移动旧标签来替换历史版本。
-- Target：包含最终版本号、文档和构建记录的提交；不要将当前草稿误当作最终发布提交。
+- Target：推送本轮文档后的 `main` 最新提交，发布前核对提交 SHA；`8750f77` 已包含版本、附件与验收记录。
 - Title：`v0.1.0-alpha.2 — GELU 支持、TinyStories 基线与复现验收`。
 - Release label：Pre-release。
 - 附件：`dist/tiny_language_model-0.1.0a2-py3-none-any.whl` 及同目录下的 `.whl.sha256` 文件，均已生成并核验。
@@ -54,5 +54,21 @@
 - 语料、训练词表、模型权重和运行缓存不作为本次 Release 附件提供。
 
 使用说明见 README.md，完整实验见 experiments/README.md，复现步骤见 docs/reproduction.md。
+README 提供 wheel 用户安装和源码开发安装两条路径；配置与示例文本请从同标签源码包的 configs/、examples/ 获取，未打包进 wheel。
 跨设备和本版本 wheel 安装的检查范围分别见 docs/cross-device-checks.md 与 docs/wheel-alpha2-checks.md。
 ```
+
+## 线上操作清单
+
+1. 提交并推送本轮文档；用 `git rev-parse HEAD` 记下最终提交，在 GitHub 的 main 分支核对。
+2. 打开仓库 Releases，先检查是否已有 `v0.1.0-alpha.2`。若已存在，核对目标提交与附件，不移动旧标签或直接替换已有发行包。
+3. 若不存在，选择 Draft a new release，创建标签 `v0.1.0-alpha.2`，Target 选择刚核对的 main。
+   操作期间如 main 又有新提交，重新核对目标；不要误发布未验收的代码版本。
+4. 填入上面的标题，复制“可粘贴的 Release notes”代码块内部正文，不复制外层代码围栏。
+5. 上传 `dist/tiny_language_model-0.1.0a2-py3-none-any.whl` 和对应 `.whl.sha256`，不要选择旧 0.1.0 包。
+6. 勾选 This is a pre-release，先 Save draft 检查附件、标题与正文，确认后 Publish release。
+7. 发布后下载附件核对 SHA-256，并确认版本标签指向预期提交。GitHub 自动生成的 Source code ZIP 可提供配套配置与示例文本。
+
+操作依据：[GitHub 官方 Release 管理说明](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository)。
+本轮只修改文档，已验收 wheel 保持原哈希；其中内嵌 README 是构建时的版本，最新安装说明以标签源码中的 README 为准。
+后续实际发布成功后，再把更新日志中的“未发布”改为真实发布日期，并补 Release 链接，不提前填写发布日期。
