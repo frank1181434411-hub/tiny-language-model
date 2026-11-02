@@ -9,6 +9,8 @@ BPE、Tokenizer、Transformer、交叉熵、AdamW 和学习率调度，以及文
 
 [使用与技术文档](docs/README.md) · [跨设备复现](docs/reproduction.md) · [实验索引](experiments/README.md) · [路线图](docs/roadmap.md) · [来源与许可](docs/provenance.md)
 
+下一步任务与优先级见[开发计划 / TODO](TODO.md)，正式版的详细通过条件见[验收清单](docs/stable-release-checklist.md)。
+
 [v0.1.0-alpha.2](https://github.com/frank1181434411-hub/tiny-language-model/releases/tag/v0.1.0-alpha.2) 已于 2026-10-28 发布为预发布版本；Python 包版本为 `0.1.0a2`。详见[更新日志](CHANGELOG.md)与[发布记录](docs/release-alpha2.md)。
 
 ## 当前能力与实验结果
