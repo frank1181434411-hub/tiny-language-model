@@ -1,9 +1,13 @@
-# v0.1.0-alpha.2 发布说明草稿
+# v0.1.0-alpha.2 发布记录
 
-2026-10-28 整理；2026-11-02 补充本地收尾及线上操作。本轮没有创建标签或发布 Release，线上是否已有同名版本须在操作前核对。
+已发布：[v0.1.0-alpha.2](https://github.com/frank1181434411-hub/tiny-language-model/releases/tag/v0.1.0-alpha.2)。
+2026-11-02 通过 GitHub API 核实发布时间为 2026-10-28 13:50:14 UTC（北京时间 21:50:14），
+prerelease=true、draft=false。本轮未修改线上 Release 或标签；随后已校验用户下载的附件，结果见下文。
 当前包版本为 `0.1.0a2`，已重新构建并通过[独立安装验收](wheel-alpha2-checks.md)。旧 0.1.0 wheel 保留为历史快照。
 
-## 页面填写
+## 发布字段参考
+
+以下保留发布准备时的填写说明，不是要求重建现有版本；后续 main 文档更新不应移动已有标签。
 
 - Tag：`v0.1.0-alpha.2`；若标签已经存在，先核对其提交，不能移动旧标签来替换历史版本。
 - Target：推送本轮文档后的 `main` 最新提交，发布前核对提交 SHA；`8750f77` 已包含版本、附件与验收记录。
@@ -14,7 +18,7 @@
 
 ## 可粘贴的 Release notes
 
-以下正文可用于本次预发布；发布前应先推送最终提交，并将标签指向该提交。
+以下保留本地整理的发布文案；后续补充内容不代表已同步修改线上正文。
 
 ```markdown
 这是 tiny-language-model 的阶段性预发布，面向个人学习、实验与流程复现。
@@ -58,7 +62,9 @@ README 提供 wheel 用户安装和源码开发安装两条路径；配置与示
 跨设备和本版本 wheel 安装的检查范围分别见 docs/cross-device-checks.md 与 docs/wheel-alpha2-checks.md。
 ```
 
-## 线上操作清单
+## 发布准备流程（历史参考）
+
+alpha.2 已发布，以下步骤仅保留作流程参考，不需要为本次状态同步重新执行。
 
 1. 提交并推送本轮文档；用 `git rev-parse HEAD` 记下最终提交，在 GitHub 的 main 分支核对。
 2. 打开仓库 Releases，先检查是否已有 `v0.1.0-alpha.2`。若已存在，核对目标提交与附件，不移动旧标签或直接替换已有发行包。
@@ -71,4 +77,18 @@ README 提供 wheel 用户安装和源码开发安装两条路径；配置与示
 
 操作依据：[GitHub 官方 Release 管理说明](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository)。
 本轮只修改文档，已验收 wheel 保持原哈希；其中内嵌 README 是构建时的版本，最新安装说明以标签源码中的 README 为准。
-后续实际发布成功后，再把更新日志中的“未发布”改为真实发布日期，并补 Release 链接，不提前填写发布日期。
+本地更新日志现已记录实际发布日期与 Release 链接，下载附件的完整哈希核对已完成。
+
+## 2026-11-02 下载附件校验
+
+用户提供的下载文件实际位于 `C:/Users/ERAZER/Downloads`：
+`tiny_language_model-0.1.0a2-py3-none-any.whl` 与对应 `.whl.sha256`。
+以 PowerShell `Get-FileHash -Algorithm SHA256` 计算下载 wheel，大小为 60127 字节，结果为：
+
+```text
+947509a8677d1c20ec3fa3a24cc8e1e3d9e317529f3f62b317fae08e52ed33b2
+```
+
+下载的校验文件格式和文件名匹配；下载 wheel 的实际哈希、下载校验文件中的哈希、
+仓库 dist 内原 wheel 的实际哈希以及 alpha.2 验收记录中的哈希四者一致。
+本次只读校验用户下载的文件，未重新下载、安装或训练；结果确认该文件与已验收构建一致。

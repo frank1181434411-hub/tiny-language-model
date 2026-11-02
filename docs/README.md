@@ -4,7 +4,7 @@
 
 ## 使用入口
 
-版本汇总见[更新日志](../CHANGELOG.md)，待发布文案见 [v0.1.0-alpha.2 草稿](release-alpha2.md)。
+版本汇总见[更新日志](../CHANGELOG.md)，已发布的 alpha.2 见[发布记录](release-alpha2.md)。
 
 | 需要完成的工作 | 文档 |
 | --- | --- |
@@ -53,5 +53,5 @@
 - [输入绑定阶段验收](checkpoint-binding.md)：1349 项 CPU 测试的记录与范围。
 
 当前已完成 CPU 训练闭环、数据规模对照、跨设备源码复现和 0.1.0a2 wheel 独立安装验收。
-生成故事仍不稳定，GPU 验收与 alpha.2 标签及 Release 发布尚未完成。
+生成故事仍不稳定，GPU 验收尚未完成；alpha.2 标签及 GitHub 预发布已完成。
 各轮实验的原始结论和未来计划按当时状态保留，当前实验进度请从[实验索引](../experiments/README.md)进入。

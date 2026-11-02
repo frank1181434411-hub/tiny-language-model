@@ -9,7 +9,7 @@ BPE、Tokenizer、Transformer、交叉熵、AdamW 和学习率调度，以及文
 
 [使用与技术文档](docs/README.md) · [跨设备复现](docs/reproduction.md) · [实验索引](experiments/README.md) · [路线图](docs/roadmap.md) · [来源与许可](docs/provenance.md)
 
-[更新日志](CHANGELOG.md)与 [v0.1.0-alpha.2 发布草稿](docs/release-alpha2.md)已整理；Python 包版本为 `0.1.0a2`，对应 Git 标签 `v0.1.0-alpha.2`。标签与 Release 尚未发布。
+[v0.1.0-alpha.2](https://github.com/frank1181434411-hub/tiny-language-model/releases/tag/v0.1.0-alpha.2) 已于 2026-10-28 发布为预发布版本；Python 包版本为 `0.1.0a2`。详见[更新日志](CHANGELOG.md)与[发布记录](docs/release-alpha2.md)。
 
 ## 当前能力与实验结果
 
@@ -185,7 +185,7 @@ Python API、记录边界和内存约束见[预处理说明](docs/preprocess.md)
 
 已有[输入绑定阶段的验收记录](docs/checkpoint-binding.md)为 Windows/Python 3.12.10 下
 1349 项测试通过及 Ruff 检查通过。这是历史记录，不代表每次文档或实验更新都重新运行了全量检查。
-后续数据准备与实验各自记录了实际检查范围；本机 Windows CPU wheel 安装已验收，Linux、GPU 与正式发布整理仍待完成。
+后续数据准备与实验各自记录了实际检查范围；本机 Windows CPU wheel 安装已验收，alpha.2 预发布已完成，Linux、GPU 与稳定版发布仍待完成。
 
 当前生成仅支持单提示词、每步重算上下文；尚无 KV cache、AMP 或梯度累积。
 预处理尚不支持任意文本分块的等价流式编码，训练窗口可以跨故事边界，
