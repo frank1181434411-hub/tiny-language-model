@@ -198,7 +198,7 @@ def main(argv:list[str]|None=None)->int:
     try:
         config=load_config(args.config)
     except ConfigError as exc:
-        print(f"配置错误: {exc}",file=sys.stderr)
+        print(f"Configuration error: {exc}",file=sys.stderr)
         return 2
     print("配置校验通过（仅结构与参数校验；未检查数据存在性或硬件可用性）。")
     print(json.dumps(config.to_dict(),ensure_ascii=False,indent=2))

@@ -14,6 +14,10 @@
 
 ## 接下来的工作
 
+2026-11-02 已整理[首个正式版范围与验收清单](stable-release-checklist.md)，目标为 Windows 11、标准 CPython 3.12、CPU FP32。
+现存配置异常及 CLI 配置错误前缀已统一为英文，配置/CLI 专项测试 85 项通过，相关文件 Ruff 检查通过。
+下一步运行候选代码的完整回归；最终版本元信息、wheel 和正式发布按清单继续。未升级版本或重新打包。
+
 2026-10-28 已完成[独立环境跨设备 CPU 复现](cross-device-checks.md)：四步端到端示例成功，
 固定生成文本与 token IDs 一致，三组验证均值差异约 -1.49e-8。
 同日完成[本地来源核查](provenance.md)，添加原创贡献的 MIT 许可并保留 Stanford/GPT-2 声明。

@@ -24,9 +24,9 @@ class _UniqueKeyLoader(yaml.SafeLoader):
         for key_node, value_node in node.value:
             key = self.construct_object(key_node, deep=deep)
             if not isinstance(key, str):
-                raise ConfigError("配置字段名必须是字符串")
+                raise ConfigError("configuration field names must be strings")
             if key in result:
-                raise ConfigError(f"重复配置字段: {key}")
+                raise ConfigError(f"duplicate configuration field: {key}")
             result[key] = self.construct_object(value_node, deep=deep)
         return result
 
@@ -50,9 +50,9 @@ class ModelConfig:
         _enum("model.ffn_type", self.ffn_type, ("swiglu", "gelu"))
         _number("model.rope_theta", self.rope_theta, positive=True)
         if self.d_model % self.num_heads:
-            raise ConfigError("model.d_model 必须能被 model.num_heads 整除")
+            raise ConfigError("model.d_model must be divisible by model.num_heads")
         if (self.d_model // self.num_heads) % 2:
-            raise ConfigError("RoPE 的 head dimension (d_model / num_heads) 必须为偶数")
+            raise ConfigError("RoPE head dimension (d_model / num_heads) must be even")
 
 
 @dataclass(frozen=True)
@@ -90,13 +90,13 @@ class TrainingConfig:
         _number("training.weight_decay", self.weight_decay, positive=False)
         _number("training.grad_clip", self.grad_clip, positive=True)
         if self.min_learning_rate > self.learning_rate:
-            raise ConfigError("training.min_learning_rate 不得大于 learning_rate")
+            raise ConfigError("training.min_learning_rate must not exceed training.learning_rate")
         if self.warmup_steps >= self.max_steps:
-            raise ConfigError("training.warmup_steps 必须小于 max_steps，且不得为负")
+            raise ConfigError("training.warmup_steps must be less than training.max_steps")
         if not isinstance(self.device, str) or not re.fullmatch(
             r"cpu|mps|cuda(?::[0-9]+)?", self.device
         ):
-            raise ConfigError("training.device 必须是 cpu、mps、cuda 或 cuda:N（N 为非负整数）")
+            raise ConfigError("training.device must be cpu, mps, cuda or cuda:N (integer N>=0)")
 
 
 @dataclass(frozen=True)
@@ -125,42 +125,42 @@ class ProjectConfig:
 def _integer(name: str, value: Any, *, minimum: int) -> None:
     # bool is an int subclass, but is never a valid integer configuration value.
     if type(value) is not int or value < minimum:
-        raise ConfigError(f"{name} 必须是 >= {minimum} 的整数（不接受布尔值）")
+        raise ConfigError(f"{name} must be an integer >= {minimum} (booleans are not accepted)")
 
 
 def _number(name: str, value: Any, *, positive: bool) -> None:
     if type(value) not in (int, float):
-        raise ConfigError(f"{name} 必须是有限数值")
+        raise ConfigError(f"{name} must be a finite number")
     try:
         finite = math.isfinite(value)
     except OverflowError:
         finite = False
     if not finite or (value <= 0 if positive else value < 0):
         bound = "> 0" if positive else ">= 0"
-        raise ConfigError(f"{name} 必须是有限数值且 {bound}")
+        raise ConfigError(f"{name} must be finite and {bound}")
 
 
 def _enum(name: str, value: Any, choices: tuple[str, ...]) -> None:
     if not isinstance(value, str) or value not in choices:
-        raise ConfigError(f"{name} 必须是以下之一: {', '.join(choices)}")
+        raise ConfigError(f"{name} must be one of: {', '.join(choices)}")
 
 
 def _path(name: str, value: Any) -> None:
     if not isinstance(value, Path) or not value.is_absolute():
-        raise ConfigError(f"{name} 必须是解析后的绝对 pathlib.Path")
+        raise ConfigError(f"{name} must be a resolved absolute pathlib.Path")
 
 
 def _mapping(value: Any, name: str, expected: set[str]) -> dict[str, Any]:
     if not isinstance(value, dict):
-        raise ConfigError(f"{name} 必须是 YAML 映射")
+        raise ConfigError(f"{name} must be a YAML mapping")
     if any(not isinstance(key, str) for key in value):
-        raise ConfigError(f"{name} 字段名必须是字符串")
+        raise ConfigError(f"{name} field names must be strings")
     unknown = set(value) - expected
     if unknown:
-        raise ConfigError(f"{name} 包含未知字段: {', '.join(sorted(unknown))}")
+        raise ConfigError(f"{name} contains unknown fields: {', '.join(sorted(unknown))}")
     missing = expected - set(value)
     if missing:
-        raise ConfigError(f"{name} 缺少必填字段: {', '.join(sorted(missing))}")
+        raise ConfigError(f"{name} is missing required fields: {', '.join(sorted(missing))}")
     return value
 
 
@@ -172,7 +172,7 @@ def _section(cls: type[_Section], raw: Any, name: str, base_dir: Path) -> _Secti
     if cls in (DataConfig, OutputConfig):
         for key, value in values.items():
             if not isinstance(value, str) or not value.strip() or "\x00" in value:
-                raise ConfigError(f"{name}.{key} 必须是非空路径字符串，且不能包含空字符")
+                raise ConfigError(f"{name}.{key} must be a non-empty path string without NUL")
             path = Path(value)
             # No environment-variable or ~ expansion; relative paths use the YAML directory.
             values[key] = (base_dir / path).resolve()
@@ -197,4 +197,4 @@ def load_config(config_path: str | Path) -> ProjectConfig:
             output=_section(OutputConfig, root["output"], "output", path.parent),
         )
     except (OSError, UnicodeError, yaml.YAMLError) as exc:
-        raise ConfigError(f"无法读取配置 {config_path}: {exc}") from exc
+        raise ConfigError(f"cannot read configuration {config_path}: {exc}") from exc

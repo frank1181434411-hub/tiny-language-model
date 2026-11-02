@@ -66,36 +66,36 @@ def test_absolute_paths_are_preserved(tmp_path, raw_config):
 @pytest.mark.parametrize(
     ("section", "field", "value", "message"),
     [
-        ("model", "d_model", 30, "整除"),
-        ("model", "d_model", 12, "偶数"),
-        ("model", "num_heads", 0, "整数"),
-        ("model", "vocab_size", -1, "整数"),
-        ("model", "context_length", True, "整数"),
-        ("model", "num_layers", 1.5, "整数"),
-        ("model", "d_ff", "64", "整数"),
+        ("model", "d_model", 30, "divisible"),
+        ("model", "d_model", 12, "even"),
+        ("model", "num_heads", 0, "integer"),
+        ("model", "vocab_size", -1, "integer"),
+        ("model", "context_length", True, "integer"),
+        ("model", "num_layers", 1.5, "integer"),
+        ("model", "d_ff", "64", "integer"),
         ("model", "norm_mode", "typo", "norm_mode"),
         ("model", "ffn_type", "relu", "ffn_type"),
         ("model", "rope_theta", 0, "rope_theta"),
-        ("model", "rope_theta", float("inf"), "有限"),
+        ("model", "rope_theta", float("inf"), "finite"),
         ("training", "learning_rate", 0, "learning_rate"),
-        ("training", "learning_rate", float("nan"), "有限"),
-        ("training", "learning_rate", True, "有限"),
+        ("training", "learning_rate", float("nan"), "finite"),
+        ("training", "learning_rate", True, "finite"),
         ("training", "min_learning_rate", -0.1, "min_learning_rate"),
-        ("training", "min_learning_rate", 0.5, "不得大于"),
-        ("training", "warmup_steps", 4, "小于 max_steps"),
-        ("training", "warmup_steps", -1, "整数"),
-        ("training", "max_steps", 0, "整数"),
-        ("training", "batch_size", 0, "整数"),
-        ("training", "eval_interval", 0, "整数"),
-        ("training", "save_interval", False, "整数"),
-        ("training", "seed", -1, "整数"),
+        ("training", "min_learning_rate", 0.5, "must not exceed"),
+        ("training", "warmup_steps", 4, "less than training.max_steps"),
+        ("training", "warmup_steps", -1, "integer"),
+        ("training", "max_steps", 0, "integer"),
+        ("training", "batch_size", 0, "integer"),
+        ("training", "eval_interval", 0, "integer"),
+        ("training", "save_interval", False, "integer"),
+        ("training", "seed", -1, "integer"),
         ("training", "weight_decay", -0.1, "weight_decay"),
         ("training", "grad_clip", 0, "grad_clip"),
         ("training", "device", "gpu", "device"),
         ("training", "device", "cuda:-1", "device"),
-        ("data", "train_data_path", "", "路径字符串"),
-        ("data", "tokenizer_path", None, "路径字符串"),
-        ("output", "output_dir", False, "路径字符串"),
+        ("data", "train_data_path", "", "path string"),
+        ("data", "tokenizer_path", None, "path string"),
+        ("output", "output_dir", False, "path string"),
     ],
 )
 def test_invalid_values(tmp_path, raw_config, section, field, value, message):
@@ -108,13 +108,13 @@ def test_invalid_values(tmp_path, raw_config, section, field, value, message):
 def test_unknown_fields_are_rejected(tmp_path, raw_config, section):
     target = raw_config if section is None else raw_config[section]
     target["typo"] = 1
-    with pytest.raises(ConfigError, match="未知字段.*typo"):
+    with pytest.raises(ConfigError, match="unknown fields.*typo"):
         load_config(write_config(tmp_path, raw_config))
 
 
 def test_missing_fields_are_rejected(tmp_path, raw_config):
     del raw_config["training"]["seed"]
-    with pytest.raises(ConfigError, match="缺少必填字段.*seed"):
+    with pytest.raises(ConfigError, match="missing required fields.*seed"):
         load_config(write_config(tmp_path, raw_config))
 
 
@@ -135,7 +135,7 @@ def test_malformed_or_duplicate_yaml(tmp_path, content):
 
 
 def test_missing_config_file(tmp_path):
-    with pytest.raises(ConfigError, match="无法读取配置"):
+    with pytest.raises(ConfigError, match="cannot read configuration"):
         load_config(tmp_path / "missing.yaml")
 
 

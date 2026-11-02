@@ -75,8 +75,8 @@ def test_config_error_is_nonzero(entry, tmp_path):
     path.write_text("unexpected: true", encoding="utf-8")
     result = run_cli(entry, ["check-config", "--config", str(path)], tmp_path)
     assert result.returncode == 2
-    assert "配置错误" in result.stderr
-    assert "未知字段" in result.stderr
+    assert "Configuration error" in result.stderr
+    assert "unknown fields" in result.stderr
     assert "Traceback" not in result.stderr
     assert result.stdout == ""
 

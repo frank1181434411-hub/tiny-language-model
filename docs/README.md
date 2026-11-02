@@ -6,6 +6,8 @@
 
 版本汇总见[更新日志](../CHANGELOG.md)，已发布的 alpha.2 见[发布记录](release-alpha2.md)。
 
+正式版准备范围、兼容约定与逐项门槛见[正式版验收清单](stable-release-checklist.md)。
+
 | 需要完成的工作 | 文档 |
 | --- | --- |
 | 创建环境、安装依赖、校验配置 | [项目首页](../README.md)、[依赖与历史环境](dependencies.md) |
