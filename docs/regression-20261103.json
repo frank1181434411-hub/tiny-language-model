@@ -1,0 +1,114 @@
+{
+  "date": "2026-11-03",
+  "commit": "e305e475348fa9bb28c71288aada4748ca91002e",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "executable": "D:\\Python\\.venvs\\tiny-language-model\\Scripts\\python.exe",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "cpu": "AMD Ryzen 9 7945HX with Radeon Graphics        ",
+  "logical_processors": 32,
+  "packages": {
+    "pytest": "9.1.1",
+    "ruff": "0.17.1",
+    "torch": "2.11.0+cpu",
+    "numpy": "2.5.4",
+    "regex": "2026.9.29",
+    "PyYAML": "6.0.3"
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "commands": [
+    {
+      "name": "pip-check",
+      "command": [
+        "D:\\Python\\.venvs\\tiny-language-model\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-m",
+        "pip",
+        "check"
+      ],
+      "exit_code": 0,
+      "seconds": 1.672
+    },
+    {
+      "name": "imports",
+      "command": [
+        "D:\\Python\\.venvs\\tiny-language-model\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-c",
+        "import torch,numpy,regex,yaml,tiny_lm; print(torch.__version__); print(tiny_lm.__file__); print(torch.ones(2).sum().item())"
+      ],
+      "exit_code": 0,
+      "seconds": 4.25
+    },
+    {
+      "name": "ruff-check",
+      "command": [
+        "D:\\Python\\.venvs\\tiny-language-model\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-m",
+        "ruff",
+        "check",
+        "--no-cache",
+        "."
+      ],
+      "exit_code": 0,
+      "seconds": 0.641
+    },
+    {
+      "name": "ruff-format",
+      "command": [
+        "D:\\Python\\.venvs\\tiny-language-model\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-m",
+        "ruff",
+        "format",
+        "--no-cache",
+        "--check",
+        "."
+      ],
+      "exit_code": 0,
+      "seconds": 0.203
+    },
+    {
+      "name": "pytest",
+      "command": [
+        "D:\\Python\\.venvs\\tiny-language-model\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-m",
+        "pytest",
+        "-q",
+        "-ra",
+        "-p",
+        "no:cacheprovider",
+        "--basetemp=D:\\Python\\tiny-language-model\\outputs\\regression-20261103\\pytest-temp",
+        "--junitxml=D:\\Python\\tiny-language-model\\outputs\\regression-20261103\\pytest.xml"
+      ],
+      "exit_code": 0,
+      "seconds": 234.297
+    }
+  ],
+  "pytest_summary": {
+    "tests": "1414",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "232.792",
+    "passed": 1414
+  },
+  "source_changes_during_run": false,
+  "logs_sha256": {
+    "imports.log": "52ac567a1c21172b883d2b579b167dd7e50435ad2feea5bdde2d7ce64dcaecac",
+    "pip-check.log": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+    "pytest.log": "04b6d4e0367b436c5c307185b507e775e51a101ecbdffc1d3290d684b2fd7293",
+    "ruff-check.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "ruff-format.log": "b642d2f0cc49caff9e609808fb9c82854fc174b2f54b459a0d09dbe4c0f837ab",
+    "pytest.xml": "725ad9aafcd4ff0b4ea457ad769a5511d64f244c29101713bf3da7e2a5fcffb5"
+  }
+}
