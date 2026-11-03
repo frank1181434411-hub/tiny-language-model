@@ -1,0 +1,605 @@
+{
+  "date": "2026-11-03",
+  "status": "passed; not released",
+  "regression": {
+    "date": "2026-11-03",
+    "commit": "84b814852b612b553133975b06ac6e44373b3b3a",
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "executable": "D:\\Python\\.venvs\\tiny-language-model\\Scripts\\python.exe",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "cpu": "AMD Ryzen 9 7945HX with Radeon Graphics        ",
+    "logical_processors": 32,
+    "packages": {
+      "pytest": "9.1.1",
+      "ruff": "0.17.1",
+      "torch": "2.11.0+cpu",
+      "numpy": "2.5.4",
+      "regex": "2026.9.29",
+      "PyYAML": "6.0.3"
+    },
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "commands": [
+      {
+        "name": "pip-check",
+        "command": [
+          "D:\\Python\\.venvs\\tiny-language-model\\Scripts\\python.exe",
+          "-X",
+          "utf8",
+          "-m",
+          "pip",
+          "check"
+        ],
+        "exit_code": 0,
+        "seconds": 1.141
+      },
+      {
+        "name": "imports",
+        "command": [
+          "D:\\Python\\.venvs\\tiny-language-model\\Scripts\\python.exe",
+          "-X",
+          "utf8",
+          "-c",
+          "import torch,numpy,regex,yaml,tiny_lm; print(torch.__version__); print(tiny_lm.__file__); print(torch.ones(2).sum().item())"
+        ],
+        "exit_code": 0,
+        "seconds": 2.297
+      },
+      {
+        "name": "ruff-check",
+        "command": [
+          "D:\\Python\\.venvs\\tiny-language-model\\Scripts\\python.exe",
+          "-X",
+          "utf8",
+          "-m",
+          "ruff",
+          "check",
+          "--no-cache",
+          "."
+        ],
+        "exit_code": 0,
+        "seconds": 0.141
+      },
+      {
+        "name": "ruff-format",
+        "command": [
+          "D:\\Python\\.venvs\\tiny-language-model\\Scripts\\python.exe",
+          "-X",
+          "utf8",
+          "-m",
+          "ruff",
+          "format",
+          "--no-cache",
+          "--check",
+          "."
+        ],
+        "exit_code": 0,
+        "seconds": 0.125
+      },
+      {
+        "name": "pytest",
+        "command": [
+          "D:\\Python\\.venvs\\tiny-language-model\\Scripts\\python.exe",
+          "-X",
+          "utf8",
+          "-m",
+          "pytest",
+          "-q",
+          "-ra",
+          "-p",
+          "no:cacheprovider",
+          "--basetemp=D:\\Python\\tiny-language-model\\outputs\\final-011-20261103\\pytest-temp",
+          "--junitxml=D:\\Python\\tiny-language-model\\outputs\\final-011-20261103\\pytest.xml"
+        ],
+        "exit_code": 0,
+        "seconds": 220.094
+      }
+    ]
+  },
+  "pytest_summary": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "1414",
+    "time": "218.640",
+    "timestamp": "2026-11-03T17:51:09.242861+08:00",
+    "hostname": "Oblivion"
+  },
+  "wheel": {
+    "version": "0.1.1",
+    "wheel": "tiny_language_model-0.1.1-py3-none-any.whl",
+    "bytes": 60735,
+    "sha256": "58974deebcb3d5e77c37cf028198d9861bf155874d7bc25cd16ec78b5a7ff4d8",
+    "setuptools": "78.1.0",
+    "pip": "25.0.1",
+    "license_expression": "MIT AND LicenseRef-OpenAI-GPT2",
+    "license_files": [
+      "LICENSE",
+      "THIRD_PARTY_NOTICES.md",
+      "licenses/OpenAI-GPT2-LICENSE.txt",
+      "licenses/Stanford-CS336-LICENSE.txt"
+    ],
+    "source_files": 23,
+    "record_verified": true,
+    "sources_byte_identical": true,
+    "requires_dist": [
+      "PyYAML>=6.0.2",
+      "pytest>=8; extra == \"dev\"",
+      "ruff>=0.9; extra == \"dev\"",
+      "torch~=2.11.0; extra == \"compute\"",
+      "numpy>=1.26; extra == \"compute\"",
+      "regex>=2024.11.6; extra == \"tokenizer\"",
+      "numpy>=1.26; extra == \"data\""
+    ],
+    "files": [
+      "tiny_language_model-0.1.1.dist-info/licenses/LICENSE",
+      "tiny_language_model-0.1.1.dist-info/licenses/THIRD_PARTY_NOTICES.md",
+      "tiny_language_model-0.1.1.dist-info/licenses/licenses/OpenAI-GPT2-LICENSE.txt",
+      "tiny_language_model-0.1.1.dist-info/licenses/licenses/Stanford-CS336-LICENSE.txt",
+      "tiny_lm/__init__.py",
+      "tiny_lm/__main__.py",
+      "tiny_lm/binding.py",
+      "tiny_lm/checkpoint.py",
+      "tiny_lm/cli.py",
+      "tiny_lm/config.py",
+      "tiny_lm/data.py",
+      "tiny_lm/evaluate.py",
+      "tiny_lm/generate.py",
+      "tiny_lm/losses.py",
+      "tiny_lm/optim.py",
+      "tiny_lm/preprocess.py",
+      "tiny_lm/schedule.py",
+      "tiny_lm/train.py",
+      "tiny_lm/model/__init__.py",
+      "tiny_lm/model/attention.py",
+      "tiny_lm/model/layers.py",
+      "tiny_lm/model/transformer.py",
+      "tiny_lm/tokenizer/__init__.py",
+      "tiny_lm/tokenizer/bpe.py",
+      "tiny_lm/tokenizer/rules.py",
+      "tiny_lm/tokenizer/serialization.py",
+      "tiny_lm/tokenizer/tokenizer.py",
+      "tiny_language_model-0.1.1.dist-info/METADATA",
+      "tiny_language_model-0.1.1.dist-info/WHEEL",
+      "tiny_language_model-0.1.1.dist-info/entry_points.txt",
+      "tiny_language_model-0.1.1.dist-info/top_level.txt",
+      "tiny_language_model-0.1.1.dist-info/RECORD"
+    ]
+  },
+  "acceptance": {
+    "version": "0.1.1",
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "commands": [
+      {
+        "name": "pip-check",
+        "argv": [
+          "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "-m",
+          "pip",
+          "check"
+        ],
+        "returncode": 0,
+        "seconds": 1.252882500004489
+      },
+      {
+        "name": "module-version",
+        "argv": [
+          "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "-m",
+          "tiny_lm",
+          "--version"
+        ],
+        "returncode": 0,
+        "seconds": 0.32999679999193177
+      },
+      {
+        "name": "console-version",
+        "argv": [
+          "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Scripts\\tiny-lm.exe",
+          "--version"
+        ],
+        "returncode": 0,
+        "seconds": 0.4252654999727383
+      },
+      {
+        "name": "console-help",
+        "argv": [
+          "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Scripts\\tiny-lm.exe",
+          "--help"
+        ],
+        "returncode": 0,
+        "seconds": 0.2575139999971725
+      },
+      {
+        "name": "console-config",
+        "argv": [
+          "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Scripts\\tiny-lm.exe",
+          "check-config",
+          "--config",
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\config.yaml"
+        ],
+        "returncode": 0,
+        "seconds": 0.26447840000037104
+      },
+      {
+        "name": "tokenizer",
+        "argv": [
+          "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Python\\wheel-011-acceptance-20261103\\installed_cli.py",
+          "D:\\Python\\wheel-011-acceptance-20261103\\logs\\tokenizer.imports.json",
+          "train-tokenizer",
+          "--input",
+          "D:\\Python\\wheel-011-acceptance-20261103\\toy_corpus.txt",
+          "--vocab-size",
+          "256",
+          "--output",
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\tokenizer.json"
+        ],
+        "returncode": 0,
+        "seconds": 0.35560150002129376
+      },
+      {
+        "name": "train-data",
+        "argv": [
+          "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Python\\wheel-011-acceptance-20261103\\installed_cli.py",
+          "D:\\Python\\wheel-011-acceptance-20261103\\logs\\train-data.imports.json",
+          "prepare-data",
+          "--input",
+          "D:\\Python\\wheel-011-acceptance-20261103\\toy_corpus.txt",
+          "--tokenizer",
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\tokenizer.json",
+          "--output",
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\train.bin"
+        ],
+        "returncode": 0,
+        "seconds": 1.8096756000304595
+      },
+      {
+        "name": "val-data",
+        "argv": [
+          "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Python\\wheel-011-acceptance-20261103\\installed_cli.py",
+          "D:\\Python\\wheel-011-acceptance-20261103\\logs\\val-data.imports.json",
+          "prepare-data",
+          "--input",
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\validation.txt",
+          "--tokenizer",
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\tokenizer.json",
+          "--output",
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\val.bin"
+        ],
+        "returncode": 0,
+        "seconds": 0.6012716999975964
+      },
+      {
+        "name": "train-2",
+        "argv": [
+          "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Python\\wheel-011-acceptance-20261103\\installed_cli.py",
+          "D:\\Python\\wheel-011-acceptance-20261103\\logs\\train-2.imports.json",
+          "train",
+          "--config",
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\config.yaml",
+          "--stop-after",
+          "2",
+          "--dtype",
+          "float32",
+          "--eval-batches",
+          "4"
+        ],
+        "returncode": 0,
+        "seconds": 19.93015500000911
+      },
+      {
+        "name": "resume-4",
+        "argv": [
+          "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Python\\wheel-011-acceptance-20261103\\installed_cli.py",
+          "D:\\Python\\wheel-011-acceptance-20261103\\logs\\resume-4.imports.json",
+          "train",
+          "--config",
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\config.yaml",
+          "--resume",
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\checkpoints\\step_00000002.pt",
+          "--dtype",
+          "float32",
+          "--eval-batches",
+          "4"
+        ],
+        "returncode": 0,
+        "seconds": 7.507637700007763
+      },
+      {
+        "name": "evaluate",
+        "argv": [
+          "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Python\\wheel-011-acceptance-20261103\\installed_cli.py",
+          "D:\\Python\\wheel-011-acceptance-20261103\\logs\\evaluate.imports.json",
+          "evaluate",
+          "--config",
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\config.yaml",
+          "--checkpoint",
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\checkpoints\\step_00000004.pt",
+          "--dtype",
+          "float32",
+          "--eval-batches",
+          "4",
+          "--seed",
+          "42"
+        ],
+        "returncode": 0,
+        "seconds": 7.2756300999899395
+      },
+      {
+        "name": "generate",
+        "argv": [
+          "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Scripts\\python.exe",
+          "-I",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Python\\wheel-011-acceptance-20261103\\installed_cli.py",
+          "D:\\Python\\wheel-011-acceptance-20261103\\logs\\generate.imports.json",
+          "generate",
+          "--config",
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\config.yaml",
+          "--checkpoint",
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\checkpoints\\step_00000004.pt",
+          "--prompt",
+          "Hello",
+          "--max-new-tokens",
+          "32",
+          "--temperature",
+          "0.8",
+          "--top-k",
+          "20",
+          "--top-p",
+          "1",
+          "--seed",
+          "42"
+        ],
+        "returncode": 0,
+        "seconds": 5.645103799994104
+      }
+    ],
+    "verified": true,
+    "results": {
+      "tokenizer": {
+        "output": "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\tokenizer.json",
+        "vocab_size": 256,
+        "num_merges": 0,
+        "special_tokens": []
+      },
+      "train-data": {
+        "output": "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\train.bin",
+        "metadata": "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\train.bin.json",
+        "vocab_size": 256
+      },
+      "val-data": {
+        "output": "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\val.bin",
+        "metadata": "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\val.bin.json",
+        "vocab_size": 256
+      },
+      "train-2": {
+        "completed_updates": 2,
+        "checkpoints": [
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\checkpoints\\step_00000002.pt"
+        ],
+        "last_metrics": {
+          "step": 2,
+          "learning_rate": 0.001,
+          "train_loss": 5.744614601135254,
+          "validation_loss": 5.707887530326843
+        },
+        "dtype": "float32",
+        "eval_batches": 4
+      },
+      "resume-4": {
+        "completed_updates": 4,
+        "checkpoints": [
+          "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\checkpoints\\step_00000004.pt"
+        ],
+        "last_metrics": {
+          "step": 4,
+          "learning_rate": 0.0003250000000000001,
+          "train_loss": 5.823607444763184,
+          "validation_loss": 5.737265348434448
+        },
+        "dtype": "float32",
+        "eval_batches": 4
+      },
+      "evaluate": {
+        "checkpoint": "D:\\Python\\wheel-011-acceptance-20261103\\e2e-011\\checkpoints\\step_00000004.pt",
+        "completed_updates": 4,
+        "loss": 5.641384243965149,
+        "num_batches": 4,
+        "num_tokens": 128,
+        "seed": 42,
+        "dtype": "float32"
+      },
+      "generate": {
+        "text": "HelloK���O\r\u0016<�\u001f�_�YS\r\u0000��k6e���L#�p\u001d\u001f$",
+        "token_ids": [
+          72,
+          101,
+          108,
+          108,
+          111,
+          75,
+          187,
+          213,
+          242,
+          79,
+          13,
+          22,
+          60,
+          210,
+          31,
+          168,
+          95,
+          151,
+          89,
+          83,
+          13,
+          0,
+          186,
+          212,
+          107,
+          54,
+          101,
+          221,
+          241,
+          203,
+          76,
+          35,
+          202,
+          112,
+          29,
+          31,
+          36
+        ],
+        "num_prompt_tokens": 5,
+        "num_generated_tokens": 32,
+        "finish_reason": "length",
+        "seed": 42,
+        "dtype": "float32"
+      }
+    },
+    "module_sources": {
+      "tiny_lm": "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Lib\\site-packages\\tiny_lm\\__init__.py",
+      "torch": "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Lib\\site-packages\\torch\\__init__.py",
+      "numpy": "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Lib\\site-packages\\numpy\\__init__.py",
+      "regex": "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Lib\\site-packages\\regex\\__init__.py",
+      "yaml": "D:\\Python\\wheel-011-acceptance-20261103\\.venv\\Lib\\site-packages\\yaml\\__init__.py"
+    },
+    "gelu_forward_finite": true,
+    "license_files": [
+      "tiny_language_model-0.1.1.dist-info/licenses/LICENSE",
+      "tiny_language_model-0.1.1.dist-info/licenses/THIRD_PARTY_NOTICES.md",
+      "tiny_language_model-0.1.1.dist-info/licenses/licenses/OpenAI-GPT2-LICENSE.txt",
+      "tiny_language_model-0.1.1.dist-info/licenses/licenses/Stanford-CS336-LICENSE.txt"
+    ],
+    "direct_url": {
+      "archive_info": {
+        "hash": "sha256=58974deebcb3d5e77c37cf028198d9861bf155874d7bc25cd16ec78b5a7ff4d8",
+        "hashes": {
+          "sha256": "58974deebcb3d5e77c37cf028198d9861bf155874d7bc25cd16ec78b5a7ff4d8"
+        }
+      },
+      "url": "file:///D:/Python/wheel-011-acceptance-20261103/tiny_language_model-0.1.1-py3-none-any.whl"
+    },
+    "wheel_sha256": "58974deebcb3d5e77c37cf028198d9861bf155874d7bc25cd16ec78b5a7ff4d8",
+    "packages": {
+      "torch": "2.11.0+cpu",
+      "numpy": "2.5.4",
+      "regex": "2026.9.29",
+      "PyYAML": "6.0.3",
+      "pip": "25.0.1",
+      "setuptools": "81.0.0"
+    },
+    "input_sha256": {
+      "toy_corpus.txt": "be64288b7c818ef884c974c06df2d0a98c36a535780718f85c5abdf1ecab6eda",
+      "validation.txt": "1187226b3b832e5b5cb84371133782a03bfecd2c1d8a0a29f0cb2aafd8a4d4e8"
+    }
+  },
+  "final_input_sha256": {
+    "src/tiny_lm/binding.py": "44752d23290e7e9a6d5e8c594af8faf34d9c2ddf5b524006febf8a9a744817e3",
+    "src/tiny_lm/checkpoint.py": "f7a7fdbe7a647fd4d0da19315704028107633a65eb4b3e419440aecbb9f6e501",
+    "src/tiny_lm/cli.py": "a90b6ce96de061eb9a170c6ab4f6debcbb2909dea480c6b79968f232d5cfa084",
+    "src/tiny_lm/config.py": "a99532b9d8d11211099e1e786cd71ccd65a0bd6981dd3704a9505ac468ef720a",
+    "src/tiny_lm/data.py": "5a11ab19ab8a2ada47588e6dfb3b86b0fe80684d2e9b3e2f3bc53fa11d843247",
+    "src/tiny_lm/evaluate.py": "13c548f4ca4458f0cad19650b6634614b98fa2596c147fa992aef1c7cd47d38f",
+    "src/tiny_lm/generate.py": "94ec6bffd6f0e73d921405e419786352009afa4ff63d1d233799802d9ec24640",
+    "src/tiny_lm/losses.py": "4ced8feaa640b00f0d1e6f11c975f9bb60e63921a6c0095401cec18308c5d01c",
+    "src/tiny_lm/optim.py": "7fcaef557bdc9171efc4745364c523cc348b8fffc8eff098580efb99e423cc37",
+    "src/tiny_lm/preprocess.py": "b5884ad438eefb9c832a76f2a8edadf9f72aa026031b097b4ce78f861737b703",
+    "src/tiny_lm/schedule.py": "0e4aac3d7b90476dc3db9fc8bd79a61ae487e13f84128ebea196b261d30d7ce4",
+    "src/tiny_lm/train.py": "ea0d23ca462365f47b541ff7a893be93082a68350ac96228333c928c335188dc",
+    "src/tiny_lm/__init__.py": "ac3196df91438e90d84ae8206a96e9cb3c7bd7e68ad861c9778181ffb5cacae0",
+    "src/tiny_lm/__main__.py": "2b78ce311f8480eeaaecb36597ac70dd0df6204dd2b23959ced5d26550772aa3",
+    "src/tiny_lm/model/attention.py": "fca7b6c536093b3a9306cfcef3c238c4b8889a6ae46549fccfb87ceb9568c562",
+    "src/tiny_lm/model/layers.py": "09254892e0d24371d942ab46d13c4e8e209b5229e7efb6cdb99064f229e917ab",
+    "src/tiny_lm/model/transformer.py": "73e0cef46578d62fc000bd4cb7e9d1dd2a3e06ae1faa4d1dda2e4a89ee83a892",
+    "src/tiny_lm/model/__init__.py": "922b40e5f5aedd0ad4c831237788b501103dc20eaa32f938ded4b671415cffcc",
+    "src/tiny_lm/tokenizer/bpe.py": "6f76e786d30eef2bc93be03f1c53fa5ce33670cccf4557a82dd8bf47ef12b863",
+    "src/tiny_lm/tokenizer/rules.py": "06f249aee16c6bb8ad5ecf7b295b1b0bd24bc5148de06e0bb5a8f129c3d66663",
+    "src/tiny_lm/tokenizer/serialization.py": "2b8d81dcec6610f248ceab07d4a5f639fa6107661f37e4d3a5b9092e0958d45a",
+    "src/tiny_lm/tokenizer/tokenizer.py": "30cb32c516d622d3c08a17de1861732f0a702d91c202505b1e5b9c066d0acec9",
+    "src/tiny_lm/tokenizer/__init__.py": "3c2b3ef6c3add020f278436ca32b7b75b734fa38007e364c7eaa77fd08e380ce",
+    "tests/test_attention.py": "a7fe07efe7b43dd261cf0d059b144cfa0ef4e3851bdb1b4172d3297ffec3fcbb",
+    "tests/test_binding.py": "12cbff7ac5269bd79604541411a7197e75da96eeb10fbce0544d4d39d3f65568",
+    "tests/test_bpe.py": "edf8dc5b5bd9d0c494d4083b2f1b07aec311abe18bf5b8ac0ccc0d1f00b3cbbf",
+    "tests/test_checkpoint.py": "406b3c45713595c860e411497e2d24131175287fa33139a0e117f43c4df001fb",
+    "tests/test_cli.py": "6c2d02f687ddb9d95d2328cf874279ac91d93c2db1f20fe740ee2474ae99cf5e",
+    "tests/test_config.py": "c2d35867ada70311335524e70232cc4d02222c746f9b30b425aabcb428d74d3b",
+    "tests/test_data.py": "cdaf58077f3a3a2f6a93b64c0785ec2cb70bbdf7e4e069d6b793370ca17a1247",
+    "tests/test_expand_tinystories.py": "0222e99e1b1e7b9d19d95a99e1be38c3bbf42d058fbc4caffb60e9f9a8bf1e0f",
+    "tests/test_generate.py": "5f117a2ee8661cfde7bf0bde0d95f1fd6d266ee0fad9e81abb72c04b2d3e33e7",
+    "tests/test_generate_cli.py": "d5f5d21c2c58e5307d7aea1b25780a2d67650628985f0fc3d1f228efbedf126e",
+    "tests/test_imports.py": "e5a5781fe325a3f12325e16481baa02c71b504bf5aaa0cac56d53ab0fed5adb7",
+    "tests/test_layers.py": "be5e6b64a331afac9fa8f158576c565e32c0f7b9a845f03e58e230246c626583",
+    "tests/test_losses.py": "8fbfb4be728f5999f244d24d940c79097fcd895168b81877036f9d8258f216d1",
+    "tests/test_optim.py": "b5257d6d9d12bdca4217833321295b8fabe8d68ec2157984e60116fa711739d4",
+    "tests/test_preprocess.py": "0206e64704599126fb9c9f002d0e2f5e3d5967cb11c22fe116ffd8297890b542",
+    "tests/test_preprocess_cli.py": "ffd6abc7a9d40eb7a9d5b7db4835929a3733be6447cfa8c5846b6729089cf7b4",
+    "tests/test_schedule.py": "a7dbfd25ff7ece7ab0d29b69f3f05d1f909ddf41d2c6b9ef05766aa5f935f684",
+    "tests/test_tokenizer.py": "68ccc745b51d7ef0153c71daf0d8c9eaaa9061bb7e68c31d3177a257f68670d1",
+    "tests/test_tokenizer_serialization.py": "28db4968ca5976f048725cf4b4174e8c5e3c1fb9e50c356ee7856043219ea9d4",
+    "tests/test_training.py": "3863a9a3fc84bfdd128f7aa3b2b46d378db067727eb419eabba8b38cfd5b5d5a",
+    "tests/test_training_cli.py": "01009a9a70dbd07eaef99c8e8dfbccd53ddd077b61455bbbe50d9047adbb28f6",
+    "tests/test_transformer.py": "ce4873fd578b1ccd47eace073b045f5cd2f24ed35f48a49429d50152b28bd73b",
+    "pyproject.toml": "aad23ae3ac7394b76c47ea88120b97245c0b34fa46e7363711c4f8b58189c8c0",
+    "README.md": "5c9a340b663ea21f95064711f110be67f889623aa3a6c464c6726414da7d3466",
+    "THIRD_PARTY_NOTICES.md": "d31369c078b9ea7e7db623dd36a14a3dfdbc1a781813badbfbb834332159e8fc",
+    "LICENSE": "e0f7e1c9ca9a980c15ae74c68629097ec4582ed7216708a110ca7251217dc6c3",
+    "licenses/OpenAI-GPT2-LICENSE.txt": "4d1dde214141e7fdd5814946d242b6fe68719652a1c3cfc78cf56441538e8962",
+    "licenses/Stanford-CS336-LICENSE.txt": "c9b91dfeafb7a8690279a75f68d93b6b8c7acb7337d1ac66162f8bc276bd30fe",
+    "configs/smoke.yaml": "16510b738ff594ce486b6c8cd20137f0ecfc805ba1e28b7e38594ca2bb2c5936",
+    "examples/toy_corpus.txt": "be64288b7c818ef884c974c06df2d0a98c36a535780718f85c5abdf1ecab6eda"
+  },
+  "local_log_sha256": {
+    "build.log": "f31d82429638ef53cf80779a59944c0528af7159006662c714a9bb6870504d7a",
+    "imports.log": "52ac567a1c21172b883d2b579b167dd7e50435ad2feea5bdde2d7ce64dcaecac",
+    "pip-check.log": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+    "pytest.log": "e275061752a39fb31a5774dc5b6e5e5614218e47e7cd0e07c11f19f631f4acfe",
+    "ruff-check.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "ruff-format.log": "c3c36fcff1e28b14cae0ee73be45b9f119bbadb20f7d5eb8ab829feeabf5769d"
+  }
+}

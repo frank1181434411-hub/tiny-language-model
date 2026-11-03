@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,7 +7,8 @@ name = "tiny-language-model"
 dynamic = ["version"]
 description = "A small language model learning project, starting with a validated engineering scaffold."
 readme = "README.md"
-license = {file = "LICENSE"}
+license = "MIT AND LicenseRef-OpenAI-GPT2"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "licenses/*.txt"]
 requires-python = ">=3.11"
 dependencies = ["PyYAML>=6.0.2"]
 
@@ -22,9 +23,6 @@ tiny-lm = "tiny_lm.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.setuptools]
-license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "licenses/*.txt"]
 
 [tool.setuptools.dynamic]
 version = {attr = "tiny_lm.__version__"}

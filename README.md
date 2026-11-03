@@ -13,6 +13,10 @@ BPE、Tokenizer、Transformer、交叉熵、AdamW 和学习率调度，以及文
 
 [v0.1.0-alpha.2](https://github.com/frank1181434411-hub/tiny-language-model/releases/tag/v0.1.0-alpha.2) 已于 2026-10-28 发布为预发布版本；Python 包版本为 `0.1.0a2`。详见[更新日志](CHANGELOG.md)与[发布记录](docs/release-alpha2.md)。
 
+当前开发源码版本为 **`0.1.1`（尚未发布）**，计划标签 `v0.1.1`。
+正式版目标范围为 Windows 11 x64、标准 CPython 3.12、CPU FP32；最终候选回归和 wheel 验收进度见发布记录。
+发布准备与安装约定见 [0.1.1 发布草稿](docs/release-0.1.1.md)。
+
 ## 当前能力与实验结果
 
 - 文本：BPE 训练、版本化 tokenizer 保存/加载、编码/解码、单文件及显式多文件预处理。
@@ -42,7 +46,7 @@ BPE、Tokenizer、Transformer、交叉熵、AdamW 和学习率调度，以及文
 
 当前附件版本为 `0.1.0a2`，实际验收环境为 Windows 11、标准 CPython 3.12.10、CPU。
 项目声明 Python 3.11+，但不代表所有版本均已实测。下面使用已拉取仓库中的附件；
-Release 发布后也可下载相同 wheel 与校验文件。配置和示例文本不包含在 wheel 内，
+也可从已发布的 alpha.2 Release 下载相同 wheel 与校验文件。配置和示例文本不包含在 wheel 内，
 请保留同版本仓库的 `configs/` 与 `examples/`；发布后可下载该标签的 Source code ZIP 获取它们。
 
 以下在仓库根目录执行。`.venv-wheel` 应为新目录，若已存在请换一个名称；
@@ -77,6 +81,10 @@ if ($LASTEXITCODE -ne 0) { throw 'Dependency check failed' }
 
 在项目根目录使用 Python 3.11 或以上的标准 Windows CPython 创建独立环境。
 已有项目环境时跳过创建步骤：
+
+当前 main 的 editable 安装报告 `0.1.1`，不等同于已发布的 alpha.2 wheel。
+构建依赖要求 `setuptools>=77.0.3`，用于新版许可元数据；常规 pip 安装由隔离构建环境准备它。
+若使用 `--no-build-isolation`，须自行满足这个最低版本。运行依赖与 Python 最低声明未变。
 
 ```powershell
 Set-Location D:\Python\tiny-language-model

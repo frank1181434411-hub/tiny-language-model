@@ -4,6 +4,16 @@ The root LICENSE covers this project's original software and documentation
 contributions. It does not replace the notices below or relicense external
 dependencies, datasets, model weights, or third-party excerpts.
 
+## Distribution license metadata
+
+The distribution uses the SPDX expression `MIT AND LicenseRef-OpenAI-GPT2`.
+`MIT` covers the original contributions and the retained Stanford MIT material.
+`LicenseRef-OpenAI-GPT2` identifies the complete, unchanged Modified MIT License
+in `licenses/OpenAI-GPT2-LICENSE.txt`, applicable to the adapted GPT-2 pattern
+described below. This custom reference does not replace that text with standard
+MIT terms or change the license of any component. The expression describes the
+combined distribution, not a choice of alternative licenses.
+
 ## Stanford CS336 Assignment 1
 
 This project grew from the owner's implementation of Stanford CS336 Spring 2025
