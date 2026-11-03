@@ -1,0 +1,22 @@
+{
+  "url": "https://github.com/frank1181434411-hub/tiny-language-model/releases/tag/v0.1.1",
+  "tag": "v0.1.1",
+  "commit": "08bb5c53151c90b70b246c17f75cc1913d804c54",
+  "published_at": "2026-11-03T10:06:02Z",
+  "draft": false,
+  "prerelease": false,
+  "assets": [
+    {
+      "name": "tiny_language_model-0.1.1-py3-none-any.whl",
+      "bytes": 60735,
+      "sha256": "58974deebcb3d5e77c37cf028198d9861bf155874d7bc25cd16ec78b5a7ff4d8",
+      "url": "https://github.com/frank1181434411-hub/tiny-language-model/releases/download/v0.1.1/tiny_language_model-0.1.1-py3-none-any.whl"
+    },
+    {
+      "name": "tiny_language_model-0.1.1-py3-none-any.whl.sha256",
+      "bytes": 110,
+      "sha256": "27b1e44a9c613ff79faa38c523fd773b77ec00ac26b5db4187d769486b003028",
+      "url": "https://github.com/frank1181434411-hub/tiny-language-model/releases/download/v0.1.1/tiny_language_model-0.1.1-py3-none-any.whl.sha256"
+    }
+  ]
+}

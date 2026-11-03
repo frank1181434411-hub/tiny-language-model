@@ -1,6 +1,6 @@
-# v0.1.1 正式版发布草稿
+# v0.1.1 正式版发布记录
 
-2026-11-03：发布配置、最终候选完整回归和最终 wheel 独立安装验收已完成，**尚未发布**。详见[最终验收记录](final-0.1.1-checks.md)。
+北京时间 2026-11-03 18:06:02 已正式发布 [v0.1.1](https://github.com/frank1181434411-hub/tiny-language-model/releases/tag/v0.1.1)，标签指向 `08bb5c53151c90b70b246c17f75cc1913d804c54`，draft=false、prerelease=false。两个附件已重新下载核对，SHA-256 均一致，见[发布核对](release-0.1.1-published.json)。以下保留发布准备与验收记录。
 源码/Python 包版本为 `0.1.1`，计划 Git 标签为 `v0.1.1`；已有 `0.1.0` 历史快照和 alpha.2 附件保持原样。
 
 ## 安装与交付约定

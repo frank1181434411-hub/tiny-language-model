@@ -13,9 +13,9 @@ BPE、Tokenizer、Transformer、交叉熵、AdamW 和学习率调度，以及文
 
 [v0.1.0-alpha.2](https://github.com/frank1181434411-hub/tiny-language-model/releases/tag/v0.1.0-alpha.2) 已于 2026-10-28 发布为预发布版本；Python 包版本为 `0.1.0a2`。详见[更新日志](CHANGELOG.md)与[发布记录](docs/release-alpha2.md)。
 
-当前开发源码版本为 **`0.1.1`（尚未发布）**，计划标签 `v0.1.1`。
+当前正式版本为 **[`v0.1.1`](https://github.com/frank1181434411-hub/tiny-language-model/releases/tag/v0.1.1)**，于 2026-11-03 发布，标签指向验收提交 `08bb5c5`。
 正式版目标范围为 Windows 11 x64、标准 CPython 3.12、CPU FP32；最终候选回归和 wheel 验收进度见发布记录。
-发布准备与安装约定见 [0.1.1 发布草稿](docs/release-0.1.1.md)。
+发布记录与安装约定见 [0.1.1 发布记录](docs/release-0.1.1.md)。下方 alpha.2 安装示例保留供历史版本使用；安装正式版时改用 `tiny_language_model-0.1.1-py3-none-any.whl`，预期版本为 `0.1.1`，并使用 v0.1.1 标签的配置和示例。
 
 ## 当前能力与实验结果
 
